@@ -360,16 +360,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let allCompanies = [];
 
     const showSelectionScreen = () => {
-        interviewCategories.style.display = 'grid';
-        dsaPrepContent.style.display = 'none';
-        resumeAnalyzerContent.style.display = 'none';
+        if (interviewCategories) interviewCategories.style.display = 'grid';
+        if (dsaPrepContent) dsaPrepContent.style.display = 'none';
+        if (resumeAnalyzerContent) resumeAnalyzerContent.style.display = 'none';
     };
 
     const enterDsaPrep = async () => {
-        interviewCategories.style.display = 'none';
-        dsaPrepContent.style.display = 'block';
-        companySelection.style.display = 'block';
-        questionsView.style.display = 'none';
+        if (interviewCategories) interviewCategories.style.display = 'none';
+        if (dsaPrepContent) dsaPrepContent.style.display = 'block';
+        if (companySelection) companySelection.style.display = 'block';
+        if (questionsView) questionsView.style.display = 'none';
         
         if (allCompanies.length === 0) {
             await fetchCompanies();
@@ -378,11 +378,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const enterResumeAnalyzer = () => {
-        interviewCategories.style.display = 'none';
-        resumeAnalyzerContent.style.display = 'block';
-        uploadZone.style.display = 'block';
-        analysisStatus.style.display = 'none';
-        analysisResults.style.display = 'none';
+        if (interviewCategories) interviewCategories.style.display = 'none';
+        if (resumeAnalyzerContent) resumeAnalyzerContent.style.display = 'block';
+        if (uploadZone) uploadZone.style.display = 'block';
+        if (analysisStatus) analysisStatus.style.display = 'none';
+        if (analysisResults) analysisResults.style.display = 'none';
     };
 
     const fetchCompanies = async () => {
@@ -1037,10 +1037,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Event Listeners for Category Selection (Practice page)
-    btnDsaCategory.addEventListener('click', enterDsaPrep);
-    btnResumeCategory.addEventListener('click', enterResumeAnalyzer);
-    backToCategoriesDsa.addEventListener('click', showSelectionScreen);
-    backToCategoriesResume.addEventListener('click', showSelectionScreen);
+    if (btnDsaCategory) btnDsaCategory.addEventListener('click', enterDsaPrep);
+    if (btnResumeCategory) btnResumeCategory.addEventListener('click', enterResumeAnalyzer);
+    if (backToCategoriesDsa) backToCategoriesDsa.addEventListener('click', showSelectionScreen);
+    if (backToCategoriesResume) backToCategoriesResume.addEventListener('click', showSelectionScreen);
 
     // Resume Upload Events
     btnTriggerUpload.addEventListener('click', () => resumeUpload.click());
