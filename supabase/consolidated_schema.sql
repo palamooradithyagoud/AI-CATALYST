@@ -240,17 +240,38 @@ ALTER TABLE recommendation_history ENABLE ROW LEVEL SECURITY;
 ALTER TABLE learning_progress  ENABLE ROW LEVEL SECURITY;
 ALTER TABLE success_metrics    ENABLE ROW LEVEL SECURITY;
 
--- Setup permissive policies allowing full access (bypassing filters for local dev and backend service accounts)
+-- Setup permissive policies allowing full access
+DROP POLICY IF EXISTS "Public full access profiles" ON profiles;
 CREATE POLICY "Public full access profiles" ON profiles FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Public full access resume_analysis" ON resume_analysis;
 CREATE POLICY "Public full access resume_analysis" ON resume_analysis FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Public full access dsa_progress" ON dsa_progress;
 CREATE POLICY "Public full access dsa_progress" ON dsa_progress FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Public full access interview_progress" ON interview_progress;
 CREATE POLICY "Public full access interview_progress" ON interview_progress FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Public full access recent_searches" ON recent_searches;
 CREATE POLICY "Public full access recent_searches" ON recent_searches FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Public full access skills_cache" ON skills_cache;
 CREATE POLICY "Public full access skills_cache" ON skills_cache FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Public full access trust_score_engine" ON trust_score_engine;
 CREATE POLICY "Public full access trust_score_engine" ON trust_score_engine FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Public full access user_feedback" ON user_feedback;
 CREATE POLICY "Public full access user_feedback" ON user_feedback FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Public full access recommendation_history" ON recommendation_history;
 CREATE POLICY "Public full access recommendation_history" ON recommendation_history FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Public full access learning_progress" ON learning_progress;
 CREATE POLICY "Public full access learning_progress" ON learning_progress FOR ALL USING (true) WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Public full access success_metrics" ON success_metrics;
 CREATE POLICY "Public full access success_metrics" ON success_metrics FOR ALL USING (true) WITH CHECK (true);
 
 -- Note: Storage buckets creation setup

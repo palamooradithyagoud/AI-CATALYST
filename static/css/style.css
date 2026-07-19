@@ -1869,4 +1869,39 @@ body {
   color: var(--primary);
 }
 
+/* Company Grid & Badge Styles for Practice View */
+.companies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px;
+}
+
+.company-badge {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  text-align: center;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition: all 0.2s var(--smooth);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.company-badge:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
+
+
 
