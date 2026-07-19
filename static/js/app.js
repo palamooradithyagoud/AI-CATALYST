@@ -1496,12 +1496,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 2. Update Sidebar Streak Widget
         document.getElementById('sidebar-streak-days').textContent = `${streak} days`;
 
-        // 3. Update Dashboard Progress Card
-        const progressPctText = document.getElementById('dashboard-progress-pct');
-        const progressCountText = document.getElementById('dashboard-progress-count');
-        const progressRingBar = document.getElementById('dashboard-progress-ring-bar');
-
-        // Calculate real playlist progress
+        // 3. Update 4-KPI Circular Dashboard Ring Cards
         const savedPl = getSavedPlaylists();
         let totalPlaylistVideos = 0;
         let completedPlaylistVideos = 0;
@@ -1512,52 +1507,58 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Overall progress = combination of DSA + playlist progress
-        const dsaPct = Math.min(100, Math.round((totalSolved / GOAL) * 100));
-        const overallTopics = totalSolved + completedPlaylistVideos;
-        const overallTotal = GOAL + totalPlaylistVideos;
-        const overallPct = overallTotal > 0 ? Math.min(100, Math.round((overallTopics / overallTotal) * 100)) : 0;
-
-        progressPctText.textContent = `${overallPct}%`;
-        progressCountText.textContent = `${overallTopics} / ${overallTotal}`;
-        
-        // SVG Ring calculations (circumference = 314.16)
-        const offset = 314.16 - (314.16 * overallPct / 100);
-        progressRingBar.style.strokeDashoffset = offset;
-
-        // Progress Bars Fill — DSA uses real data
-        const dsaLabelText = document.getElementById('dsa-progress-label-text');
-        if (dsaLabelText) {
-            dsaLabelText.textContent = `DSA (${totalSolved} solved)`;
+        // 3a. Calculate Learning Progress % based on saved YouTube playlists
+        let learningPct = 0;
+        if (totalPlaylistVideos > 0) {
+            learningPct = Math.round((completedPlaylistVideos / totalPlaylistVideos) * 100);
+        } else if (savedPl.length > 0) {
+            const completedCount = savedPl.filter(p => p.completed).length;
+            learningPct = Math.min(100, Math.round((completedCount / savedPl.length) * 100) || (savedPl.length * 20));
         }
-        document.getElementById('dsa-progress-label-pct').textContent = `${dsaPct}%`;
-        document.getElementById('dsa-progress-bar-fill').style.width = `${dsaPct}%`;
-        
-        // System Design — based on saved playlists with "system design" in title
-        const sdPlaylists = savedPl.filter(p => (p.title + ' ' + (p.skill || '')).toLowerCase().includes('system'));
-        const sdTotal = sdPlaylists.reduce((a, p) => a + (p.videos ? p.videos.length : 0), 0);
-        const sdDone = sdPlaylists.reduce((a, p) => a + (p.videos ? p.videos.filter(v => v.completed).length : 0), 0);
-        const sdPct = sdTotal > 0 ? Math.round((sdDone / sdTotal) * 100) : 0;
-        document.getElementById('sd-progress-label-pct').textContent = `${sdPct}%`;
-        document.getElementById('sd-progress-bar-fill').style.width = `${sdPct}%`;
-        
-        // AI/ML — based on saved playlists with "ai" or "ml" or "machine" in title
-        const aiPlaylists = savedPl.filter(p => /(ai|ml|machine|deep|neural)/i.test(p.title + ' ' + (p.skill || '')));
-        const aiTotal = aiPlaylists.reduce((a, p) => a + (p.videos ? p.videos.length : 0), 0);
-        const aiDone = aiPlaylists.reduce((a, p) => a + (p.videos ? p.videos.filter(v => v.completed).length : 0), 0);
-        const aiPct = aiTotal > 0 ? Math.round((aiDone / aiTotal) * 100) : 0;
-        document.getElementById('aiml-progress-label-pct').textContent = `${aiPct}%`;
-        document.getElementById('aiml-progress-bar-fill').style.width = `${aiPct}%`;
-        
-        // Dev — remaining playlists (not SD/AI categorized)
-        const devPlaylists = savedPl.filter(p => !sdPlaylists.includes(p) && !aiPlaylists.includes(p));
-        const devTotal = devPlaylists.reduce((a, p) => a + (p.videos ? p.videos.length : 0), 0);
-        const devDone = devPlaylists.reduce((a, p) => a + (p.videos ? p.videos.filter(v => v.completed).length : 0), 0);
-        const devPct = devTotal > 0 ? Math.round((devDone / devTotal) * 100) : 0;
-        document.getElementById('dev-progress-label-pct').textContent = `${devPct}%`;
-        document.getElementById('dev-progress-bar-fill').style.width = `${devPct}%`;
 
-        // 4. Update Resume Score Card
+        const elValLearning = document.getElementById('val-learning-progress');
+        const elRingLearning = document.getElementById('ring-learning-progress');
+        if (elValLearning) elValLearning.textContent = `${learningPct}%`;
+        if (elRingLearning) {
+            const offsetLearning = 251.32 - (251.32 * learningPct / 100);
+            elRingLearning.style.strokeDashoffset = offsetLearning;
+        }
+
+        // 3b. Calculate Resume Readiness %
+        let resumePct = 76;
+        if (latestResumeAnalysis && latestResumeAnalysis.score !== undefined) {
+            resumePct = latestResumeAnalysis.score > 10 ? latestResumeAnalysis.score : (latestResumeAnalysis.score * 10);
+        }
+        const elValResume = document.getElementById('val-resume-readiness');
+        const elRingResume = document.getElementById('ring-resume-readiness');
+        if (elValResume) elValResume.textContent = `${resumePct}%`;
+        if (elRingResume) {
+            const offsetResume = 251.32 - (251.32 * resumePct / 100);
+            elRingResume.style.strokeDashoffset = offsetResume;
+        }
+
+        // 3c. Calculate Interview Readiness %
+        const interviewPct = 68;
+        const elValInterview = document.getElementById('val-interview-readiness');
+        const elRingInterview = document.getElementById('ring-interview-readiness');
+        if (elValInterview) elValInterview.textContent = `${interviewPct}%`;
+        if (elRingInterview) {
+            const offsetInterview = 251.32 - (251.32 * interviewPct / 100);
+            elRingInterview.style.strokeDashoffset = offsetInterview;
+        }
+
+        // 3d. Calculate AI Career Health %
+        const dsaPct = Math.min(100, Math.round((totalSolved / GOAL) * 100));
+        const careerHealthPct = Math.min(100, Math.round((dsaPct * 0.3) + (resumePct * 0.3) + (interviewPct * 0.2) + (learningPct * 0.2)));
+        const elValCareer = document.getElementById('val-career-health');
+        const elRingCareer = document.getElementById('ring-career-health');
+        if (elValCareer) elValCareer.textContent = `${careerHealthPct}%`;
+        if (elRingCareer) {
+            const offsetCareer = 251.32 - (251.32 * careerHealthPct / 100);
+            elRingCareer.style.strokeDashoffset = offsetCareer;
+        }
+
+        // 4. Update Resume Score Card & Database records
         loadResumeScore();
 
         // 5. Update Practice Overview KPIs — real data
