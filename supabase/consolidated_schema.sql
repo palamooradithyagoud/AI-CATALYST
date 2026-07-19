@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS profiles (
     github_profile TEXT,
     codeforces_profile TEXT,
     codementor_profile TEXT,
+    welcome_email_sent BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
 

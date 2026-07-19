@@ -24,6 +24,9 @@ except ImportError:
     PdfReader = None
     docx2txt = None
 
+from backend.services.welcome_service import check_and_send_welcome_email
+from backend.utils.email_service import send_welcome_email
+
 app = Flask(__name__, static_folder="static", static_url_path="/static")
 app.secret_key = os.getenv("SECRET_KEY", "skillpath-dev-secret-key-2024")
 CORS(app)
@@ -67,6 +70,16 @@ def token_required(f):
                             g.user = res.user
                             g.user_id = res.user.id
                             g.user_email = res.user.email
+                            
+                            # Trigger non-blocking Welcome Email check for authenticated user
+                            user_meta = res.user.user_metadata or {}
+                            user_name = user_meta.get("full_name") or (res.user.email.split("@")[0] if res.user.email else "Candidate")
+                            check_and_send_welcome_email(
+                                user_id=res.user.id,
+                                email=res.user.email,
+                                name=user_name,
+                                sb=sb
+                            )
                     except Exception as e:
                         print(f"[AUTH] Token verification warning: {e}")
                         
@@ -2301,7 +2314,7 @@ def get_interview_history():
 # ──────────────────────────────────────────────
 def send_email_via_resend(to_email: str, subject: str, html_body: str) -> dict:
     """Sends transactional email via Resend API."""
-    resend_key = os.getenv("RESEND_API_KEY", "re_jJw645Ks_9e3AAnsHCGjXb8uUHeHLiKfp")
+    resend_key = os.getenv("RESEND_API_KEY", "")
     if not resend_key:
         print("[RESEND] RESEND_API_KEY not configured.")
         return {"error": "RESEND_API_KEY is not configured"}
