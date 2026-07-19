@@ -5,11 +5,11 @@
  * to automatically attach the Supabase JWT access token to backend API calls.
  */
 
-// Intercept all fetch requests to inject Supabase JWT
+// Intercept all fetch requests to inject Supabase JWT and auto-redirect on session expiration
 const originalFetch = window.fetch;
 window.fetch = async function (url, options = {}) {
-    // Only attempt to get session if supabaseClient has been created and it's not a request for /config
-    if (window.supabaseClient && !url.includes('/config')) {
+    // Only attempt to get session if supabaseClient has been created and it's not a request for /config or /login-page
+    if (window.supabaseClient && !url.includes('/config') && !url.includes('/login-page')) {
         try {
             const { data } = await window.supabaseClient.auth.getSession();
             const token = data?.session?.access_token;
@@ -23,7 +23,17 @@ window.fetch = async function (url, options = {}) {
             console.error("Failed to attach auth headers:", e);
         }
     }
-    return originalFetch(url, options);
+    const response = await originalFetch(url, options);
+    if (response.status === 401 && !url.includes('/login-page') && !url.includes('/config')) {
+        console.warn("[AUTH] Session invalid or expired. Redirecting to sign in...");
+        if (typeof showToast === 'function') {
+            showToast("⚠️ Session expired. Redirecting to sign in...");
+        }
+        setTimeout(() => {
+            window.location.href = '/login-page';
+        }, 1200);
+    }
+    return response;
 };
 
 class DatabaseService {
