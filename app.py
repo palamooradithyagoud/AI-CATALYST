@@ -1,4 +1,7 @@
 import os
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 from dotenv import load_dotenv
 load_dotenv()  # Load environment variables from .env file
 
@@ -2407,6 +2410,8 @@ def send_welcome_email():
 @app.route("/")
 def index():
     return app.send_static_file("index.html")
+
+handler = app
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 3000))
