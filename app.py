@@ -2296,11 +2296,99 @@ def get_interview_history():
         return jsonify([])
 
 
+# ──────────────────────────────────────────────
+# Resend Transactional Email Service
+# ──────────────────────────────────────────────
+def send_email_via_resend(to_email: str, subject: str, html_body: str) -> dict:
+    """Sends transactional email via Resend API."""
+    resend_key = os.getenv("RESEND_API_KEY", "re_jJw645Ks_9e3AAnsHCGjXb8uUHeHLiKfp")
+    if not resend_key:
+        print("[RESEND] RESEND_API_KEY not configured.")
+        return {"error": "RESEND_API_KEY is not configured"}
+        
+    try:
+        url = "https://api.resend.com/emails"
+        headers = {
+            "Authorization": f"Bearer {resend_key}",
+            "Content-Type": "application/json"
+        }
+        payload = {
+            "from": "SkillPath AI <onboarding@resend.dev>",
+            "to": [to_email],
+            "subject": subject,
+            "html": html_body
+        }
+        resp = requests.post(url, headers=headers, json=payload, timeout=10)
+        print(f"[RESEND] Email status: {resp.status_code}, response: {resp.text}")
+        if resp.status_code in (200, 201):
+            return resp.json()
+        else:
+            return {"error": resp.text, "status": resp.status_code}
+    except Exception as e:
+        print(f"[RESEND] Send email exception: {e}")
+        return {"error": str(e)}
+
+@app.route("/send-email-report", methods=["POST"])
+@token_required
+def send_email_report():
+    body = request.get_json(silent=True) or {}
+    to_email = body.get("email") or g.user_email
+    report_type = body.get("type", "Resume Analysis & Interview Audit")
+    report_html = body.get("html", """
+        <div style="font-family: Arial, sans-serif; padding: 24px; color: #1e293b; background: #f8fafc; border-radius: 12px;">
+            <h2 style="color: #2563eb;">🚀 SkillPath AI Career Report</h2>
+            <p>Your personalized career roadmap and audit summary is ready!</p>
+            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+            <p>Visit your command center anytime: <a href="https://skillpath-sandy.vercel.app/" style="color: #2563eb; font-weight: bold;">SkillPath Dashboard</a></p>
+        </div>
+    """)
+    
+    if not to_email or "@" not in to_email:
+        return jsonify({"error": "Valid recipient email address is required"}), 400
+        
+    subject = f"SkillPath AI — Your {report_type} Report"
+    res = send_email_via_resend(to_email, subject, report_html)
+    if "error" in res and res["error"]:
+        return jsonify({"error": res["error"]}), 500
+    return jsonify({"message": f"Successfully sent {report_type} report to {to_email}!", "email_id": res.get("id")})
+
+@app.route("/send-welcome-email", methods=["POST"])
+@token_required
+def send_welcome_email():
+    body = request.get_json(silent=True) or {}
+    to_email = body.get("email") or g.user_email
+    name = body.get("name") or "Candidate"
+    
+    if not to_email or "@" not in to_email:
+        return jsonify({"error": "Valid recipient email address is required"}), 400
+        
+    subject = f"Welcome to SkillPath AI, {name}! 🎯"
+    welcome_html = f"""
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px; color: #0f172a; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px;">
+            <h1 style="color: #2563eb; margin-top: 0;">Welcome aboard, {name}! 🚀</h1>
+            <p style="font-size: 1.05rem; line-height: 1.6; color: #475569;">
+                Your AI Career Acceleration Command Center is ready. Here is what you can accomplish:
+            </p>
+            <ul style="line-height: 1.8; color: #334155;">
+                <li>🎯 <strong>Resume Review</strong>: Get instant ATS scores & actionable improvement recommendations.</li>
+                <li>🔮 <strong>AI Career Health</strong>: Track real-time readiness across Data Structures, System Design, and Dev skills.</li>
+                <li>🧬 <strong>Learning Progress</strong>: Save YouTube playlists and track video completions.</li>
+                <li>✴️ <strong>Mock Interviews</strong>: Simulate technical interview rounds with real-time AI evaluation.</li>
+            </ul>
+            <a href="https://skillpath-sandy.vercel.app/" style="display: inline-block; background: #2563eb; color: #ffffff; font-weight: bold; text-decoration: none; padding: 14px 28px; border-radius: 8px; margin-top: 20px;">Open Your Dashboard →</a>
+        </div>
+    """
+    res = send_email_via_resend(to_email, subject, welcome_html)
+    if "error" in res and res["error"]:
+        return jsonify({"error": res["error"]}), 500
+    return jsonify({"message": f"Welcome email sent to {to_email}!", "email_id": res.get("id")})
+
+
 @app.route("/")
 def index():
-    pass
     return app.send_static_file("index.html")
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 3000))
     app.run(debug=True, host="0.0.0.0", port=port)
+
