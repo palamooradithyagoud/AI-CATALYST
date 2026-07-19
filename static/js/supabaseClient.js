@@ -23,17 +23,7 @@ window.fetch = async function (url, options = {}) {
             console.error("Failed to attach auth headers:", e);
         }
     }
-    const response = await originalFetch(url, options);
-    if (response.status === 401 && !url.includes('/login-page') && !url.includes('/config')) {
-        console.warn("[AUTH] Session invalid or expired. Redirecting to sign in...");
-        if (typeof showToast === 'function') {
-            showToast("⚠️ Session expired. Redirecting to sign in...");
-        }
-        setTimeout(() => {
-            window.location.href = '/login-page';
-        }, 1200);
-    }
-    return response;
+    return originalFetch(url, options);
 };
 
 class DatabaseService {

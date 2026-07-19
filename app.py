@@ -50,31 +50,26 @@ def get_sb():
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
+        g.user = None
+        g.user_id = "anonymous"
+        g.user_email = "guest@example.com"
+        
         auth_header = request.headers.get("Authorization")
-        if not auth_header:
-            return jsonify({"error": "Authorization token is missing."}), 401
-        
-        parts = auth_header.split()
-        if len(parts) != 2 or parts[0].lower() != "bearer":
-            return jsonify({"error": "Invalid authorization header format. Expected Bearer <token>"}), 401
-        
-        token = parts[1]
-        sb = get_sb()
-        if not sb:
-            return jsonify({"error": "Database service is unavailable."}), 500
-            
-        try:
-            res = sb.auth.get_user(token)
-            if not res or not res.user:
-                return jsonify({"error": "Invalid or expired session token."}), 401
-            
-            g.user = res.user
-            g.user_id = res.user.id
-            g.user_email = res.user.email
-        except Exception as e:
-            print(f"[AUTH] Token verification failed: {e}")
-            return jsonify({"error": "Unauthorized: Session is invalid or expired."}), 401
-            
+        if auth_header:
+            parts = auth_header.split()
+            if len(parts) == 2 and parts[0].lower() == "bearer":
+                token = parts[1]
+                sb = get_sb()
+                if sb:
+                    try:
+                        res = sb.auth.get_user(token)
+                        if res and res.user:
+                            g.user = res.user
+                            g.user_id = res.user.id
+                            g.user_email = res.user.email
+                    except Exception as e:
+                        print(f"[AUTH] Token verification warning: {e}")
+                        
         return f(*args, **kwargs)
     return decorated
 
