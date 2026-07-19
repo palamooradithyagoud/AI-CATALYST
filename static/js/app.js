@@ -1507,55 +1507,85 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // 3a. Calculate Learning Progress % based on saved YouTube playlists
+        // 3a. Calculate Learning Progress % based on saved YouTube playlists from Supabase
         let learningPct = 0;
         if (totalPlaylistVideos > 0) {
             learningPct = Math.round((completedPlaylistVideos / totalPlaylistVideos) * 100);
         } else if (savedPl.length > 0) {
             const completedCount = savedPl.filter(p => p.completed).length;
-            learningPct = Math.min(100, Math.round((completedCount / savedPl.length) * 100) || (savedPl.length * 20));
+            learningPct = Math.round((completedCount / savedPl.length) * 100);
         }
 
         const elValLearning = document.getElementById('val-learning-progress');
         const elRingLearning = document.getElementById('ring-learning-progress');
+        const elSubLearning = document.getElementById('sub-learning-progress');
         if (elValLearning) elValLearning.textContent = `${learningPct}%`;
         if (elRingLearning) {
             const offsetLearning = 251.32 - (251.32 * learningPct / 100);
             elRingLearning.style.strokeDashoffset = offsetLearning;
         }
+        if (elSubLearning) {
+            elSubLearning.textContent = savedPl.length > 0 ? `${completedPlaylistVideos}/${totalPlaylistVideos} videos completed` : 'No saved playlists';
+        }
 
-        // 3b. Calculate Resume Readiness %
-        let resumePct = 76;
-        if (latestResumeAnalysis && latestResumeAnalysis.score !== undefined) {
-            resumePct = latestResumeAnalysis.score > 10 ? latestResumeAnalysis.score : (latestResumeAnalysis.score * 10);
+        // 3b. Calculate Resume Readiness % from Supabase
+        let resumePct = 0;
+        if (latestResumeAnalysis && latestResumeAnalysis.score !== undefined && latestResumeAnalysis.score !== null) {
+            const s = Number(latestResumeAnalysis.score);
+            resumePct = s > 10 ? Math.round(s) : Math.round(s * 10);
         }
         const elValResume = document.getElementById('val-resume-readiness');
         const elRingResume = document.getElementById('ring-resume-readiness');
+        const elSubResume = document.getElementById('sub-resume-readiness');
         if (elValResume) elValResume.textContent = `${resumePct}%`;
         if (elRingResume) {
             const offsetResume = 251.32 - (251.32 * resumePct / 100);
             elRingResume.style.strokeDashoffset = offsetResume;
         }
+        if (elSubResume) {
+            elSubResume.textContent = latestResumeAnalysis ? `ATS Score: ${resumePct}%` : 'No upload yet';
+        }
 
-        // 3c. Calculate Interview Readiness %
-        const interviewPct = 68;
+        // 3c. Calculate Interview Readiness % from Supabase
+        let interviewPct = 0;
+        if (typeof latestInterviewScore === 'number' && !isNaN(latestInterviewScore)) {
+            interviewPct = Math.round(latestInterviewScore);
+        }
         const elValInterview = document.getElementById('val-interview-readiness');
         const elRingInterview = document.getElementById('ring-interview-readiness');
+        const elSubInterview = document.getElementById('sub-interview-readiness');
         if (elValInterview) elValInterview.textContent = `${interviewPct}%`;
         if (elRingInterview) {
             const offsetInterview = 251.32 - (251.32 * interviewPct / 100);
             elRingInterview.style.strokeDashoffset = offsetInterview;
         }
+        if (elSubInterview) {
+            elSubInterview.textContent = typeof latestInterviewScore === 'number' ? `Score: ${interviewPct}%` : 'No mock interviews';
+        }
 
-        // 3d. Calculate AI Career Health %
+        // 3d. Calculate AI Career Health % (Weighted composite of active user activity)
         const dsaPct = Math.min(100, Math.round((totalSolved / GOAL) * 100));
-        const careerHealthPct = Math.min(100, Math.round((dsaPct * 0.3) + (resumePct * 0.3) + (interviewPct * 0.2) + (learningPct * 0.2)));
+        const activeScores = [];
+        if (dsaPct > 0) activeScores.push(dsaPct);
+        if (resumePct > 0) activeScores.push(resumePct);
+        if (interviewPct > 0) activeScores.push(interviewPct);
+        if (learningPct > 0) activeScores.push(learningPct);
+
+        let careerHealthPct = 0;
+        if (activeScores.length > 0) {
+            careerHealthPct = Math.round(activeScores.reduce((a, b) => a + b, 0) / activeScores.length);
+        }
+
         const elValCareer = document.getElementById('val-career-health');
         const elRingCareer = document.getElementById('ring-career-health');
+        const elSubCareer = document.getElementById('sub-career-health');
         if (elValCareer) elValCareer.textContent = `${careerHealthPct}%`;
         if (elRingCareer) {
             const offsetCareer = 251.32 - (251.32 * careerHealthPct / 100);
             elRingCareer.style.strokeDashoffset = offsetCareer;
+        }
+        if (elSubCareer) {
+            elSubCareer.textContent = careerHealthPct > 0 ? 'Progressing well' : 'Start your prep';
         }
 
         // 4. Update Resume Score Card & Database records
@@ -1577,6 +1607,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     let latestResumeAnalysis = null;
+    let latestInterviewScore = null;
 
     const loadResumeScore = async () => {
         try {
@@ -2805,6 +2836,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch('/get-interview-history');
             if (!res.ok) throw new Error("Failed history fetch");
             const data = await res.json();
+            
+            if (Array.isArray(data) && data.length > 0) {
+                latestInterviewScore = data[0].mock_interview_score;
+            } else {
+                latestInterviewScore = null;
+            }
             
             if (!data || data.length === 0) {
                 historyList.innerHTML = `<p class="empty-state" style="margin:0; padding: 20px 0;">No interviews simulated yet. Launch your first round above!</p>`;
