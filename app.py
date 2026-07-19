@@ -24,8 +24,15 @@ except ImportError:
     PdfReader = None
     docx2txt = None
 
-from backend.services.welcome_service import check_and_send_welcome_email
-from backend.utils.email_service import send_welcome_email
+try:
+    from backend.services.welcome_service import check_and_send_welcome_email
+    from backend.utils.email_service import send_welcome_email
+except Exception as e:
+    print(f"[WARN] Email service import warning: {e}")
+    def check_and_send_welcome_email(*args, **kwargs):
+        pass
+    def send_welcome_email(*args, **kwargs):
+        return {"success": False, "error": "Email service unavailable"}
 
 app = Flask(__name__, static_folder="static", static_url_path="/static")
 app.secret_key = os.getenv("SECRET_KEY", "skillpath-dev-secret-key-2024")
