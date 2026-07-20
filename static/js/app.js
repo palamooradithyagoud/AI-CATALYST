@@ -2467,42 +2467,52 @@ document.addEventListener('DOMContentLoaded', () => {
     if (backToCategoriesResume) backToCategoriesResume.addEventListener('click', showSelectionScreen);
 
     // Resume Upload Events
-    btnTriggerUpload.addEventListener('click', () => resumeUpload.click());
-    resumeUpload.addEventListener('change', (e) => {
-        if (e.target.files.length > 0) handleResumeAnalysis(e.target.files[0]);
-    });
+    if (btnTriggerUpload) btnTriggerUpload.addEventListener('click', () => resumeUpload?.click());
+    if (resumeUpload) {
+        resumeUpload.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) handleResumeAnalysis(e.target.files[0]);
+        });
+    }
 
-    uploadZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        uploadZone.classList.add('dragover');
-    });
-    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
-    uploadZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        uploadZone.classList.remove('dragover');
-        if (e.dataTransfer.files.length > 0) handleResumeAnalysis(e.dataTransfer.files[0]);
-    });
+    if (uploadZone) {
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+        uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length > 0) handleResumeAnalysis(e.dataTransfer.files[0]);
+        });
+    }
 
-    companySearchInput.addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        const filtered = allCompanies.filter(c => c.toLowerCase().includes(term));
-        renderCompanies(filtered);
-    });
+    if (companySearchInput) {
+        companySearchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = allCompanies.filter(c => c.toLowerCase().includes(term));
+            renderCompanies(filtered);
+        });
+    }
 
-    backToCompanies.addEventListener('click', () => {
-        questionsView.style.display = 'none';
-        companySelection.style.display = 'block';
-    });
+    if (backToCompanies) {
+        backToCompanies.addEventListener('click', () => {
+            if (questionsView) questionsView.style.display = 'none';
+            if (companySelection) companySelection.style.display = 'block';
+        });
+    }
 
     // Event Listeners for search/forms
-    ctaButton.addEventListener('click', handleSearch);
-    skillInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleSearch();
-    });
+    if (ctaButton) ctaButton.addEventListener('click', handleSearch);
+    if (skillInput) {
+        skillInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSearch();
+        });
+    }
 
-    tabPlaylists.addEventListener('click', () => renderStep('playlists'));
-    tabCertificates.addEventListener('click', () => renderStep('certificates'));
-    tabRoadmap.addEventListener('click', () => renderStep('roadmap'));
+    if (tabPlaylists) tabPlaylists.addEventListener('click', () => renderStep('playlists'));
+    if (tabCertificates) tabCertificates.addEventListener('click', () => renderStep('certificates'));
+    if (tabRoadmap) tabRoadmap.addEventListener('click', () => renderStep('roadmap'));
 
     // ── Student Projects Management ──
     const projectsListContainer = document.getElementById('projects-list-container');
@@ -2513,94 +2523,76 @@ document.addEventListener('DOMContentLoaded', () => {
         { title: "Realtime Collaborative Editor", category: "Fullstack", desc: "Create a dynamic text editor using WebSockets and Operational Transformation patterns." }
     ];
 
-    let customProjects = [];
-
     const loadProjects = async () => {
+        if (!projectsListContainer) return;
+        let projects = [...defaultProjects];
+
         try {
             const res = await fetch('/get-user-projects');
             if (res.ok) {
-                const list = await res.json();
-                if (Array.isArray(list)) {
-                    customProjects = list;
+                const data = await res.json();
+                if (Array.isArray(data) && data.length > 0) {
+                    projects = data;
                 }
             }
         } catch (e) {
-            console.error("Failed to load custom projects:", e);
+            console.error("Failed to load user projects from DB:", e);
         }
-        renderProjectsList();
+
+        renderProjectsList(projects);
     };
 
-    const renderProjectsList = () => {
+    const renderProjectsList = (projects) => {
         if (!projectsListContainer) return;
-        projectsListContainer.innerHTML = '';
-
-        // Render recommended blueprints
-        defaultProjects.forEach(p => {
-            const card = document.createElement('div');
-            card.className = 'card show';
-            card.innerHTML = `
-                <div class="card-header">
-                    <span class="pill-badge" style="background:var(--primary-light); color:var(--primary); font-weight:700;">${escapeHTML(p.category)}</span>
+        projectsListContainer.innerHTML = projects.map((p, idx) => `
+            <div class="card" style="padding: 20px; display: flex; flex-direction: column; gap: 10px; border-left: 4px solid var(--primary);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong style="color: var(--text-main); font-size: 1.05rem;">${escapeHTML(p.title)}</strong>
+                    <span style="background: rgba(37,99,235,0.1); color: var(--primary); font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; font-weight: 700;">${escapeHTML(p.category || 'Portfolio')}</span>
                 </div>
-                <h3 class="card-title" style="margin-top:8px;">${escapeHTML(p.title)}</h3>
-                <p class="card-desc" style="margin-bottom:0;">${escapeHTML(p.desc)}</p>
-            `;
-            projectsListContainer.appendChild(card);
-        });
-
-        // Render student's custom projects
-        customProjects.forEach((p, idx) => {
-            const card = document.createElement('div');
-            card.className = 'card show';
-            card.innerHTML = `
-                <div class="card-header">
-                    <span class="pill-badge" style="background:var(--success-light); color:var(--success); font-weight:700;">${escapeHTML(p.category)}</span>
-                    <button class="btn-back btn-delete-project" data-index="${idx}" style="margin-left:auto; padding:2px 8px; color:var(--danger); border-color:rgba(239,68,68,0.2); background:var(--danger-light); font-size:0.75rem;">Delete</button>
-                </div>
-                <h3 class="card-title" style="margin-top:8px;">${escapeHTML(p.title)}</h3>
-                <p class="card-desc" style="margin-bottom:0;">${escapeHTML(p.desc)}</p>
-            `;
-            projectsListContainer.appendChild(card);
-        });
-
-        // Add event listeners to delete buttons
-        document.querySelectorAll('.btn-delete-project').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
-                const index = parseInt(e.target.getAttribute('data-index'));
-                customProjects.splice(index, 1);
-                await syncProjects();
-                renderProjectsList();
-            });
-        });
+                <p style="margin: 0; color: var(--text-sub); font-size: 0.85rem; line-height: 1.5;">${escapeHTML(p.desc || p.description || '')}</p>
+            </div>
+        `).join('');
     };
 
-    const syncProjects = async () => {
+    const syncProjects = async (projects) => {
         try {
             await fetch('/sync-user-projects', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ projects_list: customProjects })
+                body: JSON.stringify({ projects_list: projects })
             });
         } catch (e) {
-            console.error("Failed to sync custom projects:", e);
+            console.error("Failed to sync projects:", e);
         }
     };
 
     if (addProjectForm) {
         addProjectForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const title = document.getElementById('project-title').value.trim();
-            const category = document.getElementById('project-category').value.trim();
-            const desc = document.getElementById('project-desc').value.trim();
+            const title = document.getElementById('project-title-input')?.value.trim();
+            const category = document.getElementById('project-category-input')?.value.trim();
+            const desc = document.getElementById('project-desc-input')?.value.trim();
 
-            if (!title || !category || !desc) return;
+            if (!title || !desc) {
+                showToast("Please provide project title and description.");
+                return;
+            }
 
-            customProjects.push({ title, category, desc });
-            addProjectForm.reset();
+            let currentProjects = [...defaultProjects];
+            try {
+                const res = await fetch('/get-user-projects');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (Array.isArray(data) && data.length > 0) currentProjects = data;
+                }
+            } catch (err) {}
 
-            await syncProjects();
-            renderProjectsList();
+            currentProjects.unshift({ title, category, desc });
+            await syncProjects(currentProjects);
+            renderProjectsList(currentProjects);
             showToast('✅ Project added successfully!');
+            addProjectForm.reset();
         });
     }
 
@@ -2625,8 +2617,9 @@ document.addEventListener('DOMContentLoaded', () => {
             enterResumeAnalyzer();
         } else if (targetViewId === 'view-learning') {
             resetViews();
-            document.getElementById('view-learning').classList.add('active');
-            emptyState.style.display = 'block';
+            const learningView = document.getElementById('view-learning');
+            if (learningView) learningView.classList.add('active');
+            if (emptyState) emptyState.style.display = 'block';
         } else if (targetViewId === 'view-analytics') {
             renderAnalyticsCharts();
             initProfileMilestones();
@@ -2655,15 +2648,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Dashboard Buttons Action Link
-    document.getElementById('dashboard-improve-resume-btn').addEventListener('click', () => {
-        const resumeTabBtn = document.getElementById('btn-sidebar-resume');
-        if (resumeTabBtn) resumeTabBtn.click();
-    });
+    const btnDashboardResume = document.getElementById('dashboard-improve-resume-btn');
+    if (btnDashboardResume) {
+        btnDashboardResume.addEventListener('click', () => {
+            const resumeTabBtn = document.getElementById('btn-sidebar-resume');
+            if (resumeTabBtn) resumeTabBtn.click();
+        });
+    }
 
-    document.getElementById('dashboard-view-calendar-btn').addEventListener('click', () => {
-        const interviewTabBtn = document.getElementById('btn-sidebar-interviews');
-        if (interviewTabBtn) interviewTabBtn.click();
-    });
+    const btnDashboardCalendar = document.getElementById('dashboard-view-calendar-btn');
+    if (btnDashboardCalendar) {
+        btnDashboardCalendar.addEventListener('click', () => {
+            const interviewTabBtn = document.getElementById('btn-sidebar-interviews');
+            if (interviewTabBtn) interviewTabBtn.click();
+        });
+    }
 
     // Active Roadmap Dashboard Actions
     const untrackBtnDashboard = document.getElementById('btn-dashboard-untrack');
@@ -2683,17 +2682,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const learningTabBtn = document.getElementById('btn-sidebar-learning');
         if (learningTabBtn) {
             learningTabBtn.click();
-            skillInput.value = skillName;
+            if (skillInput) skillInput.value = skillName;
             handleSearch();
         }
     };
 
-    document.getElementById('rec-item-graphs').addEventListener('click', () => {
-        triggerRecommendationSearch('Graph Algorithms');
-    });
-
-    document.getElementById('rec-item-sysdesign').addEventListener('click', () => {
-        triggerRecommendationSearch('System Design');
     });
 
     // ── Dedicated AI Mentor page consultation ────────────────────
