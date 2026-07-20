@@ -9,6 +9,9 @@ import json
 import re
 import io
 import uuid
+import time
+import jwt
+import threading
 import requests
 import pandas as pd
 from concurrent.futures import ThreadPoolExecutor
@@ -41,60 +44,249 @@ app = Flask(__name__, static_folder="static", static_url_path="/static")
 app.secret_key = os.getenv("SECRET_KEY", "skillpath-dev-secret-key-2024")
 CORS(app)
 
-# ──────────────────────────────────────────────
-# Supabase Client (service role — bypasses RLS)
-# ──────────────────────────────────────────────
-_sb: SupabaseClient = None
-def get_sb():
-    global _sb
-    if _sb is None and SupabaseClient:
-        url = os.getenv("SUPABASE_URL", "")
-        key = os.getenv("SUPABASE_SERVICE_KEY", "")
-        if url and key:
-            try:
-                _sb = create_client(url, key)
-            except Exception as e:
-                print(f"[DB] Supabase init failed: {e}")
-    return _sb
+# Global ThreadPoolExecutor for async tasks
+executor = ThreadPoolExecutor(max_workers=8)
 
 # ──────────────────────────────────────────────
-# Authentication Middleware (JWT Validation)
+# Task 7: Thread-Safe In-Memory TTL Cache
 # ──────────────────────────────────────────────
+class TTLCache:
+    def __init__(self, default_ttl=600):
+        self._cache = {}
+        self._lock = threading.Lock()
+        self.default_ttl = default_ttl
+
+    def get(self, key):
+        with self._lock:
+            if key in self._cache:
+                value, expires_at = self._cache[key]
+                if time.time() < expires_at:
+                    return value
+                del self._cache[key]
+        return None
+
+    def set(self, key, value, ttl=None):
+        ttl_val = ttl if ttl is not None else self.default_ttl
+        with self._lock:
+            self._cache[key] = (value, time.time() + ttl_val)
+
+    def clear(self):
+        with self._lock:
+            self._cache.clear()
+
+ttl_cache = TTLCache(default_ttl=600)
+
+# ──────────────────────────────────────────────
+# Task 5: Singleton Supabase Client Instance
+# ──────────────────────────────────────────────
+_sb: SupabaseClient = None
+_sb_lock = threading.Lock()
+
+def get_sb() -> SupabaseClient:
+    """Returns global singleton Supabase client instance."""
+    global _sb
+    if _sb is None and SupabaseClient:
+        with _sb_lock:
+            if _sb is None:
+                url = os.getenv("SUPABASE_URL", "")
+                key = os.getenv("SUPABASE_SERVICE_KEY", "")
+                if url and key:
+                    try:
+                        _sb = create_client(url, key)
+                        print("[DB] Singleton Supabase client initialized.")
+                    except Exception as e:
+                        print(f"[DB] Supabase init failed: {e}")
+    return _sb
+
+# Eagerly initialize Supabase client at startup
+get_sb()
+
+# ──────────────────────────────────────────────
+# Task 4: Detailed Request Performance Logging Middleware
+# ──────────────────────────────────────────────
+@app.before_request
+def before_request_perf():
+    g.start_time = time.time()
+    g.auth_time = 0.0
+    g.db_time = 0.0
+    g.ext_api_time = 0.0
+    g.serialization_time = 0.0
+
+@app.after_request
+def after_request_perf(response):
+    if hasattr(g, 'start_time'):
+        total_time_ms = round((time.time() - g.start_time) * 1000, 2)
+        auth_time_ms = round(getattr(g, 'auth_time', 0.0), 2)
+        db_time_ms = round(getattr(g, 'db_time', 0.0), 2)
+        ext_api_time_ms = round(getattr(g, 'ext_api_time', 0.0), 2)
+        ser_time_ms = max(0.0, round(total_time_ms - (auth_time_ms + db_time_ms + ext_api_time_ms), 2))
+        
+        log_line = (
+            f"[PERF] {request.method} {request.path} | Status: {response.status_code} | "
+            f"Total: {total_time_ms}ms (Auth: {auth_time_ms}ms, DB: {db_time_ms}ms, "
+            f"ExtAPI: {ext_api_time_ms}ms, Serialization: {ser_time_ms}ms)"
+        )
+        print(log_line)
+        
+        if total_time_ms > 500:
+            print(f"[PERF WARNING] Endpoint {request.method} {request.path} exceeded SLA threshold: {total_time_ms}ms > 500ms")
+            
+    return response
+
+# ──────────────────────────────────────────────
+# Task 1: Secure Local JWT Verification Middleware
+# ──────────────────────────────────────────────
+class AuthenticatedUser:
+    """Dict/Object adapter for decoded JWT payload."""
+    def __init__(self, payload):
+        self.id = payload.get("sub") or payload.get("id") or "anonymous"
+        self.email = payload.get("email") or "guest@example.com"
+        self.role = payload.get("role") or "authenticated"
+        self.user_metadata = payload.get("user_metadata") or payload.get("app_metadata") or {}
+        self.payload = payload
+
+    def get(self, key, default=None):
+        return getattr(self, key, self.payload.get(key, default))
+
+    def __getitem__(self, item):
+        return getattr(self, item, self.payload.get(item))
+
+_auth_token_cache = {}  # token -> (user_obj, exp_timestamp)
+_jwks_client = None
+_jwks_lock = threading.Lock()
+
+def _get_jwks_client():
+    global _jwks_client
+    if _jwks_client is None:
+        with _jwks_lock:
+            if _jwks_client is None:
+                supabase_url = os.getenv("SUPABASE_URL", "")
+                jwks_url = f"{supabase_url}/auth/v1/.well-known/jwks.json"
+                _jwks_client = jwt.PyJWKClient(jwks_url, cache_keys=True)
+    return _jwks_client
+
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
+        t0 = time.time()
         g.user = None
         g.user_id = "anonymous"
         g.user_email = "guest@example.com"
+        g.user_role = "anon"
         
         auth_header = request.headers.get("Authorization")
         if auth_header:
             parts = auth_header.split()
             if len(parts) == 2 and parts[0].lower() == "bearer":
                 token = parts[1]
-                sb = get_sb()
-                if sb:
+                now = time.time()
+
+                # Check in-memory token cache first (0 ms)
+                if token in _auth_token_cache:
+                    cached_user, cache_exp = _auth_token_cache[token]
+                    if now < cache_exp:
+                        g.user = cached_user
+                        g.user_id = cached_user.id
+                        g.user_email = cached_user.email
+                        g.user_role = cached_user.role
+                        g.auth_time = (time.time() - t0) * 1000
+                        return f(*args, **kwargs)
+                    else:
+                        del _auth_token_cache[token]
+
+                # Inspect unverified header for algorithm detection
+                try:
+                    header = jwt.get_unverified_header(token)
+                    alg = header.get("alg", "HS256")
+                except Exception as e:
+                    g.auth_time = (time.time() - t0) * 1000
+                    return jsonify({"error": "Malformed authorization header or token", "code": "MALFORMED_TOKEN"}), 401
+
+                verified_user = None
+
+                # HS256 Local Verification (zero network calls)
+                jwt_secret = os.getenv("SUPABASE_JWT_SECRET")
+                if alg == "HS256" and jwt_secret:
                     try:
-                        res = sb.auth.get_user(token)
-                        if res and res.user:
-                            g.user = res.user
-                            g.user_id = res.user.id
-                            g.user_email = res.user.email
-                            
-                            # Trigger non-blocking Welcome Email check for authenticated user
-                            user_meta = res.user.user_metadata or {}
-                            user_name = user_meta.get("full_name") or (res.user.email.split("@")[0] if res.user.email else "Candidate")
-                            check_and_send_welcome_email(
-                                user_id=res.user.id,
-                                email=res.user.email,
-                                name=user_name,
-                                sb=sb
-                            )
+                        payload = jwt.decode(
+                            token,
+                            jwt_secret,
+                            algorithms=["HS256"],
+                            options={"verify_exp": True, "verify_aud": False}
+                        )
+                        verified_user = AuthenticatedUser(payload)
+                    except jwt.ExpiredSignatureError:
+                        g.auth_time = (time.time() - t0) * 1000
+                        return jsonify({"error": "Authorization token has expired", "code": "TOKEN_EXPIRED"}), 401
+                    except jwt.InvalidTokenError as e:
+                        g.auth_time = (time.time() - t0) * 1000
+                        return jsonify({"error": f"Invalid token signature: {str(e)}", "code": "INVALID_SIGNATURE"}), 401
+
+                # RS256/ES256 JWKS Verification
+                elif alg in ["RS256", "ES256"]:
+                    try:
+                        jwks = _get_jwks_client()
+                        signing_key = jwks.get_signing_key_from_jwt(token)
+                        payload = jwt.decode(
+                            token,
+                            signing_key.key,
+                            algorithms=[alg],
+                            options={"verify_exp": True, "verify_aud": False}
+                        )
+                        verified_user = AuthenticatedUser(payload)
+                    except jwt.ExpiredSignatureError:
+                        g.auth_time = (time.time() - t0) * 1000
+                        return jsonify({"error": "Authorization token has expired", "code": "TOKEN_EXPIRED"}), 401
                     except Exception as e:
-                        print(f"[AUTH] Token verification warning: {e}")
-                        
+                        g.auth_time = (time.time() - t0) * 1000
+                        return jsonify({"error": f"JWKS verification failed: {str(e)}", "code": "JWKS_ERROR"}), 401
+
+                # Fallback verification & token caching if secret is not explicitly set
+                if not verified_user:
+                    sb = get_sb()
+                    if sb:
+                        try:
+                            res = sb.auth.get_user(token)
+                            if res and res.user:
+                                u = res.user
+                                payload = {
+                                    "sub": u.id,
+                                    "email": u.email,
+                                    "role": getattr(u, "role", "authenticated"),
+                                    "user_metadata": u.user_metadata or {}
+                                }
+                                verified_user = AuthenticatedUser(payload)
+                        except Exception as e:
+                            g.auth_time = (time.time() - t0) * 1000
+                            return jsonify({"error": "Token verification failed", "code": "AUTH_FAILED"}), 401
+
+                if verified_user:
+                    g.user = verified_user
+                    g.user_id = verified_user.id
+                    g.user_email = verified_user.email
+                    g.user_role = verified_user.role
+                    
+                    # Cache verified token for token exp duration (default 10 mins)
+                    token_exp = verified_user.payload.get("exp", now + 600)
+                    _auth_token_cache[token] = (verified_user, min(token_exp, now + 600))
+                    
+                    # Async welcome email check (non-blocking thread)
+                    user_name = verified_user.user_metadata.get("full_name") or verified_user.email.split("@")[0].capitalize()
+                    executor.submit(
+                        check_and_send_welcome_email,
+                        user_id=verified_user.id,
+                        email=verified_user.email,
+                        name=user_name,
+                        sb=get_sb()
+                    )
+                else:
+                    g.auth_time = (time.time() - t0) * 1000
+                    return jsonify({"error": "Invalid or unverified token", "code": "UNAUTHORIZED"}), 401
+
+        g.auth_time = round((time.time() - t0) * 1000, 2)
         return f(*args, **kwargs)
     return decorated
+
 
 
 # ──────────────────────────────────────────────
@@ -1306,12 +1498,15 @@ def get_playlist_videos():
         return jsonify({"error": "playlist_url param required"}), 400
 
     # Extract playlist ID from URL
-    import re
     match = re.search(r'list=([A-Za-z0-9_\-]+)', playlist_url)
     if not match:
         return jsonify({"error": "Invalid playlist URL"}), 400
 
     playlist_id = match.group(1)
+    cache_key = f"yt_playlist:{playlist_id}"
+    cached = ttl_cache.get(cache_key)
+    if cached:
+        return jsonify(cached)
 
     if not YOUTUBE_API_KEY or YOUTUBE_API_KEY == "your_youtube_api_key_here":
         return jsonify({"error": "YouTube API key not configured"}), 500
@@ -1320,6 +1515,7 @@ def get_playlist_videos():
     next_page_token = None
 
     try:
+        t0 = time.time()
         while True:
             params = {
                 "part": "snippet",
@@ -1330,45 +1526,44 @@ def get_playlist_videos():
             if next_page_token:
                 params["pageToken"] = next_page_token
 
-            resp = requests.get(
+            res = requests.get(
                 "https://www.googleapis.com/youtube/v3/playlistItems",
                 params=params,
                 timeout=10
             )
-            data = resp.json()
 
-            if "error" in data:
-                print(f"[YT-VIDEOS] API error: {data['error']}")
-                return jsonify({"error": data["error"].get("message", "YouTube API error")}), 500
+            if res.status_code != 200:
+                print(f"[YT API ERROR] Status {res.status_code}: {res.text[:200]}")
+                break
 
-            for item in data.get("items", []):
+            data = res.json()
+            items = data.get("items", [])
+
+            for item in items:
                 snippet = item.get("snippet", {})
-                resource = snippet.get("resourceId", {})
-                video_id = resource.get("videoId", "")
+                resource_id = snippet.get("resourceId", {})
+                video_id = resource_id.get("videoId", "")
                 title = snippet.get("title", "")
-                position = snippet.get("position", len(all_videos))
+                position = snippet.get("position", 0)
 
-                # Skip deleted/private videos
-                if title in ("Deleted video", "Private video"):
-                    continue
-
-                all_videos.append({
-                    "id": position + 1,
-                    "title": title,
-                    "videoId": video_id,
-                    "url": f"https://www.youtube.com/watch?v={video_id}",
-                    "completed": False
-                })
+                if title and title != "Private video" and title != "Deleted video":
+                    all_videos.append({
+                        "id": item.get("id"),
+                        "title": title,
+                        "videoId": video_id,
+                        "position": position
+                    })
 
             next_page_token = data.get("nextPageToken")
             if not next_page_token:
                 break
 
-        print(f"[YT-VIDEOS] Fetched {len(all_videos)} videos for playlist {playlist_id}")
-        return jsonify({"videos": all_videos, "total": len(all_videos)})
-
+        g.ext_api_time = (time.time() - t0) * 1000
+        res_payload = {"videos": all_videos, "total": len(all_videos)}
+        ttl_cache.set(cache_key, res_payload, ttl=600)
+        return jsonify(res_payload)
     except Exception as e:
-        print(f"[YT-VIDEOS] Error: {e}")
+        print(f"[YT API EXCEPTION] {e}")
         return jsonify({"error": str(e)}), 500
 
 

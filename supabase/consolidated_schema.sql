@@ -277,3 +277,13 @@ CREATE POLICY "Public full access success_metrics" ON success_metrics FOR ALL US
 
 -- Note: Storage buckets creation setup
 -- To set up storage bucket correctly, go to Supabase Dashboard -> Storage -> Create a new bucket named "resumes" (set public = false).
+
+-- ──────────────────────────────────────────────
+-- 4. High-Performance Query Optimization Indexes (Task 8)
+-- ──────────────────────────────────────────────
+CREATE INDEX IF NOT EXISTS idx_learning_progress_session_skill ON learning_progress(session_id, skill_name);
+CREATE INDEX IF NOT EXISTS idx_resume_analysis_user_created ON resume_analysis(user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_skills_cache_lookup ON skills_cache(skill_name, level, language);
+CREATE INDEX IF NOT EXISTS idx_recent_searches_user_created ON recent_searches(user_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_interview_progress_user ON interview_progress(user_id, created_at DESC);
+

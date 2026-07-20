@@ -1,26 +1,51 @@
 /**
- * Supabase Service Layer & Fetch Interceptor
+ * Supabase Service Layer & Fetch Interceptor (Production-Optimized)
  * 
  * Provides a dynamically initialized database client and intercepts all fetch requests
- * to automatically attach the Supabase JWT access token to backend API calls.
+ * to automatically attach the cached Supabase JWT access token to backend API calls.
  */
 
-// Intercept all fetch requests to inject Supabase JWT and auto-redirect on session expiration
+// In-memory token cache to eliminate redundant getSession() network/storage calls
+let cachedAccessToken = null;
+let cachedTokenExpiry = 0;
+
+function updateTokenCache(session) {
+    if (session?.access_token) {
+        cachedAccessToken = session.access_token;
+        cachedTokenExpiry = session.expires_at || (Math.floor(Date.now() / 1000) + 3600);
+    } else {
+        cachedAccessToken = null;
+        cachedTokenExpiry = 0;
+    }
+}
+
+// Intercept all fetch requests to inject Supabase JWT
 const originalFetch = window.fetch;
 window.fetch = async function (url, options = {}) {
-    // Only attempt to get session if supabaseClient has been created and it's not a request for /config or /login-page
-    if (window.supabaseClient && !url.includes('/config') && !url.includes('/login-page')) {
-        try {
-            const { data } = await window.supabaseClient.auth.getSession();
-            const token = data?.session?.access_token;
-            if (token) {
-                options.headers = {
-                    ...options.headers,
-                    'Authorization': `Bearer ${token}`
-                };
+    // Only attempt to attach auth headers if request is for our app backend and not config/login
+    if (!url.includes('/config') && !url.includes('/login-page')) {
+        const nowSec = Math.floor(Date.now() / 1000);
+        
+        // Fast path: use valid in-memory token without calling getSession()
+        if (cachedAccessToken && nowSec < (cachedTokenExpiry - 60)) {
+            options.headers = {
+                ...options.headers,
+                'Authorization': `Bearer ${cachedAccessToken}`
+            };
+        } else if (window.supabaseClient) {
+            // Token expired or not cached yet: fetch session and update cache
+            try {
+                const { data } = await window.supabaseClient.auth.getSession();
+                updateTokenCache(data?.session);
+                if (cachedAccessToken) {
+                    options.headers = {
+                        ...options.headers,
+                        'Authorization': `Bearer ${cachedAccessToken}`
+                    };
+                }
+            } catch (e) {
+                console.error("[AUTH] Failed to attach auth headers:", e);
             }
-        } catch (e) {
-            console.error("Failed to attach auth headers:", e);
         }
     }
     return originalFetch(url, options);
@@ -69,6 +94,16 @@ class DatabaseService {
                 }
             });
             window.supabaseClient = this.client;
+
+            // Subscribe to real-time auth state changes to keep token cache hot
+            this.client.auth.onAuthStateChange((event, session) => {
+                updateTokenCache(session);
+            });
+
+            // Initial cache populate
+            const { data } = await this.client.auth.getSession();
+            updateTokenCache(data?.session);
+
             return this.client;
         })();
 
