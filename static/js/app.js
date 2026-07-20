@@ -2687,7 +2687,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    });
+    // Wire up AI Recommendations click listeners on Dashboard
+    const recGraphs = document.getElementById('rec-item-graphs');
+    if (recGraphs) {
+        recGraphs.style.cursor = 'pointer';
+        recGraphs.addEventListener('click', () => triggerRecommendationSearch('Graph Algorithms'));
+    }
+    const recSysdesign = document.getElementById('rec-item-sysdesign');
+    if (recSysdesign) {
+        recSysdesign.style.cursor = 'pointer';
+        recSysdesign.addEventListener('click', () => triggerRecommendationSearch('System Design'));
+    }
+
+    // Top Bar Actions
+    const globalSearchTrigger = document.getElementById('global-search-trigger');
+    if (globalSearchTrigger) {
+        globalSearchTrigger.addEventListener('click', () => {
+            const learningTabBtn = document.getElementById('btn-sidebar-learning');
+            if (learningTabBtn) learningTabBtn.click();
+            if (skillInput) skillInput.focus();
+        });
+    }
+
+    const notificationsBtn = document.getElementById('notifications-btn');
+    if (notificationsBtn) {
+        notificationsBtn.addEventListener('click', () => {
+            showToast('🔔 You have no unread notifications.');
+        });
+    }
 
     // ── Dedicated AI Mentor page consultation ────────────────────
     const mentorSubmitPage = document.getElementById('mentor-submit-btn-page');
@@ -3224,49 +3251,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Coding Profiles Logic
-    const loadCodingProfiles = async () => {
-        let leetcode = "";
-        let github = "";
-        let codeforces = "";
-        let codementor = "";
 
-        // 1. Try DB first
-        if (currentUserId && window.db) {
-            try {
-                const profile = await window.db.getProfile(currentUserId);
-                if (profile) {
-                    leetcode = profile.leetcode_profile || "";
-                    github = profile.github_profile || "";
-                    codeforces = profile.codeforces_profile || "";
-                    codementor = profile.codementor_profile || "";
-                }
-            } catch (e) {
-                console.warn("DB profile load failed (expected if columns not migrated yet):", e);
-            }
-        }
-
-        // 2. Fallback to localStorage
-        if (!leetcode) leetcode = localStorage.getItem('profile_leetcode') || "";
-        if (!github) github = localStorage.getItem('profile_github') || "";
-        if (!codeforces) codeforces = localStorage.getItem('profile_codeforces') || "";
-        if (!codementor) codementor = localStorage.getItem('profile_codementor') || "";
-
-        // 3. Populate inputs & summaries
-        const setValAndSummary = (id, summaryId, val) => {
-            const el = document.getElementById(id);
-            if (el) el.value = val;
-            const summaryEl = document.getElementById(summaryId);
-            if (summaryEl) {
-                summaryEl.textContent = val ? val : "Not configured 🛑";
-                summaryEl.style.color = val ? "var(--text-main)" : "var(--danger)";
-            }
-        };
-        setValAndSummary('settings-leetcode', 'summary-leetcode', leetcode);
-        setValAndSummary('settings-github', 'summary-github', github);
-        setValAndSummary('settings-codeforces', 'summary-codeforces', codeforces);
-        setValAndSummary('settings-codementor', 'summary-codementor', codementor);
-    };
 
     const saveCodingProfiles = async () => {
         const leetcode = document.getElementById('settings-leetcode')?.value.trim() || "";
@@ -3338,7 +3323,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let codeforces = localStorage.getItem('profile_codeforces') || '';
         let codementor = localStorage.getItem('profile_codementor') || '';
 
-        // If authenticated user, fetch latest coding profiles from Cloud
+        // If authenticated user, fetch latest coding profiles from Cloud / DB
         if (window.supabaseClient && currentUserId && currentUserId !== 'anonymous') {
             try {
                 const { data } = await window.supabaseClient
@@ -3361,29 +3346,34 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (e) {
                 console.warn("[PROFILES] Cloud profile fetch deferred:", e);
             }
+        } else if (currentUserId && window.db) {
+            try {
+                const profile = await window.db.getProfile(currentUserId);
+                if (profile) {
+                    leetcode = profile.leetcode_profile || leetcode;
+                    github = profile.github_profile || github;
+                    codeforces = profile.codeforces_profile || codeforces;
+                    codementor = profile.codementor_profile || codementor;
+                }
+            } catch (e) {
+                console.warn("DB profile load failed:", e);
+            }
         }
 
         // Populate Settings Inputs
-        const elLeetCode = document.getElementById('settings-leetcode');
-        const elGitHub = document.getElementById('settings-github');
-        const elCodeforces = document.getElementById('settings-codeforces');
-        const elCodementor = document.getElementById('settings-codementor');
-
-        if (elLeetCode) elLeetCode.value = leetcode;
-        if (elGitHub) elGitHub.value = github;
-        if (elCodeforces) elCodeforces.value = codeforces;
-        if (elCodementor) elCodementor.value = codementor;
-
-        // Populate AI Mentor Summaries
-        const sumLC = document.getElementById('summary-leetcode');
-        const sumGH = document.getElementById('summary-github');
-        const sumCF = document.getElementById('summary-codeforces');
-        const sumCM = document.getElementById('summary-codementor');
-
-        if (sumLC) sumLC.textContent = leetcode || 'Not Configured';
-        if (sumGH) sumGH.textContent = github || 'Not Configured';
-        if (sumCF) sumCF.textContent = codeforces || 'Not Configured';
-        if (sumCM) sumCM.textContent = codementor || 'Not Configured';
+        const setValAndSummary = (id, summaryId, val) => {
+            const el = document.getElementById(id);
+            if (el) el.value = val;
+            const summaryEl = document.getElementById(summaryId);
+            if (summaryEl) {
+                summaryEl.textContent = val ? val : "Not configured 🛑";
+                summaryEl.style.color = val ? "var(--text-main)" : "var(--danger)";
+            }
+        };
+        setValAndSummary('settings-leetcode', 'summary-leetcode', leetcode);
+        setValAndSummary('settings-github', 'summary-github', github);
+        setValAndSummary('settings-codeforces', 'summary-codeforces', codeforces);
+        setValAndSummary('settings-codementor', 'summary-codementor', codementor);
     };
 
     // Set Welcome back title initials and text
