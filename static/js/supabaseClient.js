@@ -5,7 +5,6 @@
  * to automatically attach the cached Supabase JWT access token to backend API calls.
  */
 
-// In-memory token cache to eliminate redundant getSession() network/storage calls
 let cachedAccessToken = null;
 let cachedTokenExpiry = 0;
 
@@ -19,18 +18,41 @@ function updateTokenCache(session) {
     }
 }
 
+function getStoredAccessToken() {
+    const nowSec = Math.floor(Date.now() / 1000);
+    if (cachedAccessToken && nowSec < (cachedTokenExpiry - 60)) {
+        return cachedAccessToken;
+    }
+    try {
+        const sessionKey = Object.keys(localStorage).find(key => key.startsWith('sb-') && key.endsWith('-auth-token'));
+        if (sessionKey) {
+            const raw = localStorage.getItem(sessionKey);
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                const token = parsed.access_token || parsed?.currentSession?.access_token;
+                if (token) {
+                    cachedAccessToken = token;
+                    cachedTokenExpiry = parsed.expires_at || (nowSec + 3600);
+                    return token;
+                }
+            }
+        }
+    } catch (e) {}
+    return null;
+}
+
 // Intercept all fetch requests to inject Supabase JWT
 const originalFetch = window.fetch;
 window.fetch = async function (url, options = {}) {
     // Only attempt to attach auth headers if request is for our app backend and not config/login
     if (!url.includes('/config') && !url.includes('/login-page')) {
-        const nowSec = Math.floor(Date.now() / 1000);
+        const token = getStoredAccessToken();
         
-        // Fast path: use valid in-memory token without calling getSession()
-        if (cachedAccessToken && nowSec < (cachedTokenExpiry - 60)) {
+        // Fast path: use valid token immediately
+        if (token) {
             options.headers = {
                 ...options.headers,
-                'Authorization': `Bearer ${cachedAccessToken}`
+                'Authorization': `Bearer ${token}`
             };
         } else if (window.supabaseClient) {
             // Token expired or not cached yet: fetch session and update cache

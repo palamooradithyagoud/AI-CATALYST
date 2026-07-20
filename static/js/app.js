@@ -3338,6 +3338,61 @@ document.addEventListener('DOMContentLoaded', () => {
         renderDashboardProgress();
     };
 
+    // Load Coding Profiles into Settings & AI Mentor Grid
+    const loadCodingProfiles = async () => {
+        let leetcode = localStorage.getItem('profile_leetcode') || '';
+        let github = localStorage.getItem('profile_github') || '';
+        let codeforces = localStorage.getItem('profile_codeforces') || '';
+        let codementor = localStorage.getItem('profile_codementor') || '';
+
+        // If authenticated user, fetch latest coding profiles from Cloud
+        if (window.supabaseClient && currentUserId && currentUserId !== 'anonymous') {
+            try {
+                const { data } = await window.supabaseClient
+                    .from('profiles')
+                    .select('leetcode_profile, github_profile, codeforces_profile, codementor_profile')
+                    .eq('id', currentUserId)
+                    .single();
+                    
+                if (data) {
+                    if (data.leetcode_profile) leetcode = data.leetcode_profile;
+                    if (data.github_profile) github = data.github_profile;
+                    if (data.codeforces_profile) codeforces = data.codeforces_profile;
+                    if (data.codementor_profile) codementor = data.codementor_profile;
+
+                    if (leetcode) localStorage.setItem('profile_leetcode', leetcode);
+                    if (github) localStorage.setItem('profile_github', github);
+                    if (codeforces) localStorage.setItem('profile_codeforces', codeforces);
+                    if (codementor) localStorage.setItem('profile_codementor', codementor);
+                }
+            } catch (e) {
+                console.warn("[PROFILES] Cloud profile fetch deferred:", e);
+            }
+        }
+
+        // Populate Settings Inputs
+        const elLeetCode = document.getElementById('settings-leetcode');
+        const elGitHub = document.getElementById('settings-github');
+        const elCodeforces = document.getElementById('settings-codeforces');
+        const elCodementor = document.getElementById('settings-codementor');
+
+        if (elLeetCode) elLeetCode.value = leetcode;
+        if (elGitHub) elGitHub.value = github;
+        if (elCodeforces) elCodeforces.value = codeforces;
+        if (elCodementor) elCodementor.value = codementor;
+
+        // Populate AI Mentor Summaries
+        const sumLC = document.getElementById('summary-leetcode');
+        const sumGH = document.getElementById('summary-github');
+        const sumCF = document.getElementById('summary-codeforces');
+        const sumCM = document.getElementById('summary-codementor');
+
+        if (sumLC) sumLC.textContent = leetcode || 'Not Configured';
+        if (sumGH) sumGH.textContent = github || 'Not Configured';
+        if (sumCF) sumCF.textContent = codeforces || 'Not Configured';
+        if (sumCM) sumCM.textContent = codementor || 'Not Configured';
+    };
+
     // Set Welcome back title initials and text
     const updateWelcomeMessage = async () => {
         let name = 'Candidate';
@@ -3351,6 +3406,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     name = data.name || 'Candidate';
                     email = data.email || 'candidate@example.com';
                     currentUserId = data.id;
+                    loadCodingProfiles();
                 } else {
                     const storedUser = sessionStorage.getItem('logged_in_user_email');
                     if (storedUser) {
@@ -3370,7 +3426,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         name = name.charAt(0).toUpperCase() + name.slice(1);
-        const initials = name.substring(0, 2).toUpperCase();
+        
+        // Calculate smart initials
+        let initials = 'US';
+        if (name && name !== 'Candidate') {
+            const parts = name.trim().split(/\s+/);
+            if (parts.length >= 2) {
+                initials = (parts[0][0] + parts[1][0]).toUpperCase();
+            } else if (name.length >= 2) {
+                initials = name.substring(0, 2).toUpperCase();
+            } else {
+                initials = name[0].toUpperCase();
+            }
+        }
 
         const banner = document.getElementById('welcome-title-banner');
         if (banner) banner.textContent = `Welcome back, ${name}! 👋`;
@@ -3385,6 +3453,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (profileName) profileName.textContent = name;
         if (profileEmail) profileEmail.textContent = email;
         if (profileAvatar) profileAvatar.textContent = initials;
+
+        loadCodingProfiles();
     };
 
     const initDsaProgress = async () => {
