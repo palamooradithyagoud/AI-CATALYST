@@ -1642,15 +1642,22 @@ def logout():
 @app.route("/get-user-session", methods=["GET"])
 @token_required
 def get_user_session():
-    name = g.user.user_metadata.get("full_name") if g.user.user_metadata else None
+    if not g.user or g.user_id == "anonymous":
+        return jsonify({
+            "logged_in": False,
+            "id": "anonymous",
+            "email": "guest@example.com",
+            "name": "Candidate"
+        })
+
+    user_meta = getattr(g.user, "user_metadata", {}) or {}
+    name = user_meta.get("full_name") or user_meta.get("name")
     if not name:
-        name = g.user.user_metadata.get("name") if g.user.user_metadata else None
-    if not name:
-        name = g.user_email.split("@")[0].capitalize()
+        name = g.user_email.split("@")[0].capitalize() if g.user_email else "Candidate"
         
     # Ensure profile row exists in the public.profiles database table (for OAuth sign-ups fallback)
     sb = get_sb()
-    if sb:
+    if sb and g.user_id != "anonymous":
         try:
             res = sb.table("profiles").select("id").eq("id", g.user_id).execute()
             if not res.data:

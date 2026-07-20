@@ -3340,24 +3340,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Set Welcome back title initials and text
     const updateWelcomeMessage = async () => {
-        let name = 'Learner';
-        let email = 'learner@example.com';
+        let name = 'Candidate';
+        let email = 'candidate@example.com';
         
         try {
             const res = await fetch('/get-user-session');
             if (res.ok) {
                 const data = await res.json();
                 if (data.logged_in) {
-                    name = data.name;
-                    email = data.email || (name.toLowerCase() + '@example.com');
+                    name = data.name || 'Candidate';
+                    email = data.email || 'candidate@example.com';
                     currentUserId = data.id;
-                    // Pre-load coding profiles as soon as user ID is ready
-                    loadCodingProfiles();
+                } else {
+                    const storedUser = sessionStorage.getItem('logged_in_user_email');
+                    if (storedUser) {
+                        name = storedUser.split('@')[0];
+                        email = storedUser;
+                    } else {
+                        name = data.name || 'Candidate';
+                        email = data.email || 'candidate@example.com';
+                    }
                 }
             }
         } catch (e) {
             console.error("Failed to fetch user session:", e);
-            const storedUser = sessionStorage.getItem('logged_in_user_email') || 'Learner';
+            const storedUser = sessionStorage.getItem('logged_in_user_email') || 'Candidate';
             name = storedUser.split('@')[0];
             email = storedUser;
         }
@@ -3365,8 +3372,11 @@ document.addEventListener('DOMContentLoaded', () => {
         name = name.charAt(0).toUpperCase() + name.slice(1);
         const initials = name.substring(0, 2).toUpperCase();
 
-        document.getElementById('welcome-title-banner').textContent = `Welcome back, ${name}! 👋`;
-        document.getElementById('user-avatar-initials').textContent = initials;
+        const banner = document.getElementById('welcome-title-banner');
+        if (banner) banner.textContent = `Welcome back, ${name}! 👋`;
+        
+        const avatarInitials = document.getElementById('user-avatar-initials');
+        if (avatarInitials) avatarInitials.textContent = initials;
 
         const profileName = document.getElementById('profile-user-name');
         const profileEmail = document.getElementById('profile-user-email');
