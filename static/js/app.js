@@ -3309,28 +3309,104 @@ document.addEventListener('DOMContentLoaded', () => {
         renderDashboardProgress();
     };
 
-    // Load Coding Profiles into Settings & AI Mentor Grid
+    const saveAcademicProfile = async () => {
+        const fullname = document.getElementById('settings-fullname')?.value.trim() || "";
+        const college = document.getElementById('settings-college')?.value.trim() || "";
+        const dept = document.getElementById('settings-dept')?.value.trim() || "";
+        const cls = document.getElementById('settings-class')?.value || "";
+        const targetRole = document.getElementById('settings-target-role')?.value.trim() || "";
+
+        // Store locally
+        localStorage.setItem('profile_fullname', fullname);
+        localStorage.setItem('profile_college', college);
+        localStorage.setItem('profile_dept', dept);
+        localStorage.setItem('profile_class', cls);
+        localStorage.setItem('profile_target_role', targetRole);
+
+        // Save to DB via backend
+        let dbSaved = false;
+        try {
+            const res = await fetch('/save-profile-details', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    full_name: fullname,
+                    college: college,
+                    department: dept,
+                    academic_class: cls,
+                    target_role: targetRole
+                })
+            });
+            if (res.ok) {
+                const data = await res.json();
+                if (data.status === 'success') dbSaved = true;
+            }
+        } catch (e) {
+            console.error("Failed to save profile details via backend:", e);
+        }
+
+        // Update UI Hero Card & Header
+        const chipClass = document.getElementById('chip-class-val');
+        const chipCollege = document.getElementById('chip-college-val');
+        const chipDept = document.getElementById('chip-dept-val');
+        const chipRole = document.getElementById('chip-role-val');
+        const profileName = document.getElementById('profile-user-name');
+
+        if (chipClass) chipClass.textContent = cls || "Not Specified";
+        if (chipCollege) chipCollege.textContent = college || "Not Specified";
+        if (chipDept) chipDept.textContent = dept || "Not Specified";
+        if (chipRole) chipRole.textContent = targetRole || "Software Engineer";
+        if (profileName && fullname) profileName.textContent = fullname;
+
+        if (fullname) {
+            const banner = document.getElementById('welcome-title-banner');
+            if (banner) banner.textContent = `Welcome back, ${fullname.split(' ')[0]}! 👋`;
+        }
+
+        if (dbSaved) {
+            showToast('✨ Academic profile updated & synced to Cloud successfully!');
+        } else {
+            showToast('✨ Academic profile updated locally!');
+        }
+    };
+
+    // Load Coding & Academic Profiles into Settings Cards
     const loadCodingProfiles = async () => {
         let leetcode = localStorage.getItem('profile_leetcode') || '';
         let github = localStorage.getItem('profile_github') || '';
         let codeforces = localStorage.getItem('profile_codeforces') || '';
         let codementor = localStorage.getItem('profile_codementor') || '';
+        let college = localStorage.getItem('profile_college') || '';
+        let dept = localStorage.getItem('profile_dept') || '';
+        let cls = localStorage.getItem('profile_class') || '';
+        let fullname = localStorage.getItem('profile_fullname') || '';
+        let targetRole = localStorage.getItem('profile_target_role') || '';
 
-        // If authenticated user, fetch latest coding profiles from Cloud / DB
+        // If authenticated user, fetch latest coding & academic profiles from Cloud / DB
         if (window.supabaseClient && currentUserId && currentUserId !== 'anonymous') {
             try {
                 const { data } = await window.supabaseClient
                     .from('profiles')
-                    .select('leetcode_profile, github_profile, codeforces_profile, codementor_profile')
+                    .select('full_name, college, department, academic_class, target_role, leetcode_profile, github_profile, codeforces_profile, codementor_profile')
                     .eq('id', currentUserId)
                     .single();
                     
                 if (data) {
+                    if (data.full_name) fullname = data.full_name;
+                    if (data.college) college = data.college;
+                    if (data.department) dept = data.department;
+                    if (data.academic_class) cls = data.academic_class;
+                    if (data.target_role) targetRole = data.target_role;
                     if (data.leetcode_profile) leetcode = data.leetcode_profile;
                     if (data.github_profile) github = data.github_profile;
                     if (data.codeforces_profile) codeforces = data.codeforces_profile;
                     if (data.codementor_profile) codementor = data.codementor_profile;
 
+                    if (fullname) localStorage.setItem('profile_fullname', fullname);
+                    if (college) localStorage.setItem('profile_college', college);
+                    if (dept) localStorage.setItem('profile_dept', dept);
+                    if (cls) localStorage.setItem('profile_class', cls);
+                    if (targetRole) localStorage.setItem('profile_target_role', targetRole);
                     if (leetcode) localStorage.setItem('profile_leetcode', leetcode);
                     if (github) localStorage.setItem('profile_github', github);
                     if (codeforces) localStorage.setItem('profile_codeforces', codeforces);
@@ -3339,24 +3415,21 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (e) {
                 console.warn("[PROFILES] Cloud profile fetch deferred:", e);
             }
-        } else if (currentUserId && window.db) {
-            try {
-                const profile = await window.db.getProfile(currentUserId);
-                if (profile) {
-                    leetcode = profile.leetcode_profile || leetcode;
-                    github = profile.github_profile || github;
-                    codeforces = profile.codeforces_profile || codeforces;
-                    codementor = profile.codementor_profile || codementor;
-                }
-            } catch (e) {
-                console.warn("DB profile load failed:", e);
-            }
         }
 
         // Populate Settings Inputs
-        const setValAndSummary = (id, summaryId, val) => {
+        const setVal = (id, val) => {
             const el = document.getElementById(id);
-            if (el) el.value = val;
+            if (el && val !== undefined) el.value = val;
+        };
+        setVal('settings-fullname', fullname);
+        setVal('settings-college', college);
+        setVal('settings-dept', dept);
+        setVal('settings-class', cls);
+        setVal('settings-target-role', targetRole);
+
+        const setValAndSummary = (id, summaryId, val) => {
+            setVal(id, val);
             const summaryEl = document.getElementById(summaryId);
             if (summaryEl) {
                 summaryEl.textContent = val ? val : "Not configured 🛑";
@@ -3367,6 +3440,19 @@ document.addEventListener('DOMContentLoaded', () => {
         setValAndSummary('settings-github', 'summary-github', github);
         setValAndSummary('settings-codeforces', 'summary-codeforces', codeforces);
         setValAndSummary('settings-codementor', 'summary-codementor', codementor);
+
+        // Update Hero Card Chips
+        const chipClass = document.getElementById('chip-class-val');
+        const chipCollege = document.getElementById('chip-college-val');
+        const chipDept = document.getElementById('chip-dept-val');
+        const chipRole = document.getElementById('chip-role-val');
+        const profileName = document.getElementById('profile-user-name');
+
+        if (chipClass) chipClass.textContent = cls || "Not Specified";
+        if (chipCollege) chipCollege.textContent = college || "Not Specified";
+        if (chipDept) chipDept.textContent = dept || "Not Specified";
+        if (chipRole) chipRole.textContent = targetRole || "Software Engineer";
+        if (profileName && fullname) profileName.textContent = fullname;
     };
 
     // Set Welcome back title initials and text
@@ -3401,7 +3487,12 @@ document.addEventListener('DOMContentLoaded', () => {
             email = storedUser;
         }
 
-        name = name.charAt(0).toUpperCase() + name.slice(1);
+        const savedFullname = localStorage.getItem('profile_fullname');
+        if (savedFullname && savedFullname.trim() !== '') {
+            name = savedFullname.trim();
+        } else {
+            name = name.charAt(0).toUpperCase() + name.slice(1);
+        }
         
         // Calculate smart initials
         let initials = 'US';
@@ -3417,7 +3508,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const banner = document.getElementById('welcome-title-banner');
-        if (banner) banner.textContent = `Welcome back, ${name}! 👋`;
+        if (banner) banner.textContent = `Welcome back, ${name.split(' ')[0]}! 👋`;
         
         const avatarInitials = document.getElementById('user-avatar-initials');
         if (avatarInitials) avatarInitials.textContent = initials;
@@ -3470,7 +3561,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initActiveRoadmap();
     initProfileMilestones();
 
-    // Wire up Save Coding Profiles settings button
+    // Wire up Save Academic & Coding Profiles settings buttons
+    const btnSaveAcademicProfile = document.getElementById('btn-save-academic-profile');
+    if (btnSaveAcademicProfile) {
+        btnSaveAcademicProfile.addEventListener('click', saveAcademicProfile);
+    }
+
     const btnSaveProfiles = document.getElementById('btn-save-profiles');
     if (btnSaveProfiles) {
         btnSaveProfiles.addEventListener('click', saveCodingProfiles);

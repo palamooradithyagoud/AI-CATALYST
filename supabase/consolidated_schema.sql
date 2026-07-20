@@ -12,6 +12,9 @@ CREATE TABLE IF NOT EXISTS profiles (
     id UUID PRIMARY KEY, -- Linked to user uuid
     full_name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
+    college TEXT,
+    department TEXT,
+    academic_class TEXT,
     target_role TEXT,
     skill_level TEXT,
     preferred_learning_path TEXT,

@@ -1647,7 +1647,11 @@ def get_user_session():
             "logged_in": False,
             "id": "anonymous",
             "email": "guest@example.com",
-            "name": "Candidate"
+            "name": "Candidate",
+            "college": "",
+            "department": "",
+            "academic_class": "",
+            "target_role": ""
         })
 
     user_meta = getattr(g.user, "user_metadata", {}) or {}
@@ -1655,26 +1659,50 @@ def get_user_session():
     if not name:
         name = g.user_email.split("@")[0].capitalize() if g.user_email else "Candidate"
         
-    # Ensure profile row exists in the public.profiles database table (for OAuth sign-ups fallback)
     sb = get_sb()
+    profile = {}
     if sb and g.user_id != "anonymous":
         try:
-            res = sb.table("profiles").select("id").eq("id", g.user_id).execute()
-            if not res.data:
+            res = sb.table("profiles").select("*").eq("id", g.user_id).execute()
+            if res.data and len(res.data) > 0:
+                profile = res.data[0]
+            else:
                 sb.table("profiles").insert({
                     "id": g.user_id,
                     "full_name": name,
                     "email": g.user_email
                 }).execute()
-                print(f"[AUTH] Auto-created database profile for OAuth user {g.user_id}.")
+                print(f"[AUTH] Auto-created database profile for user {g.user_id}.")
         except Exception as e:
-            print(f"[AUTH] Failed to auto-create database profile for OAuth user: {e}")
+            print(f"[AUTH] Profile lookup/auto-creation: {e}")
+
+    college = profile.get("college") or ""
+    department = profile.get("department") or ""
+    academic_class = profile.get("academic_class") or ""
+
+    if profile.get("preferred_learning_path"):
+        try:
+            pref_data = json.loads(profile.get("preferred_learning_path"))
+            if isinstance(pref_data, dict):
+                if not college: college = pref_data.get("college") or ""
+                if not department: department = pref_data.get("department") or ""
+                if not academic_class: academic_class = pref_data.get("academic_class") or ""
+        except Exception:
+            pass
 
     return jsonify({
         "logged_in": True,
         "id": g.user_id,
         "email": g.user_email,
-        "name": name
+        "name": profile.get("full_name") or name,
+        "college": college,
+        "department": department,
+        "academic_class": academic_class,
+        "target_role": profile.get("target_role") or "",
+        "leetcode_profile": profile.get("leetcode_profile") or "",
+        "github_profile": profile.get("github_profile") or "",
+        "codeforces_profile": profile.get("codeforces_profile") or "",
+        "codementor_profile": profile.get("codementor_profile") or ""
     })
 
 
@@ -1849,6 +1877,68 @@ def get_leetcode_stats():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
+@app.route("/save-profile-details", methods=["POST"])
+@token_required
+def save_profile_details():
+    sb = get_sb()
+    if not sb:
+        return jsonify({"error": "DB unavailable"}), 500
+    try:
+        body = request.get_json(silent=True) or {}
+        full_name = body.get("full_name", "").strip()
+        college = body.get("college", "").strip()
+        department = body.get("department", "").strip()
+        academic_class = body.get("academic_class", "").strip()
+        target_role = body.get("target_role", "").strip()
+        leetcode = body.get("leetcode_profile", "").strip()
+        github = body.get("github_profile", "").strip()
+        codeforces = body.get("codeforces_profile", "").strip()
+        codementor = body.get("codementor_profile", "").strip()
+
+        profile_data = {
+            "id": g.user_id,
+            "email": g.user_email
+        }
+        if full_name: profile_data["full_name"] = full_name
+        if college: profile_data["college"] = college
+        if department: profile_data["department"] = department
+        if academic_class: profile_data["academic_class"] = academic_class
+        if target_role: profile_data["target_role"] = target_role
+        if leetcode: profile_data["leetcode_profile"] = leetcode
+        if github: profile_data["github_profile"] = github
+        if codeforces: profile_data["codeforces_profile"] = codeforces
+        if codementor: profile_data["codementor_profile"] = codementor
+
+        try:
+            sb.table("profiles").upsert(profile_data, on_conflict="id").execute()
+            print(f"[PROFILES] Saved profile details directly for user {g.user_id}.")
+        except Exception as sb_err:
+            print(f"[PROFILES] Direct column upsert fallback to JSON: {sb_err}")
+            academic_payload = {}
+            if college: academic_payload["college"] = college
+            if department: academic_payload["department"] = department
+            if academic_class: academic_payload["academic_class"] = academic_class
+
+            fallback_data = {
+                "id": g.user_id,
+                "email": g.user_email,
+                "preferred_learning_path": json.dumps(academic_payload)
+            }
+            if full_name: fallback_data["full_name"] = full_name
+            if target_role: fallback_data["target_role"] = target_role
+            if leetcode: fallback_data["leetcode_profile"] = leetcode
+            if github: fallback_data["github_profile"] = github
+            if codeforces: fallback_data["codeforces_profile"] = codeforces
+            if codementor: fallback_data["codementor_profile"] = codementor
+            sb.table("profiles").upsert(fallback_data, on_conflict="id").execute()
+            print(f"[PROFILES] Saved profile details via JSON fallback for user {g.user_id}.")
+
+        return jsonify({"status": "success"})
+    except Exception as e:
+        print(f"[PROFILES] Save profile details failed: {e}")
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
 @app.route("/save-coding-profiles", methods=["POST"])
 @token_required
 def save_coding_profiles():
@@ -1861,6 +1951,10 @@ def save_coding_profiles():
         github = body.get("github_profile", "").strip()
         codeforces = body.get("codeforces_profile", "").strip()
         codementor = body.get("codementor_profile", "").strip()
+        college = body.get("college", "").strip()
+        department = body.get("department", "").strip()
+        academic_class = body.get("academic_class", "").strip()
+        full_name = body.get("full_name", "").strip()
         
         # Upsert profiles table in Supabase
         profile_data = {
@@ -1871,12 +1965,31 @@ def save_coding_profiles():
             "codeforces_profile": codeforces,
             "codementor_profile": codementor
         }
-        user_meta = getattr(g.user, "user_metadata", {}) or {}
-        name = user_meta.get("full_name") or user_meta.get("name")
-        if name:
-            profile_data["full_name"] = name
+        if full_name: profile_data["full_name"] = full_name
+        if college: profile_data["college"] = college
+        if department: profile_data["department"] = department
+        if academic_class: profile_data["academic_class"] = academic_class
 
-        res = sb.table("profiles").upsert(profile_data, on_conflict="id").execute()
+        try:
+            sb.table("profiles").upsert(profile_data, on_conflict="id").execute()
+        except Exception as sb_err:
+            print(f"[PROFILES] Direct column upsert fallback to JSON: {sb_err}")
+            academic_payload = {}
+            if college: academic_payload["college"] = college
+            if department: academic_payload["department"] = department
+            if academic_class: academic_payload["academic_class"] = academic_class
+
+            fallback_data = {
+                "id": g.user_id,
+                "email": g.user_email,
+                "leetcode_profile": leetcode,
+                "github_profile": github,
+                "codeforces_profile": codeforces,
+                "codementor_profile": codementor,
+                "preferred_learning_path": json.dumps(academic_payload)
+            }
+            if full_name: fallback_data["full_name"] = full_name
+            sb.table("profiles").upsert(fallback_data, on_conflict="id").execute()
         
         print(f"[PROFILES] Backend successfully upserted Supabase profile for user {g.user_id}.")
         return jsonify({"status": "success"})

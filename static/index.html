@@ -1072,55 +1072,156 @@
             <section id="view-settings" class="content-view">
                 <div class="welcome-banner">
                     <div>
-                        <h1 class="welcome-title">Account Settings</h1>
-                        <p class="welcome-subtitle">Configure your profile, API keys, and configurations.</p>
+                        <h1 class="welcome-title">Account & Candidate Profile</h1>
+                        <p class="welcome-subtitle">Manage your academic identity, institution credentials, career goals, and developer profiles.</p>
                     </div>
                 </div>
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:24px; width:100%;">
-                    <div class="card" style="flex: 1;">
-                        <h3 class="card-heading">Profile Configurations</h3>
-                        <div style="display:flex; flex-direction:column; gap:20px;">
-                            <div style="background:var(--bg-main); border:1px solid var(--border); padding:16px 20px; border-radius:var(--radius-md); display:flex; align-items:center; gap:16px;">
-                                <div id="profile-avatar" style="width:48px; height:48px; border-radius:50%; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.2rem; font-family:'Outfit',sans-serif; flex-shrink:0;">U</div>
-                                <div style="display:flex; flex-direction:column; min-width:0;">
-                                    <strong id="profile-user-name" style="color:var(--text-main); font-size:1rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Loading...</strong>
-                                    <span id="profile-user-email" style="color:var(--text-muted); font-size:0.8rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Loading...</span>
+
+                <!-- Hero Profile Header Card -->
+                <div class="profile-hero-card">
+                    <div class="profile-hero-header">
+                        <div class="profile-avatar-wrap">
+                            <div id="profile-avatar" class="profile-avatar">U</div>
+                            <div class="profile-badge-dot" title="Active Candidate"></div>
+                        </div>
+                        <div class="profile-hero-info">
+                            <div class="profile-hero-title-row">
+                                <h2 id="profile-user-name" class="profile-hero-name">Loading Profile...</h2>
+                                <span id="profile-role-badge" class="profile-hero-tag">🎯 Active Candidate</span>
+                            </div>
+                            <p id="profile-user-email" class="profile-hero-email">loading...</p>
+                            <div class="profile-meta-chips">
+                                <div class="meta-chip">
+                                    <span class="chip-label">🎓 Class:</span>
+                                    <strong id="chip-class-val">Not Specified</strong>
+                                </div>
+                                <div class="meta-chip">
+                                    <span class="chip-label">🏫 College:</span>
+                                    <strong id="chip-college-val">Not Specified</strong>
+                                </div>
+                                <div class="meta-chip">
+                                    <span class="chip-label">💻 Dept:</span>
+                                    <strong id="chip-dept-val">Not Specified</strong>
+                                </div>
+                                <div class="meta-chip">
+                                    <span class="chip-label">🎯 Target:</span>
+                                    <strong id="chip-role-val">Software Engineer</strong>
                                 </div>
                             </div>
-                            <div style="display:flex; flex-direction:column; gap:12px; border-top:1px solid var(--border); padding-top:16px;">
-                                <h4 style="font-family:'Outfit', sans-serif; font-weight:700; color:var(--text-main); margin-bottom:4px;">🔗 Coding Profiles</h4>
-                                <div>
-                                    <label class="input-label" style="font-size:0.8rem; margin-bottom:4px; display:block;">LeetCode Profile</label>
-                                    <input id="settings-leetcode" type="text" placeholder="LeetCode username or URL" class="skill-input" style="padding:10px; width:100%; box-sizing:border-box;" />
-                                </div>
-                                <div>
-                                    <label class="input-label" style="font-size:0.8rem; margin-bottom:4px; display:block;">GitHub Profile</label>
-                                    <input id="settings-github" type="text" placeholder="GitHub username or URL" class="skill-input" style="padding:10px; width:100%; box-sizing:border-box;" />
-                                </div>
-                                <div>
-                                    <label class="input-label" style="font-size:0.8rem; margin-bottom:4px; display:block;">Codeforces Profile</label>
-                                    <input id="settings-codeforces" type="text" placeholder="Codeforces username or URL" class="skill-input" style="padding:10px; width:100%; box-sizing:border-box;" />
-                                </div>
-                                <div>
-                                    <label class="input-label" style="font-size:0.8rem; margin-bottom:4px; display:block;">Codementor Profile</label>
-                                    <input id="settings-codementor" type="text" placeholder="Codementor username or URL" class="skill-input" style="padding:10px; width:100%; box-sizing:border-box;" />
-                                </div>
-                                <button id="btn-save-profiles" class="cta-button" style="padding:12px; margin-top:8px; font-size:0.9rem; width:100%;">
-                                    Save Coding Profiles
-                                </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Grid of Premium Cards -->
+                <div class="profile-cards-grid">
+                    
+                    <!-- Card 1: Academic & Institutional Profile -->
+                    <div class="profile-card">
+                        <div class="profile-card-header">
+                            <div class="card-icon-badge icon-academic">🎓</div>
+                            <div>
+                                <h3 class="profile-card-title">Academic & Institutional Profile</h3>
+                                <p class="profile-card-desc">Specify your current academic year, college/university, and department.</p>
                             </div>
-                            <button class="btn-outline-primary" style="color:var(--danger); border-color:var(--danger); width:100%; height:44px; display:flex; align-items:center; justify-content:center; font-weight:600;" onclick="handleLogout()">
-                                Sign Out / Log Out
+                        </div>
+                        <div class="profile-form-grid">
+                            <div class="profile-input-group span-2">
+                                <label class="input-label"><span class="input-icon">👤</span> Full Name</label>
+                                <input id="settings-fullname" type="text" placeholder="Your full name" class="skill-input profile-input" />
+                            </div>
+                            <div class="profile-input-group">
+                                <label class="input-label"><span class="input-icon">🏫</span> College / University</label>
+                                <input id="settings-college" type="text" placeholder="e.g., BVRIT / IIIT / JNTUH" class="skill-input profile-input" />
+                            </div>
+                            <div class="profile-input-group">
+                                <label class="input-label"><span class="input-icon">💻</span> Department / Branch</label>
+                                <input id="settings-dept" type="text" placeholder="e.g., Computer Science & Engineering (CSE)" class="skill-input profile-input" />
+                            </div>
+                            <div class="profile-input-group">
+                                <label class="input-label"><span class="input-icon">🎓</span> Class / Academic Year</label>
+                                <select id="settings-class" class="skill-input profile-input select-custom">
+                                    <option value="">Select your year / class</option>
+                                    <option value="1st Year (Freshman)">1st Year (Freshman)</option>
+                                    <option value="2nd Year (Sophomore)">2nd Year (Sophomore)</option>
+                                    <option value="3rd Year (Junior)">3rd Year (Junior)</option>
+                                    <option value="4th Year (Final Year)">4th Year (Final Year)</option>
+                                    <option value="Post-Graduate (M.Tech/MS/MCA)">Post-Graduate (M.Tech/MS/MCA)</option>
+                                    <option value="Graduated / Working Professional">Graduated / Working Professional</option>
+                                </select>
+                            </div>
+                            <div class="profile-input-group">
+                                <label class="input-label"><span class="input-icon">🎯</span> Target Career Role</label>
+                                <input id="settings-target-role" type="text" placeholder="e.g., SDE-1 / Full Stack Engineer" class="skill-input profile-input" />
+                            </div>
+                        </div>
+                        <button id="btn-save-academic-profile" class="cta-button profile-btn-primary">
+                            ✨ Save Academic Profile
+                        </button>
+                    </div>
+
+                    <!-- Card 2: Developer & Coding Profiles -->
+                    <div class="profile-card">
+                        <div class="profile-card-header">
+                            <div class="card-icon-badge icon-coding">🔗</div>
+                            <div>
+                                <h3 class="profile-card-title">Coding & Developer Profiles</h3>
+                                <p class="profile-card-desc">Connect competitive programming platforms for live stats & readiness tracking.</p>
+                            </div>
+                        </div>
+                        <div class="coding-profiles-subgrid">
+                            <div class="mini-profile-card">
+                                <div class="mini-card-head">
+                                    <span class="platform-badge leetcode-badge">⚡ LeetCode</span>
+                                    <span id="summary-leetcode" class="profile-summary-tag">Not configured</span>
+                                </div>
+                                <input id="settings-leetcode" type="text" placeholder="Username or URL" class="skill-input mini-input" />
+                            </div>
+                            <div class="mini-profile-card">
+                                <div class="mini-card-head">
+                                    <span class="platform-badge github-badge">🐙 GitHub</span>
+                                    <span id="summary-github" class="profile-summary-tag">Not configured</span>
+                                </div>
+                                <input id="settings-github" type="text" placeholder="Username or URL" class="skill-input mini-input" />
+                            </div>
+                            <div class="mini-profile-card">
+                                <div class="mini-card-head">
+                                    <span class="platform-badge codeforces-badge">🏆 Codeforces</span>
+                                    <span id="summary-codeforces" class="profile-summary-tag">Not configured</span>
+                                </div>
+                                <input id="settings-codeforces" type="text" placeholder="Username or URL" class="skill-input mini-input" />
+                            </div>
+                            <div class="mini-profile-card">
+                                <div class="mini-card-head">
+                                    <span class="platform-badge codementor-badge">👨‍💻 Codementor</span>
+                                    <span id="summary-codementor" class="profile-summary-tag">Not configured</span>
+                                </div>
+                                <input id="settings-codementor" type="text" placeholder="Username or URL" class="skill-input mini-input" />
+                            </div>
+                        </div>
+                        <button id="btn-save-profiles" class="cta-button profile-btn-primary">
+                            💾 Save Coding Profiles & Sync Stats
+                        </button>
+                    </div>
+
+                    <!-- Card 3: Earned Milestones & Badges -->
+                    <div class="profile-card span-full">
+                        <div class="profile-card-header" style="justify-content:space-between; align-items:center; width:100%;">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <div class="card-icon-badge icon-trophy">🏆</div>
+                                <div>
+                                    <h3 class="profile-card-title">Earned Milestones & Career Badges</h3>
+                                    <p class="profile-card-desc">Track unlocked platform achievements and completed learning milestones.</p>
+                                </div>
+                            </div>
+                            <button class="btn-signout" onclick="handleLogout()">
+                                🚪 Sign Out
                             </button>
+                        </div>
+                        <div id="profile-milestones-list" style="display:flex; flex-direction:column; gap:12px; max-height:300px; overflow-y:auto; padding-right:4px;">
+                            <p class="empty-state" style="margin:0; padding:10px 0; font-size:0.85rem;">No milestone achievements earned yet. Complete an active roadmap to 100% to earn your first badge!</p>
                         </div>
                     </div>
 
-                    <div class="card" style="flex: 1;">
-                        <h3 class="card-heading">🏆 Earned Milestones</h3>
-                        <div id="profile-milestones-list" style="display:flex; flex-direction:column; gap:12px; max-height:300px; overflow-y:auto; padding-right:4px;">
-                            <p class="empty-state" style="margin:0; padding:10px 0; font-size:0.85rem;">No milestone achievements earned yet.</p>
-                        </div>
-                    </div>
                 </div>
             </section>
         </main>
