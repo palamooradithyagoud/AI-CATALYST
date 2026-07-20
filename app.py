@@ -1862,15 +1862,23 @@ def save_coding_profiles():
         codeforces = body.get("codeforces_profile", "").strip()
         codementor = body.get("codementor_profile", "").strip()
         
-        # Update profiles table on the backend
-        res = sb.table("profiles").update({
+        # Upsert profiles table in Supabase
+        profile_data = {
+            "id": g.user_id,
+            "email": g.user_email,
             "leetcode_profile": leetcode,
             "github_profile": github,
             "codeforces_profile": codeforces,
             "codementor_profile": codementor
-        }).eq("id", g.user_id).execute()
+        }
+        user_meta = getattr(g.user, "user_metadata", {}) or {}
+        name = user_meta.get("full_name") or user_meta.get("name")
+        if name:
+            profile_data["full_name"] = name
+
+        res = sb.table("profiles").upsert(profile_data, on_conflict="id").execute()
         
-        print(f"[PROFILES] Backend successfully updated profiles for user {g.user_id}.")
+        print(f"[PROFILES] Backend successfully upserted Supabase profile for user {g.user_id}.")
         return jsonify({"status": "success"})
     except Exception as e:
         print(f"[PROFILES] Backend save failed: {e}")
