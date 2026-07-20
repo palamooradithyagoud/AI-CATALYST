@@ -942,7 +942,7 @@
       }
 
       showToast('🔒 Login successful! Redirecting...');
-      setTimeout(() => window.location.href = '/', 1000);
+      setTimeout(() => window.location.href = '/dashboard', 1000);
     } catch (err) {
       showError('Network error. Please try again.');
       setLoading('login-btn', 'login-spinner', 'login-text', false, 'Sign In');
@@ -994,7 +994,7 @@
         showPanel('verification-pending', email);
       } else {
         showToast('✨ Account created! Redirecting...');
-        setTimeout(() => window.location.href = '/', 1000);
+        setTimeout(() => window.location.href = '/dashboard', 1000);
       }
     } catch (err) {
       showError('Network error. Please try again.');
@@ -1120,7 +1120,7 @@
       const { error } = await window.supabaseClient.auth.signInWithOAuth({
         provider: provider,
         options: {
-          redirectTo: window.location.origin + '/'
+          redirectTo: window.location.origin + '/dashboard'
         }
       });
       if (error) showError(error.message);

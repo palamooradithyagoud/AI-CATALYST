@@ -2611,6 +2611,10 @@ def send_welcome_email():
 
 @app.route("/")
 def index():
+    return redirect("/login-page")
+
+@app.route("/dashboard")
+def dashboard():
     return app.send_static_file("index.html")
 
 handler = app
