@@ -1546,21 +1546,16 @@ document.addEventListener('DOMContentLoaded', () => {
             elSubResume.textContent = latestResumeAnalysis ? `ATS Score: ${resumePct}%` : 'No upload yet';
         }
 
-        // 3c. Calculate Interview Readiness % from Supabase
-        let interviewPct = 0;
-        if (typeof latestInterviewScore === 'number' && !isNaN(latestInterviewScore)) {
-            interviewPct = Math.round(latestInterviewScore);
-        }
+        // 3c. Calculate Interview Readiness % (Locked)
         const elValInterview = document.getElementById('val-interview-readiness');
         const elRingInterview = document.getElementById('ring-interview-readiness');
         const elSubInterview = document.getElementById('sub-interview-readiness');
-        if (elValInterview) elValInterview.textContent = `${interviewPct}%`;
+        if (elValInterview) elValInterview.textContent = `🔒 Locked`;
         if (elRingInterview) {
-            const offsetInterview = 251.32 - (251.32 * interviewPct / 100);
-            elRingInterview.style.strokeDashoffset = offsetInterview;
+            elRingInterview.style.strokeDashoffset = 251.32;
         }
         if (elSubInterview) {
-            elSubInterview.textContent = typeof latestInterviewScore === 'number' ? `Score: ${interviewPct}%` : 'No mock interviews';
+            elSubInterview.textContent = 'Currently Locked';
         }
 
         // 3d. Calculate AI Career Health % (Weighted composite of active user activity)
@@ -2631,9 +2626,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (targetViewId === 'view-mentor') {
             loadCodingProfiles();
         } else if (targetViewId === 'view-interviews') {
-            loadInterviewHistory();
-            initInterviewInputs();
-            showStage('setup');
+            showToast('🔒 Mock Interviews are currently locked for platform updates.');
         }
     };
 
