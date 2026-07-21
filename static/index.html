@@ -17,6 +17,8 @@
     <meta name="description" content="Discover curated YouTube playlists, professional certifications, and company-specific interview prep. AI-powered career recommendations.">
     <!-- Chart.js for Advanced Analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- YouTube IFrame Player API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
     <link rel="stylesheet" href="/static/css/style.css?v=3.0">
     <!-- Route Guard: Fast check for active Supabase Auth session token -->
     <script>
@@ -428,23 +430,7 @@
                         </div>
                     </div>
 
-                    <!-- Saved Playlists Progress Card -->
-                    <div class="card card-saved-playlists" style="grid-column: span 2;">
-                        <h3 class="card-heading">Saved Playlists & Progress</h3>
-                        <div style="display:flex; gap:24px; margin-bottom:20px; flex-wrap:wrap;">
-                            <div style="background:var(--bg-main); border:1px solid var(--border); padding:12px 20px; border-radius:var(--radius-md); display:flex; flex-direction:column; gap:4px; min-width:140px;">
-                                <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600; text-transform:uppercase;">Playlists Saved</span>
-                                <strong id="saved-playlists-count" style="font-size:1.5rem; color:var(--text-main); font-family:'Outfit',sans-serif;">0</strong>
-                            </div>
-                            <div style="background:var(--bg-main); border:1px solid var(--border); padding:12px 20px; border-radius:var(--radius-md); display:flex; flex-direction:column; gap:4px; min-width:140px;">
-                                <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600; text-transform:uppercase;">Completed</span>
-                                <strong id="completed-playlists-count" style="font-size:1.5rem; color:var(--success); font-family:'Outfit',sans-serif;">0</strong>
-                            </div>
-                        </div>
-                        <div id="saved-playlists-list" style="display:flex; flex-direction:column; gap:16px;">
-                            <p class="empty-state" style="padding:10px 0; font-size:0.9rem; margin:0;">No playlists saved yet. Go to the Learning tab to search and save playlists.</p>
-                        </div>
-                    </div>
+
 
                     <!-- Skill Distribution Card -->
                     <div class="card card-distribution">
@@ -466,83 +452,224 @@
 
             <!-- VIEW: Learning -->
             <section id="view-learning" class="content-view">
-                <!-- Search Panel -->
-                <div class="search-panel">
-                    <div class="search-form">
-                        <div class="input-group">
-                            <input 
-                                type="text" 
-                                id="skill-input" 
-                                class="skill-input" 
-                                placeholder="What do you want to learn?" 
-                                aria-label="Skill to learn"
-                                autocomplete="off"
-                            >
+                <!-- 2 Main Cards Selection Header -->
+                <div class="learning-header-cards">
+                    <div class="learning-nav-card active" id="card-nav-explore">
+                        <div class="learning-nav-card-icon">🔍</div>
+                        <div class="learning-nav-card-content">
+                            <div class="learning-card-badge">Card 1</div>
+                            <h3>Explore Skills & Courses</h3>
+                            <p>Search any skill to get AI-curated video playlists, certifications & custom career roadmaps.</p>
                         </div>
-                        <select id="level-dropdown" class="level-dropdown" aria-label="Skill level">
-                            <option value="Beginner">🌱 Beginner</option>
-                            <option value="Intermediate">🔥 Intermediate</option>
-                            <option value="Advanced">🚀 Advanced</option>
-                        </select>
-                        <select id="language-dropdown" class="level-dropdown" aria-label="Learning language">
-                            <option value="English">🇺🇸 English</option>
-                            <option value="Hindi">🇮🇳 Hindi</option>
-                            <option value="Telugu">🇮🇳 Telugu</option>
-                        </select>
-                        <button id="cta-button" class="cta-button">
-                            Find Resources
-                        </button>
+                    </div>
+                    <div class="learning-nav-card" id="card-nav-saved">
+                        <div class="learning-nav-card-icon">📚</div>
+                        <div class="learning-nav-card-content">
+                            <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                                <div class="learning-card-badge accent">Card 2</div>
+                                <span class="pill-badge" id="learning-saved-badge" style="background:var(--primary-light); color:var(--primary); font-weight:700;">0 Saved</span>
+                            </div>
+                            <h3>Saved Playlists & Player</h3>
+                            <p>Access saved course playlists, track video progress, and watch interactive video lessons.</p>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Loading Indicator -->
-                <div id="loading" class="loading-indicator">
-                    <div class="spinner"></div>
-                    <p>Curating the best resources for you...</p>
-                </div>
-
-                <!-- Tab Switcher -->
-                <div id="results-nav" class="results-tabs" style="display: none;">
-                    <button id="tab-playlists" class="tab-btn active">📺 Resources</button>
-                    <button id="tab-certificates" class="tab-btn">🏆 Certifications</button>
-                    <button id="tab-roadmap" class="tab-btn">🗺️ AI Roadmap</button>
-                    <span id="tier-label-badge" style="margin-left:auto; font-size:0.75rem; opacity:0.7; align-self:center;"></span>
-                </div>
-
-                <!-- View Step 1: YouTube Playlists -->
-                <div id="playlist-step" class="results-step active">
-                    <div class="step-header">
-                        <h2 class="step-title">📺 Core Video Resources</h2>
-                        <p class="step-desc" id="tier-indicator">The best free curated playlists to build your foundation.</p>
+                <!-- CARD 1 CONTAINER: EXPLORE -->
+                <div id="learning-card-explore-content" class="learning-card-container active">
+                    <!-- Search Panel -->
+                    <div class="search-panel">
+                        <div class="search-form">
+                            <div class="input-group">
+                                <input 
+                                    type="text" 
+                                    id="skill-input" 
+                                    class="skill-input" 
+                                    placeholder="What do you want to learn? (e.g. Python, React, DSA)" 
+                                    aria-label="Skill to learn"
+                                    autocomplete="off"
+                                >
+                            </div>
+                            <select id="level-dropdown" class="level-dropdown" aria-label="Skill level">
+                                <option value="Beginner">🌱 Beginner</option>
+                                <option value="Intermediate">🔥 Intermediate</option>
+                                <option value="Advanced">🚀 Advanced</option>
+                            </select>
+                            <select id="language-dropdown" class="level-dropdown" aria-label="Learning language">
+                                <option value="English">🇺🇸 English</option>
+                                <option value="Hindi">🇮🇳 Hindi</option>
+                                <option value="Telugu">🇮🇳 Telugu</option>
+                            </select>
+                            <button id="cta-button" class="cta-button">
+                                Find Resources
+                            </button>
+                        </div>
                     </div>
-                    <!-- AI Mentorship Recommendations (Tier 3) -->
-                    <div id="ai-recommendations" style="display: none; margin-bottom: 30px;">
-                        <h3 style="margin-bottom: 15px; font-family:'Outfit', sans-serif;">🌟 AI Mentor Recommendations</h3>
-                        <div id="ai-recommendations-grid" class="results-grid"></div>
+
+                    <!-- Loading Indicator -->
+                    <div id="loading" class="loading-indicator">
+                        <div class="spinner"></div>
+                        <p>Curating the best resources for you...</p>
                     </div>
-                    <!-- Standard / Fallback Grid -->
-                    <div id="playlist-grid" class="results-grid"></div>
+
+                    <!-- Tab Switcher -->
+                    <div id="results-nav" class="results-tabs" style="display: none;">
+                        <button id="tab-playlists" class="tab-btn active">📺 Resources</button>
+                        <button id="tab-certificates" class="tab-btn">🏆 Certifications</button>
+                        <button id="tab-roadmap" class="tab-btn">🗺️ AI Roadmap</button>
+                        <span id="tier-label-badge" style="margin-left:auto; font-size:0.75rem; opacity:0.7; align-self:center;"></span>
+                    </div>
+
+                    <!-- View Step 1: YouTube Playlists -->
+                    <div id="playlist-step" class="results-step active">
+                        <div class="step-header">
+                            <h2 class="step-title">📺 Core Video Resources</h2>
+                            <p class="step-desc" id="tier-indicator">The best free curated playlists to build your foundation.</p>
+                        </div>
+                        <!-- AI Mentorship Recommendations (Tier 3) -->
+                        <div id="ai-recommendations" style="display: none; margin-bottom: 30px;">
+                            <h3 style="margin-bottom: 15px; font-family:'Outfit', sans-serif;">🌟 AI Mentor Recommendations</h3>
+                            <div id="ai-recommendations-grid" class="results-grid"></div>
+                        </div>
+                        <!-- Standard / Fallback Grid -->
+                        <div id="playlist-grid" class="results-grid"></div>
+                    </div>
+
+                    <div id="certificate-step" class="results-step">
+                        <div class="step-header">
+                            <h2 class="step-title">🏆 Professional Certifications</h2>
+                            <p class="step-desc">Validated programs from Coursera, Udemy, edX, etc.</p>
+                        </div>
+                        <div id="certificate-grid" class="results-grid"></div>
+                    </div>
+
+                    <!-- View Step: AI Roadmap -->
+                    <div id="roadmap-step" class="results-step">
+                        <div class="step-header">
+                            <h2 class="step-title">🗺️ Your Career Accelerator Roadmap</h2>
+                            <p class="step-desc">A step-by-step path tailored for you by Groq AI.</p>
+                        </div>
+                        <div id="roadmap-content" style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px; display:flex; flex-direction:column; gap:20px;"></div>
+                    </div>
+
+                    <div id="empty-state" class="empty-state">
+                        <p>Enter a skill above to generate your learning path.</p>
+                    </div>
                 </div>
 
-                <div id="certificate-step" class="results-step">
-                    <div class="step-header">
-                        <h2 class="step-title">🏆 Professional Certifications</h2>
-                        <p class="step-desc">Validated programs from Coursera, Udemy, edX, etc.</p>
+                <!-- CARD 2 CONTAINER: SAVED PLAYLISTS -->
+                <div id="learning-card-saved-content" class="learning-card-container" style="display: none;">
+                    <div class="card card-saved-playlists-main">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:16px;">
+                            <div>
+                                <h3 class="card-heading" style="margin:0 0 4px 0;">📚 Saved Playlists & Progress</h3>
+                                <p style="margin:0; font-size:0.875rem; color:var(--text-sub);">Watch your saved video playlists, track video completions, and continue learning.</p>
+                            </div>
+                            <div style="display:flex; gap:16px; flex-wrap:wrap;">
+                                <div style="background:var(--bg-main); border:1px solid var(--border); padding:10px 18px; border-radius:var(--radius-md); display:flex; flex-direction:column; gap:2px; min-width:130px;">
+                                    <span style="font-size:0.7rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Saved</span>
+                                    <strong id="saved-playlists-count" style="font-size:1.4rem; color:var(--text-main); font-family:'Outfit',sans-serif;">0</strong>
+                                </div>
+                                <div style="background:var(--bg-main); border:1px solid var(--border); padding:10px 18px; border-radius:var(--radius-md); display:flex; flex-direction:column; gap:2px; min-width:130px;">
+                                    <span style="font-size:0.7rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Completed</span>
+                                    <strong id="completed-playlists-count" style="font-size:1.4rem; color:var(--success); font-family:'Outfit',sans-serif;">0</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="saved-playlists-list" style="display:flex; flex-direction:column; gap:16px;">
+                            <p class="empty-state" style="padding:20px 0; font-size:0.9rem; margin:0; text-align:center;">No playlists saved yet. Go to <strong>Explore</strong> card to search skills and save playlists.</p>
+                        </div>
                     </div>
-                    <div id="certificate-grid" class="results-grid"></div>
+                </div>
+            </section>
+
+            <!-- VIEW: Learning Player (Coursera/Udemy Experience) -->
+            <section id="view-player" class="content-view">
+                <!-- Top Navigation Header -->
+                <div class="player-top-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:16px;">
+                    <div style="display:flex; align-items:center; gap:14px;">
+                        <button id="player-btn-back" class="btn-back">← Back to Saved Playlists</button>
+                        <div>
+                            <h2 id="player-playlist-title" style="font-family:'Outfit', sans-serif; font-size:1.4rem; font-weight:800; margin:0; color:var(--text-main);">Playlist Title</h2>
+                            <span id="player-playlist-meta" style="font-size:0.85rem; color:var(--text-sub);">Channel • Skill • Level</span>
+                        </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:16px;">
+                        <div style="text-align:right;">
+                            <span id="player-completion-pct-text" style="font-family:'Outfit', sans-serif; font-size:1.15rem; font-weight:800; color:var(--success);">0% Completed</span>
+                            <div style="font-size:0.75rem; color:var(--text-muted);" id="player-completion-count-text">0 of 0 videos</div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- View Step: AI Roadmap -->
-                <div id="roadmap-step" class="results-step">
-                    <div class="step-header">
-                        <h2 class="step-title">🗺️ Your Career Accelerator Roadmap</h2>
-                        <p class="step-desc">A step-by-step path tailored for you by Groq AI.</p>
-                    </div>
-                    <div id="roadmap-content" style="background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-lg); padding:24px; display:flex; flex-direction:column; gap:20px;"></div>
-                </div>
+                <!-- Main Player Grid Layout: Primary Video Column + Playlist Sidebar -->
+                <div class="learning-player-grid">
+                    <!-- Left / Primary Column: Video Player & Controls -->
+                    <div class="player-main-column">
+                        <!-- Video Container with IFrame API Anchor & Resume Overlay -->
+                        <div class="player-video-wrapper">
+                            <!-- YouTube Player Anchor -->
+                            <div id="yt-player-anchor"></div>
 
-                <div id="empty-state" class="empty-state">
-                    <p>Enter a skill above to generate your learning path.</p>
+                            <!-- Resume Prompt Overlay (Hidden by default) -->
+                            <div id="player-resume-overlay" class="player-resume-overlay" style="display: none;">
+                                <div class="resume-card">
+                                    <div style="font-size:2.2rem; margin-bottom:8px;">⏱️</div>
+                                    <h3 style="margin:0 0 6px 0; font-family:'Outfit', sans-serif; font-size:1.3rem;">Resume Watching</h3>
+                                    <p style="margin:0 0 18px 0; font-size:0.925rem; color:#94a3b8;" id="player-resume-time-text">You previously watched up to 02:45.</p>
+                                    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+                                        <button id="player-btn-resume" class="btn-resume-action btn-primary-gradient">▶ Continue from 02:45</button>
+                                        <button id="player-btn-restart" class="btn-resume-action btn-secondary-outline">🔄 Start Over</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Controls & Live Watch Progress -->
+                        <div class="player-controls-card">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:12px;">
+                                <div style="display:flex; gap:10px;">
+                                    <button id="player-btn-prev" class="player-nav-btn">⏮ Previous Video</button>
+                                    <button id="player-btn-next" class="player-nav-btn">⏭ Next Video</button>
+                                </div>
+                                <label class="autoplay-switch-wrap" style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.85rem; font-weight:600; color:var(--text-sub);">
+                                    <input type="checkbox" id="player-toggle-autoplay" checked style="accent-color:var(--primary); width:16px; height:16px; cursor:pointer;">
+                                    <span>Auto-play Next Video</span>
+                                </label>
+                            </div>
+
+                            <!-- Live Anti-Cheat Progress Bar -->
+                            <div class="player-live-progress-wrap">
+                                <div style="display:flex; justify-content:space-between; font-size:0.825rem; font-weight:700; margin-bottom:6px; color:var(--text-sub);">
+                                    <span>Watch Progress <span id="player-auto-complete-status" style="font-size:0.75rem; color:#38bdf8; margin-left:6px;">(Anti-Cheat Active 🛡️)</span></span>
+                                    <span id="player-live-time-display">00:00 / 00:00</span>
+                                </div>
+                                <div class="live-progress-track">
+                                    <div id="player-live-progress-fill" class="live-progress-fill" style="width: 0%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Current Video Metadata -->
+                            <div style="margin-top:18px;">
+                                <h3 id="player-current-video-title" style="font-family:'Outfit', sans-serif; font-size:1.25rem; font-weight:800; margin:0 0 6px 0; color:var(--text-main);">Select a Video</h3>
+                                <p id="player-current-video-desc" style="margin:0; font-size:0.875rem; color:var(--text-sub); line-height:1.5;">Video description & learning objectives.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Collapsible / Scrollable Playlist Video Sidebar -->
+                    <div class="player-sidebar-column">
+                        <div class="player-sidebar-card">
+                            <div class="player-sidebar-header">
+                                <h3 style="font-family:'Outfit', sans-serif; font-size:1.1rem; font-weight:800; margin:0; color:var(--text-main);">Course Playlist</h3>
+                                <span id="player-sidebar-count-badge" class="pill-badge" style="background:var(--primary-light); color:var(--primary);">0 Videos</span>
+                            </div>
+                            <div id="player-sidebar-video-list" class="player-sidebar-video-list">
+                                <!-- Dynamic Video Items -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 

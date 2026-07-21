@@ -1548,7 +1548,7 @@ def get_playlist_videos():
 
                 if title and title != "Private video" and title != "Deleted video":
                     all_videos.append({
-                        "id": item.get("id"),
+                        "id": len(all_videos) + 1,
                         "title": title,
                         "videoId": video_id,
                         "position": position
@@ -2042,10 +2042,34 @@ def get_user_projects():
         print(f"[PROJECTS] Get failed: {e}")
         return jsonify([])
 
+def _migrate_video_item(v):
+    if not isinstance(v, dict):
+        return {
+            "id": 1,
+            "videoId": "",
+            "title": str(v),
+            "duration": 0.0,
+            "watchTime": 0.0,
+            "watchedSeconds": 0.0,
+            "completed": False,
+            "completedAt": None,
+            "lastPosition": 0.0
+        }
+    return {
+        "id": v.get("id", 1),
+        "videoId": str(v.get("videoId") or v.get("video_id") or "").strip(),
+        "title": v.get("title", "Untitled Video"),
+        "duration": float(v.get("duration", 0) or 0),
+        "watchTime": float(v.get("watchTime", 0) or 0),
+        "watchedSeconds": float(v.get("watchedSeconds", 0) or 0),
+        "completed": bool(v.get("completed", False)),
+        "completedAt": v.get("completedAt"),
+        "lastPosition": float(v.get("lastPosition", 0) or 0)
+    }
+
 @app.route("/sync-saved-playlists", methods=["POST"])
 @token_required
 def sync_saved_playlists():
-    pass
     body = request.get_json(silent=True) or {}
     playlists_list = body.get("playlists_list", [])
     
@@ -2054,11 +2078,12 @@ def sync_saved_playlists():
         return jsonify({"error": "DB unavailable"}), 500
         
     try:
-        # Calculate real completion percentage based on all saved playlists and videos
         total_videos = 0
         completed_videos = 0
         for p in playlists_list:
             videos = p.get("videos", [])
+            for i, v in enumerate(videos):
+                videos[i] = _migrate_video_item(v)
             total_videos += len(videos)
             completed_videos += len([v for v in videos if v.get("completed")])
         
@@ -2080,7 +2105,6 @@ def sync_saved_playlists():
 @app.route("/get-saved-playlists", methods=["GET"])
 @token_required
 def get_saved_playlists():
-    pass
     sb = get_sb()
     if not sb:
         return jsonify([])
@@ -2092,11 +2116,208 @@ def get_saved_playlists():
                 .limit(1)\
                 .execute()
         if res.data:
-            return jsonify(res.data[0].get("completed_steps", []))
+            playlists = res.data[0].get("completed_steps", [])
+            for p in playlists:
+                vids = p.get("videos", [])
+                for i, v in enumerate(vids):
+                    vids[i] = _migrate_video_item(v)
+            return jsonify(playlists)
         return jsonify([])
     except Exception as e:
         print(f"[PLAYLISTS] Get failed: {e}")
         return jsonify([])
+
+@app.route("/watch-progress", methods=["POST"])
+@token_required
+def watch_progress():
+    body = request.get_json(silent=True) or {}
+    playlist_url = body.get("playlistUrl") or body.get("playlist_url") or ""
+    video_id = str(body.get("videoId") or body.get("video_id") or "").strip()
+    last_position = float(body.get("lastPosition") or body.get("last_position") or 0)
+    watched_seconds = float(body.get("watchedSeconds") or body.get("watched_seconds") or 0)
+    duration = float(body.get("duration") or 0)
+    
+    if not playlist_url or not video_id:
+        return jsonify({"error": "playlistUrl and videoId required"}), 400
+        
+    sb = get_sb()
+    if not sb:
+        return jsonify({"error": "DB unavailable"}), 500
+        
+    try:
+        res = sb.table("learning_progress")\
+                .select("completed_steps")\
+                .eq("session_id", g.user_id)\
+                .eq("skill_name", "saved_playlists")\
+                .limit(1)\
+                .execute()
+        
+        playlists_list = res.data[0].get("completed_steps", []) if res.data else []
+        updated = False
+        video_completed = False
+        completed_at = None
+        
+        from datetime import datetime, timezone
+        now_iso = datetime.now(timezone.utc).isoformat()
+
+        for p in playlists_list:
+            if p.get("url") == playlist_url:
+                videos = p.get("videos", [])
+                for i, v in enumerate(videos):
+                    videos[i] = _migrate_video_item(v)
+                    v_item = videos[i]
+                    target_vid = str(v_item.get("videoId") or v_item.get("id") or "").strip()
+                    if target_vid == video_id or str(v_item.get("id")) == video_id:
+                        v_item["lastPosition"] = max(v_item.get("lastPosition", 0), last_position)
+                        v_item["watchedSeconds"] = max(v_item.get("watchedSeconds", 0), watched_seconds)
+                        if duration > 0:
+                            v_item["duration"] = duration
+                        v_item["watchTime"] = max(v_item.get("watchTime", 0), last_position)
+                        
+                        # Anti-cheat completion check: 95% position OR end-of-video + 80% genuine watched seconds
+                        dur = v_item.get("duration", 0)
+                        if dur > 0:
+                            ratio = last_position / dur
+                            genuine_ratio = v_item.get("watchedSeconds", 0) / dur
+                            if (ratio >= 0.95 or last_position >= dur - 5) and (genuine_ratio >= 0.80 or v_item.get("watchedSeconds", 0) >= dur * 0.80):
+                                if not v_item.get("completed"):
+                                    v_item["completed"] = True
+                                    v_item["completedAt"] = now_iso
+                                video_completed = v_item["completed"]
+                                completed_at = v_item.get("completedAt")
+                        
+                        all_done = all(vid.get("completed") for vid in videos)
+                        p["completed"] = all_done
+                        updated = True
+                        break
+            if updated:
+                break
+                
+        if updated:
+            total_videos = 0
+            completed_videos = 0
+            for p in playlists_list:
+                vids = p.get("videos", [])
+                total_videos += len(vids)
+                completed_videos += len([v for v in vids if v.get("completed")])
+            
+            pct = round((completed_videos / total_videos) * 100.0, 2) if total_videos > 0 else 0.0
+            
+            sb.table("learning_progress").upsert({
+                "session_id": g.user_id,
+                "skill_name": "saved_playlists",
+                "completed_steps": playlists_list,
+                "completion_pct": pct
+            }, on_conflict="session_id, skill_name").execute()
+            
+        return jsonify({
+            "status": "success",
+            "completed": video_completed,
+            "completedAt": completed_at,
+            "lastPosition": last_position,
+            "watchedSeconds": watched_seconds
+        })
+    except Exception as e:
+        print(f"[WATCH] Progress sync failed: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/mark-video-complete", methods=["POST"])
+@token_required
+def mark_video_complete():
+    body = request.get_json(silent=True) or {}
+    playlist_url = body.get("playlistUrl") or body.get("playlist_url") or ""
+    video_id = str(body.get("videoId") or body.get("video_id") or "").strip()
+    
+    if not playlist_url or not video_id:
+        return jsonify({"error": "playlistUrl and videoId required"}), 400
+        
+    sb = get_sb()
+    if not sb:
+        return jsonify({"error": "DB unavailable"}), 500
+        
+    try:
+        res = sb.table("learning_progress")\
+                .select("completed_steps")\
+                .eq("session_id", g.user_id)\
+                .eq("skill_name", "saved_playlists")\
+                .limit(1)\
+                .execute()
+        
+        playlists_list = res.data[0].get("completed_steps", []) if res.data else []
+        from datetime import datetime, timezone
+        now_iso = datetime.now(timezone.utc).isoformat()
+        
+        for p in playlists_list:
+            if p.get("url") == playlist_url:
+                videos = p.get("videos", [])
+                for i, v in enumerate(videos):
+                    videos[i] = _migrate_video_item(v)
+                    v_item = videos[i]
+                    target_vid = str(v_item.get("videoId") or v_item.get("id") or "").strip()
+                    if target_vid == video_id or str(v_item.get("id")) == video_id:
+                        v_item["completed"] = True
+                        v_item["completedAt"] = now_iso
+                        break
+                p["completed"] = all(vid.get("completed") for vid in videos)
+                break
+                
+        total_videos = 0
+        completed_videos = 0
+        for p in playlists_list:
+            vids = p.get("videos", [])
+            total_videos += len(vids)
+            completed_videos += len([v for v in vids if v.get("completed")])
+        
+        pct = round((completed_videos / total_videos) * 100.0, 2) if total_videos > 0 else 0.0
+        
+        sb.table("learning_progress").upsert({
+            "session_id": g.user_id,
+            "skill_name": "saved_playlists",
+            "completed_steps": playlists_list,
+            "completion_pct": pct
+        }, on_conflict="session_id, skill_name").execute()
+        
+        return jsonify({"status": "success", "completed": True, "completedAt": now_iso})
+    except Exception as e:
+        print(f"[WATCH] Mark complete failed: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/resume-progress/<path:video_id>", methods=["GET"])
+@token_required
+def resume_progress(video_id):
+    playlist_url = request.args.get("playlistUrl") or request.args.get("playlist_url") or ""
+    sb = get_sb()
+    if not sb:
+        return jsonify({"lastPosition": 0, "watchedSeconds": 0, "completed": False})
+        
+    try:
+        res = sb.table("learning_progress")\
+                .select("completed_steps")\
+                .eq("session_id", g.user_id)\
+                .eq("skill_name", "saved_playlists")\
+                .limit(1)\
+                .execute()
+        
+        playlists_list = res.data[0].get("completed_steps", []) if res.data else []
+        for p in playlists_list:
+            if not playlist_url or p.get("url") == playlist_url:
+                for v in p.get("videos", []):
+                    v_item = _migrate_video_item(v)
+                    target_vid = str(v_item.get("videoId") or v_item.get("id") or "").strip()
+                    if target_vid == video_id or str(v_item.get("id")) == video_id:
+                        return jsonify({
+                            "videoId": target_vid,
+                            "lastPosition": v_item.get("lastPosition", 0),
+                            "watchedSeconds": v_item.get("watchedSeconds", 0),
+                            "watchTime": v_item.get("watchTime", 0),
+                            "duration": v_item.get("duration", 0),
+                            "completed": v_item.get("completed", False),
+                            "completedAt": v_item.get("completedAt")
+                        })
+        return jsonify({"lastPosition": 0, "watchedSeconds": 0, "completed": False})
+    except Exception as e:
+        print(f"[WATCH] Get resume progress failed: {e}")
+        return jsonify({"lastPosition": 0, "watchedSeconds": 0, "completed": False})
 
 @app.route("/sync-active-roadmap", methods=["POST"])
 @token_required

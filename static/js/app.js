@@ -304,9 +304,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const saved = getSavedPlaylists();
         const savedCountEl = document.getElementById('saved-playlists-count');
         const completedCountEl = document.getElementById('completed-playlists-count');
+        const savedBadge = document.getElementById('learning-saved-badge');
         const listContainer = document.getElementById('saved-playlists-list');
 
         if (savedCountEl) savedCountEl.textContent = saved.length;
+        if (savedBadge) savedBadge.textContent = `${saved.length} Saved`;
         
         const completedCount = saved.filter(p => p.completed).length;
         if (completedCountEl) completedCountEl.textContent = completedCount;
@@ -314,7 +316,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!listContainer) return;
 
         if (saved.length === 0) {
-            listContainer.innerHTML = `<p class="empty-state" style="padding:10px 0; font-size:0.9rem; margin:0;">No playlists saved yet. Go to the Learning tab to search and save playlists.</p>`;
+            listContainer.innerHTML = `<p class="empty-state" style="padding:20px 0; font-size:0.9rem; margin:0; text-align:center;">No playlists saved yet. Go to <strong>Explore</strong> card to search skills and save playlists.</p>`;
             return;
         }
 
@@ -326,6 +328,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const totalCount = p.videos ? p.videos.length : 0;
             const completedCount = p.videos ? p.videos.filter(v => v.completed).length : 0;
             const progressPct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+            const statusBadgeHTML = p.completed
+                ? `<span class="pill-badge status-verified-badge" style="background:rgba(16, 185, 129, 0.15); color:var(--success); font-size:0.75rem; font-weight:700; padding:5px 12px; border-radius:99px; display:inline-flex; align-items:center; gap:4px;">✅ Completed</span>`
+                : (completedCount > 0
+                    ? `<span class="pill-badge status-progress-badge" style="background:rgba(56, 189, 248, 0.15); color:#38bdf8; font-size:0.75rem; font-weight:700; padding:5px 12px; border-radius:99px; display:inline-flex; align-items:center; gap:4px;">🛡️ ${progressPct}% Verified</span>`
+                    : `<span class="pill-badge status-pending-badge" style="background:var(--bg-main); color:var(--text-muted); border:1px solid var(--border); font-size:0.75rem; font-weight:600; padding:5px 12px; border-radius:99px; display:inline-flex; align-items:center; gap:4px;">⏳ Not Started</span>`);
 
             card.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
@@ -335,12 +342,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             ${escapeHTML(p.channel)} | ${escapeHTML(p.skill)} | ${escapeHTML(p.level)}
                         </div>
                     </div>
-                    <div class="saved-playlist-actions" style="margin-left: auto;">
-                        <label class="saved-playlist-check">
-                            <input type="checkbox" class="playlist-complete-checkbox" data-url="${escapeHTML(p.url)}" ${p.completed ? 'checked' : ''}>
-                            <span>${p.completed ? '✅ Done' : 'Mark Done'}</span>
-                        </label>
-                        <a href="${p.url}" target="_blank" class="btn-watch" style="padding: 6px 12px; font-size: 0.75rem; border-radius: var(--radius-sm);">Watch</a>
+                    <div class="saved-playlist-actions" style="margin-left: auto; display:flex; align-items:center; gap:12px;">
+                        ${statusBadgeHTML}
+                        <button class="btn-watch btn-open-player" data-url="${escapeHTML(p.url)}" style="padding: 6px 14px; font-size: 0.75rem; border-radius: var(--radius-sm); border:none; cursor:pointer; font-weight:700; background:var(--primary); color:#fff;">▶ Watch</button>
                         <button class="btn-remove-saved" data-url="${escapeHTML(p.url)}">Delete</button>
                     </div>
                 </div>
@@ -352,7 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span class="saved-playlist-progress-text" style="font-size: 0.75rem; color: var(--text-sub); font-weight: 500;">
-                            ${completedCount} of ${totalCount} videos completed (${progressPct}%)
+                            ${completedCount} of ${totalCount} videos verified (${progressPct}%)
                         </span>
                         <button class="saved-playlist-videos-toggle" data-expanded="false" style="font-size:0.75rem; color:var(--primary); background:none; border:none; cursor:pointer; font-weight:700;">
                             ▼ Show Videos (${totalCount})
@@ -362,12 +366,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <!-- Collapsible Video Checklist -->
                 <div class="playlist-videos-list" style="display: none;">
-                    ${(p.videos || []).map(v => `
-                        <label class="playlist-video-item ${v.completed ? 'completed' : ''}">
-                            <input type="checkbox" class="video-checkbox" data-video-id="${v.id}" ${v.completed ? 'checked' : ''}>
-                            <span>${v.id}. ${escapeHTML(v.title)}</span>
-                            ${v.videoId ? `<a href="https://www.youtube.com/watch?v=${v.videoId}" target="_blank" class="video-play-link" title="Watch on YouTube">▶</a>` : ''}
-                        </label>
+                    ${(p.videos || []).map((v, vIdx) => `
+                        <div class="playlist-video-item ${v.completed ? 'completed' : ''}" data-video-index="${vIdx}" style="display:flex; align-items:center; gap:10px; width:100%;">
+                            <span class="video-status-icon" style="font-size:0.85rem;" title="${v.completed ? 'Verified completion via watch timer' : 'Watch video in player to complete'}">
+                                ${v.completed ? '✅' : '🔒'}
+                            </span>
+                            <span class="btn-play-video-item" style="cursor:pointer; flex:1; font-weight:${v.completed ? '500' : '600'};">${v.displayNum || (vIdx + 1)}. ${escapeHTML(v.title)}</span>
+                            <button class="btn-play-video-item btn-watch" style="padding:4px 10px; font-size:0.7rem; border-radius:4px; font-weight:700;">▶ Play</button>
+                        </div>
                     `).join('')}
                 </div>
             `;
@@ -388,16 +394,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // General Playlist Completion Checkbox Listener
-            card.querySelector('.playlist-complete-checkbox').addEventListener('change', (e) => {
-                togglePlaylistCompleted(p.url, e.target.checked);
-            });
+            // Open Player Watch Listener
+            const openPlayerBtn = card.querySelector('.btn-open-player');
+            if (openPlayerBtn) {
+                openPlayerBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openLearningPlayer(p.url, 0);
+                });
+            }
 
-            // Individual Video Checkboxes Listeners
-            card.querySelectorAll('.video-checkbox').forEach(cb => {
-                cb.addEventListener('change', (e) => {
-                    const videoId = e.target.getAttribute('data-video-id');
-                    toggleVideoCompleted(p.url, videoId, e.target.checked, card);
+            card.querySelectorAll('.btn-play-video-item').forEach((btnItem) => {
+                btnItem.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const vIdx = parseInt(btnItem.closest('.playlist-video-item').getAttribute('data-video-index') || 0);
+                    openLearningPlayer(p.url, vIdx);
                 });
             });
 
@@ -433,6 +445,463 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         renderSavedPlaylists();
     };
+
+    const switchLearningCard = (cardName) => {
+        const cardExplore = document.getElementById('card-nav-explore');
+        const cardSaved = document.getElementById('card-nav-saved');
+        const contentExplore = document.getElementById('learning-card-explore-content');
+        const contentSaved = document.getElementById('learning-card-saved-content');
+
+        if (cardName === 'saved') {
+            if (cardExplore) cardExplore.classList.remove('active');
+            if (cardSaved) cardSaved.classList.add('active');
+            if (contentExplore) contentExplore.style.display = 'none';
+            if (contentSaved) contentSaved.style.display = 'block';
+            renderSavedPlaylists();
+        } else {
+            if (cardSaved) cardSaved.classList.remove('active');
+            if (cardExplore) cardExplore.classList.add('active');
+            if (contentSaved) contentSaved.style.display = 'none';
+            if (contentExplore) contentExplore.style.display = 'block';
+        }
+    };
+
+    const cardExploreBtn = document.getElementById('card-nav-explore');
+    const cardSavedBtn = document.getElementById('card-nav-saved');
+    if (cardExploreBtn) {
+        cardExploreBtn.addEventListener('click', () => switchLearningCard('explore'));
+    }
+    if (cardSavedBtn) {
+        cardSavedBtn.addEventListener('click', () => switchLearningCard('saved'));
+    }
+
+    // ── LEARNING PLAYER SYSTEM (Coursera / Udemy Style) ──────────
+    let currentPlaylist = null;
+    let currentVideoIndex = 0;
+    let ytPlayer = null;
+    let watchProgressTimer = null;
+    let antiCheatTimer = null;
+    let lastPlayerTime = 0;
+    let watchedSecondsCounter = 0;
+    let activeVideoCompleted = false;
+
+    const extractYouTubeVideoId = (url) => {
+        if (!url) return '';
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : '';
+    };
+
+    const openLearningPlayer = (playlistUrl, videoIndex = 0) => {
+        const saved = getSavedPlaylists();
+        let targetPlaylist = saved.find(p => p.url === playlistUrl);
+
+        if (!targetPlaylist) {
+            let gridMatch = null;
+            if (currentResults && currentResults.playlists) {
+                gridMatch = currentResults.playlists.find(p => p.url === playlistUrl);
+            }
+            targetPlaylist = {
+                url: playlistUrl,
+                title: gridMatch ? gridMatch.title : 'Course Playlist',
+                channel: gridMatch ? gridMatch.channel : 'YouTube',
+                skill: currentSkill || 'General',
+                level: gridMatch ? gridMatch.level : 'All Levels',
+                completed: false,
+                videos: generateVideosForPlaylist(gridMatch ? gridMatch.title : 'Playlist', currentSkill)
+            };
+        }
+
+        if (targetPlaylist.videos) {
+            targetPlaylist.videos.forEach((v, idx) => {
+                if (typeof v.id !== 'number' || v.id > 1000) v.id = idx + 1;
+                v.displayNum = idx + 1;
+                if (!v.videoId) v.videoId = extractYouTubeVideoId(v.url || targetPlaylist.url);
+                if (v.watchedSeconds === undefined) v.watchedSeconds = 0;
+                if (v.lastPosition === undefined) v.lastPosition = 0;
+                if (v.completed === undefined) v.completed = false;
+            });
+        }
+
+        currentPlaylist = targetPlaylist;
+        currentVideoIndex = (videoIndex >= 0 && videoIndex < currentPlaylist.videos.length) ? videoIndex : 0;
+
+        switchView('view-player');
+
+        renderPlayerHeader();
+        renderPlayerSidebar();
+        loadCurrentVideo();
+    };
+
+    const renderPlayerHeader = () => {
+        if (!currentPlaylist) return;
+        const titleEl = document.getElementById('player-playlist-title');
+        const metaEl = document.getElementById('player-playlist-meta');
+        if (titleEl) titleEl.textContent = currentPlaylist.title;
+        if (metaEl) metaEl.textContent = `${currentPlaylist.channel} • ${currentPlaylist.skill} • ${currentPlaylist.level}`;
+
+        const total = currentPlaylist.videos ? currentPlaylist.videos.length : 0;
+        const completedCount = currentPlaylist.videos ? currentPlaylist.videos.filter(v => v.completed).length : 0;
+        const pct = total > 0 ? Math.round((completedCount / total) * 100) : 0;
+
+        const pctEl = document.getElementById('player-completion-pct-text');
+        const countEl = document.getElementById('player-completion-count-text');
+        if (pctEl) pctEl.textContent = `${pct}% Completed`;
+        if (countEl) countEl.textContent = `${completedCount} of ${total} videos`;
+    };
+
+    const renderPlayerSidebar = () => {
+        if (!currentPlaylist || !currentPlaylist.videos) return;
+        const listContainer = document.getElementById('player-sidebar-video-list');
+        const badge = document.getElementById('player-sidebar-count-badge');
+        if (badge) badge.textContent = `${currentPlaylist.videos.length} Videos`;
+
+        if (!listContainer) return;
+        listContainer.innerHTML = '';
+
+        currentPlaylist.videos.forEach((v, idx) => {
+            const item = document.createElement('div');
+            item.className = `player-sidebar-item ${idx === currentVideoIndex ? 'active' : ''} ${v.completed ? 'completed' : ''}`;
+            
+            item.innerHTML = `
+                <span class="item-index">${idx === currentVideoIndex ? '▶' : `#${idx + 1}`}</span>
+                <span class="item-title">${escapeHTML(v.title)}</span>
+                <span class="item-status">${v.completed ? '✅' : '⏳'}</span>
+            `;
+
+            item.addEventListener('click', () => {
+                if (idx !== currentVideoIndex) {
+                    syncCurrentWatchProgress();
+                    currentVideoIndex = idx;
+                    loadCurrentVideo();
+                }
+            });
+
+            listContainer.appendChild(item);
+        });
+    };
+
+    const loadCurrentVideo = () => {
+        if (!currentPlaylist || !currentPlaylist.videos[currentVideoIndex]) return;
+
+        const video = currentPlaylist.videos[currentVideoIndex];
+        activeVideoCompleted = video.completed || false;
+        watchedSecondsCounter = video.watchedSeconds || 0;
+        lastPlayerTime = 0;
+
+        const resumeOverlay = document.getElementById('player-resume-overlay');
+        if (resumeOverlay) resumeOverlay.style.display = 'none';
+
+        const vidTitle = document.getElementById('player-current-video-title');
+        const vidDesc = document.getElementById('player-current-video-desc');
+        if (vidTitle) vidTitle.textContent = `${video.displayNum || (currentVideoIndex + 1)}. ${video.title}`;
+        if (vidDesc) vidDesc.textContent = `Part of ${currentPlaylist.title} by ${currentPlaylist.channel}`;
+
+        renderPlayerHeader();
+        renderPlayerSidebar();
+
+        let ytId = video.videoId || extractYouTubeVideoId(video.url || currentPlaylist.url);
+        if (!ytId) {
+            ytId = 'dQw4w9WgXcQ';
+        }
+
+        if (ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
+            try {
+                ytPlayer.loadVideoById({ videoId: ytId });
+            } catch(e) {
+                console.error("YT Player loadVideoById failed:", e);
+            }
+        } else if (window.YT && window.YT.Player) {
+            try {
+                ytPlayer = new YT.Player('yt-player-anchor', {
+                    height: '100%',
+                    width: '100%',
+                    videoId: ytId,
+                    playerVars: {
+                        autoplay: 1,
+                        modestbranding: 1,
+                        rel: 0
+                    },
+                    events: {
+                        onReady: onYTPlayerReady,
+                        onStateChange: onYTPlayerStateChange
+                    }
+                });
+            } catch(e) {
+                console.error("YT.Player init failed:", e);
+            }
+        } else {
+            window.onYouTubeIframeAPIReady = () => {
+                try {
+                    ytPlayer = new YT.Player('yt-player-anchor', {
+                        height: '100%',
+                        width: '100%',
+                        videoId: ytId,
+                        playerVars: {
+                            autoplay: 1,
+                            modestbranding: 1,
+                            rel: 0
+                        },
+                        events: {
+                            onReady: onYTPlayerReady,
+                            onStateChange: onYTPlayerStateChange
+                        }
+                    });
+                } catch(e) {}
+            };
+        }
+    };
+
+    const onYTPlayerReady = (event) => {
+        checkResumePrompt();
+    };
+
+    const checkResumePrompt = () => {
+        if (!currentPlaylist || !currentPlaylist.videos[currentVideoIndex]) return;
+        const video = currentPlaylist.videos[currentVideoIndex];
+        const savedPos = video.lastPosition || 0;
+
+        if (savedPos > 5 && !video.completed) {
+            const mins = Math.floor(savedPos / 60);
+            const secs = Math.floor(savedPos % 60);
+            const formatted = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+            const resumeOverlay = document.getElementById('player-resume-overlay');
+            const resumeText = document.getElementById('player-resume-time-text');
+            const btnResume = document.getElementById('player-btn-resume');
+
+            if (resumeText) resumeText.textContent = `You previously watched up to ${formatted}.`;
+            if (btnResume) btnResume.textContent = `▶ Continue watching from ${formatted}`;
+            if (resumeOverlay) resumeOverlay.style.display = 'flex';
+
+            if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
+                try { ytPlayer.pauseVideo(); } catch(e){}
+            }
+        }
+    };
+
+    const onYTPlayerStateChange = (event) => {
+        const pState = window.YT ? window.YT.PlayerState : { PLAYING: 1, ENDED: 0 };
+        if (event && event.data === pState.PLAYING) {
+            startWatchTimers();
+        } else {
+            stopWatchTimers();
+        }
+
+        if (event && event.data === pState.ENDED) {
+            syncCurrentWatchProgress();
+            const dur = (ytPlayer && typeof ytPlayer.getDuration === 'function') ? ytPlayer.getDuration() : 0;
+            checkAutoCompletion(dur, dur);
+        }
+    };
+
+    const startWatchTimers = () => {
+        stopWatchTimers();
+
+        antiCheatTimer = setInterval(() => {
+            if (!ytPlayer || typeof ytPlayer.getCurrentTime !== 'function') return;
+            const curr = ytPlayer.getCurrentTime() || 0;
+            const dur = (typeof ytPlayer.getDuration === 'function') ? (ytPlayer.getDuration() || 0) : 0;
+
+            if (lastPlayerTime > 0) {
+                const delta = curr - lastPlayerTime;
+                if (delta > 0 && delta <= 2.5) {
+                    watchedSecondsCounter += delta;
+                }
+            }
+            lastPlayerTime = curr;
+
+            updateLiveProgressUI(curr, dur);
+            checkAutoCompletion(curr, dur);
+        }, 1000);
+
+        watchProgressTimer = setInterval(() => {
+            syncCurrentWatchProgress();
+        }, 5000);
+    };
+
+    const stopWatchTimers = () => {
+        if (antiCheatTimer) clearInterval(antiCheatTimer);
+        if (watchProgressTimer) clearInterval(watchProgressTimer);
+        antiCheatTimer = null;
+        watchProgressTimer = null;
+    };
+
+    const updateLiveProgressUI = (curr, dur) => {
+        const fill = document.getElementById('player-live-progress-fill');
+        const text = document.getElementById('player-live-time-display');
+
+        if (dur > 0) {
+            const pct = Math.min(100, Math.round((curr / dur) * 100));
+            if (fill) fill.style.width = `${pct}%`;
+
+            const currMin = Math.floor(curr / 60);
+            const currSec = Math.floor(curr % 60);
+            const durMin = Math.floor(dur / 60);
+            const durSec = Math.floor(dur % 60);
+            const formatted = `${String(currMin).padStart(2, '0')}:${String(currSec).padStart(2, '0')} / ${String(durMin).padStart(2, '0')}:${String(durSec).padStart(2, '0')}`;
+            if (text) text.textContent = formatted;
+        }
+    };
+
+    const checkAutoCompletion = (curr, dur) => {
+        if (activeVideoCompleted || dur <= 0) return;
+
+        const ratio = curr / dur;
+        const genuineRatio = watchedSecondsCounter / dur;
+
+        if ((ratio >= 0.95 || curr >= dur - 4) && (genuineRatio >= 0.75 || watchedSecondsCounter >= dur * 0.75)) {
+            markCurrentVideoComplete();
+        }
+    };
+
+    const markCurrentVideoComplete = async () => {
+        if (!currentPlaylist || !currentPlaylist.videos[currentVideoIndex]) return;
+        const video = currentPlaylist.videos[currentVideoIndex];
+
+        if (video.completed) return;
+
+        video.completed = true;
+        video.completedAt = new Date().toISOString();
+        activeVideoCompleted = true;
+
+        showToast(`🎉 Video #${video.id} Completed Automatically!`);
+
+        renderPlayerHeader();
+        renderPlayerSidebar();
+
+        try {
+            await fetch('/mark-video-complete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    playlistUrl: currentPlaylist.url,
+                    videoId: String(video.videoId || video.id)
+                })
+            });
+        } catch (e) {}
+
+        syncSavedPlaylists(savedPlaylists);
+        updateCommandCenter();
+
+        const autoPlayCheck = document.getElementById('player-toggle-autoplay');
+        if (autoPlayCheck && autoPlayCheck.checked) {
+            setTimeout(() => {
+                if (currentVideoIndex < currentPlaylist.videos.length - 1) {
+                    currentVideoIndex++;
+                    loadCurrentVideo();
+                }
+            }, 2000);
+        }
+    };
+
+    const syncCurrentWatchProgress = async () => {
+        if (!currentPlaylist || !currentPlaylist.videos[currentVideoIndex] || !ytPlayer || typeof ytPlayer.getCurrentTime !== 'function') return;
+
+        const video = currentPlaylist.videos[currentVideoIndex];
+        const curr = ytPlayer.getCurrentTime() || 0;
+        const dur = (typeof ytPlayer.getDuration === 'function') ? (ytPlayer.getDuration() || 0) : 0;
+
+        video.lastPosition = curr;
+        video.watchedSeconds = watchedSecondsCounter;
+        if (dur > 0) video.duration = dur;
+
+        try {
+            const res = await fetch('/watch-progress', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    playlistUrl: currentPlaylist.url,
+                    videoId: String(video.videoId || video.id),
+                    lastPosition: curr,
+                    watchedSeconds: watchedSecondsCounter,
+                    duration: dur
+                })
+            });
+            const data = await res.json();
+            if (data.completed && !activeVideoCompleted) {
+                markCurrentVideoComplete();
+            }
+        } catch (e) {}
+    };
+
+    // Event Wire-up for Player Controls
+    const btnPlayerBack = document.getElementById('player-btn-back');
+    if (btnPlayerBack) {
+        btnPlayerBack.addEventListener('click', () => {
+            syncCurrentWatchProgress();
+            stopWatchTimers();
+            if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
+                try { ytPlayer.pauseVideo(); } catch(e){}
+            }
+            switchView('view-learning');
+            switchLearningCard('saved');
+        });
+    }
+
+    const btnPlayerPrev = document.getElementById('player-btn-prev');
+    if (btnPlayerPrev) {
+        btnPlayerPrev.addEventListener('click', () => {
+            if (currentVideoIndex > 0) {
+                syncCurrentWatchProgress();
+                currentVideoIndex--;
+                loadCurrentVideo();
+            } else {
+                showToast("You are on the first video.");
+            }
+        });
+    }
+
+    const btnPlayerNext = document.getElementById('player-btn-next');
+    if (btnPlayerNext) {
+        btnPlayerNext.addEventListener('click', () => {
+            if (currentPlaylist && currentPlaylist.videos && currentVideoIndex < currentPlaylist.videos.length - 1) {
+                syncCurrentWatchProgress();
+                currentVideoIndex++;
+                loadCurrentVideo();
+            } else {
+                showToast("You have reached the end of the playlist!");
+            }
+        });
+    }
+
+    const btnResumeAction = document.getElementById('player-btn-resume');
+    if (btnResumeAction) {
+        btnResumeAction.addEventListener('click', () => {
+            const resumeOverlay = document.getElementById('player-resume-overlay');
+            if (resumeOverlay) resumeOverlay.style.display = 'none';
+
+            if (currentPlaylist && currentPlaylist.videos[currentVideoIndex]) {
+                const pos = currentPlaylist.videos[currentVideoIndex].lastPosition || 0;
+                if (ytPlayer && typeof ytPlayer.seekTo === 'function') {
+                    try {
+                        ytPlayer.seekTo(pos, true);
+                        ytPlayer.playVideo();
+                    } catch(e){}
+                }
+            }
+        });
+    }
+
+    const btnRestartAction = document.getElementById('player-btn-restart');
+    if (btnRestartAction) {
+        btnRestartAction.addEventListener('click', () => {
+            const resumeOverlay = document.getElementById('player-resume-overlay');
+            if (resumeOverlay) resumeOverlay.style.display = 'none';
+
+            if (currentPlaylist && currentPlaylist.videos[currentVideoIndex]) {
+                currentPlaylist.videos[currentVideoIndex].lastPosition = 0;
+                currentPlaylist.videos[currentVideoIndex].watchedSeconds = 0;
+                watchedSecondsCounter = 0;
+                if (ytPlayer && typeof ytPlayer.seekTo === 'function') {
+                    try {
+                        ytPlayer.seekTo(0, true);
+                        ytPlayer.playVideo();
+                    } catch(e){}
+                }
+            }
+        });
+    }
 
     // ── ACTIVE ROADMAP TRACKING SYSTEM ──
     const initActiveRoadmap = async () => {
@@ -1191,7 +1660,11 @@ document.addEventListener('DOMContentLoaded', () => {
             watchBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                safeOpenUrl(url);
+                if (!isCert) {
+                    openLearningPlayer(url, 0);
+                } else {
+                    safeOpenUrl(url);
+                }
             });
         }
 
@@ -2938,6 +3411,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 v.classList.add('active');
             }
         });
+
+        if (targetViewId !== 'view-player') {
+            if (typeof stopWatchTimers === 'function') stopWatchTimers();
+            if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
+                try { ytPlayer.pauseVideo(); } catch(e){}
+            }
+        }
 
         // Trigger view-specific dynamic logic
         if (targetViewId === 'view-dashboard') {
