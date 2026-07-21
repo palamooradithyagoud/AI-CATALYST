@@ -213,13 +213,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const toggleVideoCompleted = (playlistUrl, videoId, isChecked) => {
+    const toggleVideoCompleted = (playlistUrl, videoId, isChecked, cardEl) => {
         const playlist = savedPlaylists.find(p => p.url === playlistUrl);
         if (playlist) {
             if (!playlist.videos) {
                 playlist.videos = generateVideosForPlaylist(playlist.title, playlist.skill);
             }
-            const video = playlist.videos.find(v => v.id === videoId);
+            const video = playlist.videos.find(v => String(v.id) === String(videoId));
             if (video) {
                 video.completed = isChecked;
             }
@@ -227,12 +227,42 @@ document.addEventListener('DOMContentLoaded', () => {
             // Re-calculate playlist completion
             const total = playlist.videos.length;
             const completedCount = playlist.videos.filter(v => v.completed).length;
+            const progressPct = total > 0 ? Math.round((completedCount / total) * 100) : 0;
             const wasCompleted = playlist.completed;
-            playlist.completed = (completedCount === total);
+            playlist.completed = (total > 0 && completedCount === total);
             playlist.completedAt = playlist.completed ? new Date().toISOString() : null;
 
+            // In-place UI update to prevent list collapse and immediately update card progress
+            if (cardEl) {
+                const progressBar = cardEl.querySelector('.saved-playlist-progress-bar');
+                if (progressBar) progressBar.style.width = `${progressPct}%`;
+
+                const progressText = cardEl.querySelector('.saved-playlist-progress-text');
+                if (progressText) progressText.textContent = `${completedCount} of ${total} videos completed (${progressPct}%)`;
+
+                const mainCheck = cardEl.querySelector('.playlist-complete-checkbox');
+                if (mainCheck) mainCheck.checked = playlist.completed;
+
+                const mainCheckLabel = cardEl.querySelector('.saved-playlist-check span');
+                if (mainCheckLabel) mainCheckLabel.textContent = playlist.completed ? '✅ Done' : 'Mark Done';
+
+                const videoCb = cardEl.querySelector(`.video-checkbox[data-video-id="${CSS.escape(String(videoId))}"]`);
+                const videoItem = videoCb ? videoCb.closest('.playlist-video-item') : null;
+                if (videoItem) {
+                    if (isChecked) videoItem.classList.add('completed');
+                    else videoItem.classList.remove('completed');
+                }
+
+                const completedCountEl = document.getElementById('completed-playlists-count');
+                if (completedCountEl) {
+                    const completedTotal = savedPlaylists.filter(p => p.completed).length;
+                    completedCountEl.textContent = completedTotal;
+                }
+            } else {
+                renderSavedPlaylists();
+            }
+
             syncSavedPlaylists(savedPlaylists);
-            renderSavedPlaylists();
             updateCommandCenter();
             
             showToast(`Video marked ${isChecked ? 'completed' : 'incomplete'} (${completedCount}/${total})`);
@@ -293,9 +323,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const card = document.createElement('div');
             card.className = 'saved-playlist-card';
             
-            const totalCount = p.videos.length;
-            const completedCount = p.videos.filter(v => v.completed).length;
-            const progressPct = Math.round((completedCount / totalCount) * 100);
+            const totalCount = p.videos ? p.videos.length : 0;
+            const completedCount = p.videos ? p.videos.filter(v => v.completed).length : 0;
+            const progressPct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
             card.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
@@ -318,10 +348,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <!-- Progress Bar -->
                 <div style="margin-top: 12px;">
                     <div style="width: 100%; height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; margin-bottom: 4px;">
-                        <div style="width: ${progressPct}%; height: 100%; background: var(--success); transition: width 0.3s var(--smooth);"></div>
+                        <div class="saved-playlist-progress-bar" style="width: ${progressPct}%; height: 100%; background: var(--success); transition: width 0.3s var(--smooth);"></div>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="font-size: 0.75rem; color: var(--text-sub); font-weight: 500;">
+                        <span class="saved-playlist-progress-text" style="font-size: 0.75rem; color: var(--text-sub); font-weight: 500;">
                             ${completedCount} of ${totalCount} videos completed (${progressPct}%)
                         </span>
                         <button class="saved-playlist-videos-toggle" data-expanded="false" style="font-size:0.75rem; color:var(--primary); background:none; border:none; cursor:pointer; font-weight:700;">
@@ -332,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 <!-- Collapsible Video Checklist -->
                 <div class="playlist-videos-list" style="display: none;">
-                    ${p.videos.map(v => `
+                    ${(p.videos || []).map(v => `
                         <label class="playlist-video-item ${v.completed ? 'completed' : ''}">
                             <input type="checkbox" class="video-checkbox" data-video-id="${v.id}" ${v.completed ? 'checked' : ''}>
                             <span>${v.id}. ${escapeHTML(v.title)}</span>
@@ -366,8 +396,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Individual Video Checkboxes Listeners
             card.querySelectorAll('.video-checkbox').forEach(cb => {
                 cb.addEventListener('change', (e) => {
-                    const videoId = parseInt(e.target.getAttribute('data-video-id'));
-                    toggleVideoCompleted(p.url, videoId, e.target.checked);
+                    const videoId = e.target.getAttribute('data-video-id');
+                    toggleVideoCompleted(p.url, videoId, e.target.checked, card);
                 });
             });
 
@@ -1156,6 +1186,15 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
         
+        const watchBtn = card.querySelector('.btn-watch');
+        if (watchBtn) {
+            watchBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                safeOpenUrl(url);
+            });
+        }
+
         const saveBtn = card.querySelector('.btn-save-playlist');
         if (saveBtn) {
             saveBtn.addEventListener('click', (e) => {
@@ -1242,16 +1281,279 @@ document.addEventListener('DOMContentLoaded', () => {
         if (resumeAnalyzerContent) resumeAnalyzerContent.style.display = 'none';
     };
 
+    const cardModeBeginners = document.getElementById('card-mode-beginners');
+    const cardModeCompanywise = document.getElementById('card-mode-companywise');
+    const workspaceBeginners = document.getElementById('workspace-beginners');
+    const workspaceCompanywise = document.getElementById('workspace-companywise');
+    const beginnerQuestionsGrid = document.getElementById('beginner-questions-grid');
+
+    const beginnerQuestionsData = [
+        { id: "1", title: "Two Sum", url: "https://leetcode.com/problems/two-sum/", difficulty: "Easy", topic: "Arrays" },
+        { id: "217", title: "Contains Duplicate", url: "https://leetcode.com/problems/contains-duplicate/", difficulty: "Easy", topic: "Arrays" },
+        { id: "242", title: "Valid Anagram", url: "https://leetcode.com/problems/valid-anagram/", difficulty: "Easy", topic: "Arrays" },
+        { id: "121", title: "Best Time to Buy and Sell Stock", url: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/", difficulty: "Easy", topic: "Arrays" },
+        { id: "169", title: "Majority Element", url: "https://leetcode.com/problems/majority-element/", difficulty: "Easy", topic: "Arrays" },
+        { id: "268", title: "Missing Number", url: "https://leetcode.com/problems/missing-number/", difficulty: "Easy", topic: "Arrays" },
+        { id: "125", title: "Valid Palindrome", url: "https://leetcode.com/problems/valid-palindrome/", difficulty: "Easy", topic: "Strings" },
+        { id: "344", title: "Reverse String", url: "https://leetcode.com/problems/reverse-string/", difficulty: "Easy", topic: "Strings" },
+        { id: "14", title: "Longest Common Prefix", url: "https://leetcode.com/problems/longest-common-prefix/", difficulty: "Easy", topic: "Strings" },
+        { id: "20", title: "Valid Parentheses", url: "https://leetcode.com/problems/valid-parentheses/", difficulty: "Easy", topic: "Strings" },
+        { id: "28", title: "Find Index of First Occurrence in String", url: "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/", difficulty: "Easy", topic: "Strings" },
+        { id: "206", title: "Reverse Linked List", url: "https://leetcode.com/problems/reverse-linked-list/", difficulty: "Easy", topic: "Linked Lists" },
+        { id: "21", title: "Merge Two Sorted Lists", url: "https://leetcode.com/problems/merge-two-sorted-lists/", difficulty: "Easy", topic: "Linked Lists" },
+        { id: "141", title: "Linked List Cycle", url: "https://leetcode.com/problems/linked-list-cycle/", difficulty: "Easy", topic: "Linked Lists" },
+        { id: "83", title: "Remove Duplicates from Sorted List", url: "https://leetcode.com/problems/remove-duplicates-from-sorted-list/", difficulty: "Easy", topic: "Linked Lists" },
+        { id: "234", title: "Palindrome Linked List", url: "https://leetcode.com/problems/palindrome-linked-list/", difficulty: "Easy", topic: "Linked Lists" },
+        { id: "232", title: "Implement Queue using Stacks", url: "https://leetcode.com/problems/implement-queue-using-stacks/", difficulty: "Easy", topic: "Stacks" },
+        { id: "155", title: "Min Stack", url: "https://leetcode.com/problems/min-stack/", difficulty: "Medium", topic: "Stacks" },
+        { id: "844", title: "Backspace String Compare", url: "https://leetcode.com/problems/backspace-string-compare/", difficulty: "Easy", topic: "Stacks" },
+        { id: "704", title: "Binary Search", url: "https://leetcode.com/problems/binary-search/", difficulty: "Easy", topic: "Binary Search" },
+        { id: "35", title: "Search Insert Position", url: "https://leetcode.com/problems/search-insert-position/", difficulty: "Easy", topic: "Binary Search" },
+        { id: "278", title: "First Bad Version", url: "https://leetcode.com/problems/first-bad-version/", difficulty: "Easy", topic: "Binary Search" },
+        { id: "69", title: "Sqrt(x)", url: "https://leetcode.com/problems/sqrtx/", difficulty: "Easy", topic: "Binary Search" },
+        { id: "104", title: "Maximum Depth of Binary Tree", url: "https://leetcode.com/problems/maximum-depth-of-binary-tree/", difficulty: "Easy", topic: "Trees" },
+        { id: "226", title: "Invert Binary Tree", url: "https://leetcode.com/problems/invert-binary-tree/", difficulty: "Easy", topic: "Trees" },
+        { id: "100", title: "Same Tree", url: "https://leetcode.com/problems/same-tree/", difficulty: "Easy", topic: "Trees" },
+        { id: "101", title: "Symmetric Tree", url: "https://leetcode.com/problems/symmetric-tree/", difficulty: "Easy", topic: "Trees" },
+        { id: "572", title: "Subtree of Another Tree", url: "https://leetcode.com/problems/subtree-of-another-tree/", difficulty: "Easy", topic: "Trees" }
+    ];
+
+    let currentBeginnerTopic = "All";
+
+    const renderBeginnerQuestions = (topicFilter = "All") => {
+        if (!beginnerQuestionsGrid) return;
+        beginnerQuestionsGrid.innerHTML = '';
+
+        const solvedList = getSolvedQuestions();
+        const filtered = beginnerQuestionsData.filter(q => {
+            if (topicFilter !== "All" && q.topic !== topicFilter) return false;
+            return true;
+        });
+
+        if (filtered.length === 0) {
+            beginnerQuestionsGrid.innerHTML = '<p class="empty-state">No questions found for this topic.</p>';
+            return;
+        }
+
+        filtered.forEach((q) => {
+            const card = document.createElement('div');
+            card.className = 'resource-card show';
+            const isSolved = solvedList.some(s => s.link === q.url);
+            const diffClass = q.difficulty === 'Easy' ? 'diff-easy' : q.difficulty === 'Medium' ? 'diff-medium' : 'diff-hard';
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <span class="rank-badge lc-id">#${escapeHTML(q.id)}</span>
+                    <div class="card-badges">
+                        <span class="pill-badge diff-pill ${diffClass}">${escapeHTML(q.difficulty)}</span>
+                        <span class="pill-badge" style="background:rgba(37,99,235,0.08); color:var(--primary); font-weight:700; border-color:transparent;">${escapeHTML(q.topic)}</span>
+                    </div>
+                </div>
+
+                <div class="card-check-wrap">
+                    <input type="checkbox" class="solve-checkbox"
+                        data-link="${q.url}"
+                        data-name="${escapeHTML(q.title)}"
+                        data-diff="${q.difficulty}"
+                        data-topic="${q.topic}"
+                        ${isSolved ? 'checked' : ''}>
+                    <span class="solve-label">${isSolved ? '✅ Solved' : 'Mark as Solved'}</span>
+                </div>
+
+                <h3 class="card-title" style="font-size:1.05rem; margin-top:8px;">${escapeHTML(q.title)}</h3>
+
+                <div style="font-size:0.75rem; color:var(--text-sub); margin-bottom:12px;">
+                    <span>Target: <strong>Foundational ${escapeHTML(q.topic)}</strong></span>
+                </div>
+
+                <a href="${q.url}" target="_blank" class="btn-watch" rel="noopener noreferrer" style="margin-top:auto;">
+                    Solve on LeetCode →
+                </a>
+            `;
+
+            const solveLink = card.querySelector('.btn-watch');
+            if (solveLink) {
+                solveLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    safeOpenUrl(q.url);
+                });
+            }
+
+            const checkbox = card.querySelector('.solve-checkbox');
+            checkbox.addEventListener('change', (e) => {
+                toggleSolved({ link: q.url, name: q.title, difficulty: q.difficulty, topic: q.topic }, e.target.checked);
+                card.querySelector('.solve-label').textContent = e.target.checked ? '✅ Solved' : 'Mark as Solved';
+                updateCommandCenter();
+            });
+
+            beginnerQuestionsGrid.appendChild(card);
+        });
+    };
+
+    const drawRoadmapLines = () => {
+        const wrapper = document.getElementById('roadmap-canvas-wrapper');
+        const svg = document.getElementById('roadmap-svg-lines');
+        if (!wrapper || !svg || wrapper.offsetWidth === 0) return;
+
+        const defs = svg.querySelector('defs');
+        svg.innerHTML = '';
+        if (defs) svg.appendChild(defs);
+
+        const wrapperRect = wrapper.getBoundingClientRect();
+
+        const connections = [
+            ['node-arrays', 'node-twopointers'],
+            ['node-arrays', 'node-stack'],
+            ['node-twopointers', 'node-binarysearch'],
+            ['node-twopointers', 'node-slidingwindow'],
+            ['node-twopointers', 'node-linkedlist'],
+            ['node-binarysearch', 'node-trees'],
+            ['node-slidingwindow', 'node-trees'],
+            ['node-linkedlist', 'node-trees'],
+            ['node-stack', 'node-trees'],
+            ['node-trees', 'node-tries'],
+            ['node-trees', 'node-heap'],
+            ['node-trees', 'node-backtracking'],
+            ['node-heap', 'node-intervals'],
+            ['node-heap', 'node-greedy'],
+            ['node-heap', 'node-advgraphs'],
+            ['node-backtracking', 'node-graphs'],
+            ['node-backtracking', 'node-dp1d'],
+            ['node-graphs', 'node-advgraphs'],
+            ['node-graphs', 'node-dp2d'],
+            ['node-dp1d', 'node-dp2d'],
+            ['node-dp1d', 'node-bitmanip'],
+            ['node-dp2d', 'node-math'],
+            ['node-bitmanip', 'node-math']
+        ];
+
+        connections.forEach(([fromId, toId]) => {
+            const fromEl = document.getElementById(fromId);
+            const toEl = document.getElementById(toId);
+            if (!fromEl || !toEl) return;
+
+            const fromRect = fromEl.getBoundingClientRect();
+            const toRect = toEl.getBoundingClientRect();
+
+            const startX = (fromRect.left + fromRect.width / 2) - wrapperRect.left + wrapper.scrollLeft;
+            const startY = fromRect.bottom - wrapperRect.top + wrapper.scrollTop;
+            const endX = (toRect.left + toRect.width / 2) - wrapperRect.left + wrapper.scrollLeft;
+            const endY = toRect.top - wrapperRect.top + wrapper.scrollTop;
+
+            const midY = startY + (endY - startY) * 0.5;
+
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', `M ${startX} ${startY} C ${startX} ${midY}, ${endX} ${midY}, ${endX} ${endY}`);
+            path.setAttribute('stroke', 'url(#roadmapGrad)');
+            path.setAttribute('stroke-width', '2.8');
+            path.setAttribute('fill', 'none');
+            path.setAttribute('opacity', '0.95');
+            path.setAttribute('marker-end', 'url(#arrowhead)');
+
+            svg.appendChild(path);
+        });
+    };
+
+    window.addEventListener('resize', drawRoadmapLines);
+    const roadmapWrapperEl = document.getElementById('roadmap-canvas-wrapper');
+    if (roadmapWrapperEl) {
+        roadmapWrapperEl.addEventListener('scroll', drawRoadmapLines);
+    }
+
+    const practiceSelectionScreen = document.getElementById('practice-selection-screen');
+    const backToPracticeBeginners = document.getElementById('back-to-practice-beginners');
+    const backToPracticeCompanywise = document.getElementById('back-to-practice-companywise');
+
+    const showPracticeSelection = () => {
+        if (practiceSelectionScreen) practiceSelectionScreen.style.display = 'block';
+        if (workspaceBeginners) workspaceBeginners.style.display = 'none';
+        if (workspaceCompanywise) workspaceCompanywise.style.display = 'none';
+        if (cardModeBeginners) cardModeBeginners.classList.remove('active');
+        if (cardModeCompanywise) cardModeCompanywise.classList.remove('active');
+    };
+
+    const switchPracticeMode = (mode) => {
+        if (mode === 'beginners') {
+            if (practiceSelectionScreen) practiceSelectionScreen.style.display = 'none';
+            if (cardModeBeginners) cardModeBeginners.classList.add('active');
+            if (cardModeCompanywise) cardModeCompanywise.classList.remove('active');
+            if (workspaceBeginners) workspaceBeginners.style.display = 'block';
+            if (workspaceCompanywise) workspaceCompanywise.style.display = 'none';
+            
+            drawRoadmapLines();
+            setTimeout(drawRoadmapLines, 60);
+            setTimeout(drawRoadmapLines, 200);
+            setTimeout(drawRoadmapLines, 500);
+        } else if (mode === 'companywise') {
+            if (practiceSelectionScreen) practiceSelectionScreen.style.display = 'none';
+            if (cardModeCompanywise) cardModeCompanywise.classList.add('active');
+            if (cardModeBeginners) cardModeBeginners.classList.remove('active');
+            if (workspaceCompanywise) workspaceCompanywise.style.display = 'block';
+            if (workspaceBeginners) workspaceBeginners.style.display = 'none';
+            if (companySelection) companySelection.style.display = 'block';
+            if (questionsView) questionsView.style.display = 'none';
+
+            if (allCompanies.length === 0) {
+                fetchCompanies().then(() => renderCompanies(allCompanies));
+            } else {
+                renderCompanies(allCompanies);
+            }
+        }
+    };
+
+    // Back to cards navigation listeners
+    if (backToPracticeBeginners) {
+        backToPracticeBeginners.addEventListener('click', showPracticeSelection);
+    }
+    if (backToPracticeCompanywise) {
+        backToPracticeCompanywise.addEventListener('click', showPracticeSelection);
+    }
+
+    // Node click handlers on Roadmap Tree
+    document.querySelectorAll('.roadmap-node').forEach(node => {
+        node.addEventListener('click', () => {
+            document.querySelectorAll('.roadmap-node').forEach(n => n.classList.remove('active-node'));
+            node.classList.add('active-node');
+            const title = node.getAttribute('data-title');
+            if (title) showToast(`🌱 Module: ${title}`);
+        });
+    });
+
+    if (cardModeBeginners) {
+        cardModeBeginners.addEventListener('click', () => switchPracticeMode('beginners'));
+    }
+    if (cardModeCompanywise) {
+        cardModeCompanywise.addEventListener('click', () => switchPracticeMode('companywise'));
+    }
+
+    // Beginner topic filter buttons
+    const beginnerTopicBtns = document.querySelectorAll('.beginner-topic-btn');
+    beginnerTopicBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            beginnerTopicBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentBeginnerTopic = btn.getAttribute('data-topic');
+            renderBeginnerQuestions(currentBeginnerTopic);
+        });
+    });
+
+    // Top Company Quick Select Pills
+    const topCompPills = document.querySelectorAll('.top-comp-pill');
+    topCompPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+            const comp = pill.getAttribute('data-company');
+            if (comp) {
+                switchPracticeMode('companywise');
+                loadCompanyQuestions(comp);
+            }
+        });
+    });
+
     const enterDsaPrep = async () => {
         if (interviewCategories) interviewCategories.style.display = 'none';
         if (dsaPrepContent) dsaPrepContent.style.display = 'block';
-        if (companySelection) companySelection.style.display = 'block';
-        if (questionsView) questionsView.style.display = 'none';
-        
-        if (allCompanies.length === 0) {
-            await fetchCompanies();
-        }
-        renderCompanies(allCompanies);
+        showPracticeSelection();
     };
 
     const enterResumeAnalyzer = () => {
@@ -1385,6 +1687,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 </a>
             `;
 
+            const solveLink = card.querySelector('.btn-watch');
+            if (solveLink) {
+                solveLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    safeOpenUrl(link);
+                });
+            }
+
             const checkbox = card.querySelector('.solve-checkbox');
             checkbox.addEventListener('change', (e) => {
                 toggleSolved({ link, name, difficulty, topic }, e.target.checked);
@@ -1418,11 +1729,27 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Solved Questions State & Command Center Automation
      */
-    let solvedDsaQuestions = [];
+    let solvedDsaQuestions = (() => {
+        try {
+            const stored = localStorage.getItem('solvedDsaQuestions');
+            return stored ? JSON.parse(stored) : [];
+        } catch(e) {
+            return [];
+        }
+    })();
     let leetcodeStats = null;
     
     const getSolvedQuestions = () => {
         return solvedDsaQuestions;
+    };
+
+    const safeOpenUrl = (targetUrl) => {
+        if (!targetUrl || targetUrl === '#') return;
+        let cleanUrl = targetUrl.trim();
+        if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
+            cleanUrl = 'https://' + cleanUrl;
+        }
+        window.open(cleanUrl, '_blank', 'noopener,noreferrer');
     };
 
     const toggleSolved = (q, isChecked) => {
@@ -1437,12 +1764,20 @@ document.addEventListener('DOMContentLoaded', () => {
             solvedDsaQuestions = solvedDsaQuestions.filter(s => s.link !== q.link);
         }
 
+        // Persist to localStorage for instant client-side responsiveness
+        try {
+            localStorage.setItem('solvedDsaQuestions', JSON.stringify(solvedDsaQuestions));
+        } catch(e) {}
+
         // Sync to backend Supabase database
         fetch('/sync-dsa-progress', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ solved_list: solvedDsaQuestions })
         }).catch(err => console.error("DSA sync failed:", err));
+
+        // Immediately update Dashboard metrics & graphs
+        updateCommandCenter();
     };
 
     let charts = {};
@@ -1559,6 +1894,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // 3d. Calculate AI Career Health % (Weighted composite of active user activity)
+        const interviewPct = 0;
         const dsaPct = Math.min(100, Math.round((totalSolved / GOAL) * 100));
         const activeScores = [];
         if (dsaPct > 0) activeScores.push(dsaPct);
@@ -2605,7 +2941,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Trigger view-specific dynamic logic
         if (targetViewId === 'view-dashboard') {
-            renderDashboardProgress();
+            updateCommandCenter();
         } else if (targetViewId === 'view-practice') {
             enterDsaPrep();
         } else if (targetViewId === 'view-resume') {

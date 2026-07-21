@@ -17,7 +17,7 @@
     <meta name="description" content="Discover curated YouTube playlists, professional certifications, and company-specific interview prep. AI-powered career recommendations.">
     <!-- Chart.js for Advanced Analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/style.css?v=3.0">
     <!-- Route Guard: Fast check for active Supabase Auth session token -->
     <script>
       (function() {
@@ -550,15 +550,191 @@
             <section id="view-practice" class="content-view">
                 <!-- DSA Category View (COMMAND CENTER) -->
                 <div id="dsa-prep-content">
-                    <!-- Company-wise lists -->
-                    <div class="dsa-workspace">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px;">
-                            <h2 style="font-family:'Outfit', sans-serif; font-weight:800; font-size:1.5rem;">Problem Database</h2>
+                    <!-- Main Practice Cards Selection Screen -->
+                    <div id="practice-selection-screen">
+                        <div style="margin-bottom: 24px;">
+                            <h2 style="font-family:'Outfit', sans-serif; font-weight:800; font-size:1.6rem; margin-bottom:6px;">Practice & Problem Solving</h2>
+                            <p style="color:var(--text-sub); font-size:0.95rem; margin:0;">Choose your path to practice data structures & algorithms step-by-step or target top companies.</p>
                         </div>
-                        
+
+                        <!-- 2 Main Practice Cards Selection Grid -->
+                        <div class="practice-mode-grid">
+                            <!-- Card 1: Beginner Level -->
+                            <div id="card-mode-beginners" class="practice-mode-card">
+                                <span class="practice-mode-badge">Foundations</span>
+                                <div class="mode-icon-wrap">🌱</div>
+                                <div class="mode-card-content">
+                                    <h3 class="mode-card-title">1. Beginner Level</h3>
+                                    <p class="mode-card-desc">Master foundational data structures & algorithms concepts, core patterns, and time complexities.</p>
+                                    <div class="mode-card-footer">
+                                        <span class="mode-card-stat">🌱 Core Concept Modules</span>
+                                        <span class="mode-card-action">View Concepts →</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: Company Wise Questions -->
+                            <div id="card-mode-companywise" class="practice-mode-card">
+                                <span class="practice-mode-badge">Interview Prep</span>
+                                <div class="mode-icon-wrap">🏢</div>
+                                <div class="mode-card-content">
+                                    <h3 class="mode-card-title">2. Company Wise Questions</h3>
+                                    <p class="mode-card-desc">Explore LeetCode interview questions asked by top tech giants including Google, Amazon, Meta, Microsoft & 600+ companies.</p>
+                                    <div class="mode-card-footer">
+                                        <span class="mode-card-stat">🏢 LeetCode Question Bank</span>
+                                        <span class="mode-card-action">Explore Questions →</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WORKSPACE 1: Beginner Level Track (Dedicated Roadmap Page) -->
+                    <div id="workspace-beginners" class="dsa-workspace" style="display: none;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; flex-wrap:wrap; gap:12px;">
+                            <div>
+                                <h3 style="font-family:'Outfit', sans-serif; font-weight:800; font-size:1.5rem; margin:0 0 4px 0;">🗺️ Beginner Level — DSA Learning Roadmap</h3>
+                                <p style="color:var(--text-sub); font-size:0.925rem; margin:0;">Follow the prerequisite tree from core data structures to advanced algorithm patterns.</p>
+                            </div>
+                            <button id="back-to-practice-beginners" class="btn-back">← Back to Practice Cards</button>
+                        </div>
+
+                        <!-- Roadmap Canvas -->
+                        <div id="roadmap-canvas-wrapper" class="roadmap-canvas-wrapper">
+                            <svg id="roadmap-svg-lines" class="roadmap-svg-lines">
+                                <defs>
+                                    <linearGradient id="roadmapGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#818cf8" />
+                                        <stop offset="50%" stop-color="#06b6d4" />
+                                        <stop offset="100%" stop-color="#3b82f6" />
+                                    </linearGradient>
+                                    <marker id="arrowhead" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8" />
+                                    </marker>
+                                </defs>
+                            </svg>
+
+                            <div id="roadmap-tree-container" class="roadmap-tree-container">
+                                <!-- Level 1: Root -->
+                                <div class="roadmap-row">
+                                    <div class="roadmap-node" id="node-arrays" data-title="Arrays & Hashing">
+                                        <span class="node-label">Arrays & Hashing</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Level 2 -->
+                                <div class="roadmap-row gap-wide">
+                                    <div class="roadmap-node" id="node-twopointers" data-title="Two Pointers">
+                                        <span class="node-label">Two Pointers</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                    <div class="roadmap-node" id="node-stack" data-title="Stack">
+                                        <span class="node-label">Stack</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Level 3 -->
+                                <div class="roadmap-row gap-mid">
+                                    <div class="roadmap-node" id="node-binarysearch" data-title="Binary Search">
+                                        <span class="node-label">Binary Search</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                    <div class="roadmap-node" id="node-slidingwindow" data-title="Sliding Window">
+                                        <span class="node-label">Sliding Window</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                    <div class="roadmap-node" id="node-linkedlist" data-title="Linked List">
+                                        <span class="node-label">Linked List</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Level 4: Center Node -->
+                                <div class="roadmap-row">
+                                    <div class="roadmap-node node-highlight" id="node-trees" data-title="Trees">
+                                        <span class="node-label">Trees</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Level 5 -->
+                                <div class="roadmap-row gap-wide">
+                                    <div class="roadmap-node" id="node-tries" data-title="Tries">
+                                        <span class="node-label">Tries</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                    <div class="roadmap-node" id="node-heap" data-title="Heap / Priority Queue">
+                                        <span class="node-label">Heap / Priority Queue</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                    <div class="roadmap-node" id="node-backtracking" data-title="Backtracking">
+                                        <span class="node-label">Backtracking</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Level 6 -->
+                                <div class="roadmap-row gap-narrow">
+                                    <div class="roadmap-node" id="node-intervals" data-title="Intervals">
+                                        <span class="node-label">Intervals</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                    <div class="roadmap-node" id="node-greedy" data-title="Greedy">
+                                        <span class="node-label">Greedy</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                    <div class="roadmap-node" id="node-advgraphs" data-title="Advanced Graphs">
+                                        <span class="node-label">Advanced Graphs</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                    <div class="roadmap-node" id="node-graphs" data-title="Graphs">
+                                        <span class="node-label">Graphs</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                    <div class="roadmap-node" id="node-dp1d" data-title="1-D DP">
+                                        <span class="node-label">1-D DP</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Level 7 -->
+                                <div class="roadmap-row gap-mid">
+                                    <div class="roadmap-node" id="node-dp2d" data-title="2-D DP">
+                                        <span class="node-label">2-D DP</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                    <div class="roadmap-node" id="node-bitmanip" data-title="Bit Manipulation">
+                                        <span class="node-label">Bit Manipulation</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                </div>
+
+                                <!-- Level 8: Bottom Target -->
+                                <div class="roadmap-row">
+                                    <div class="roadmap-node" id="node-math" data-title="Math & Geometry">
+                                        <span class="node-label">Math & Geometry</span>
+                                        <span class="node-underline"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WORKSPACE 2: Company-Wise Track (Dedicated Page) -->
+                    <div id="workspace-companywise" class="dsa-workspace" style="display: none;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px; flex-wrap:wrap; gap:12px;">
+                            <div>
+                                <h3 style="font-family:'Outfit', sans-serif; font-weight:800; font-size:1.5rem; margin:0 0 4px 0;">🏢 Company Wise Interview Questions</h3>
+                                <p style="color:var(--text-sub); font-size:0.925rem; margin:0;">Explore targeted LeetCode questions asked by Google, Amazon, Microsoft, Meta & 600+ companies.</p>
+                            </div>
+                            <button id="back-to-practice-companywise" class="btn-back">← Back to Practice Cards</button>
+                        </div>
+
                         <!-- Filters -->
-                        <div class="search-panel" style="padding:20px; display:flex; gap:16px; flex-wrap:wrap; margin-bottom:24px;">
-                            <input type="text" id="company-search" placeholder="Search Company (e.g. Google)..." class="skill-input" style="flex:1; padding:10px 16px;">
+                        <div class="search-panel" style="padding:20px; display:flex; gap:16px; flex-wrap:wrap; margin-bottom:20px;">
+                            <input type="text" id="company-search" placeholder="Search Company (e.g. Google, Amazon, Microsoft)..." class="skill-input" style="flex:1; padding:10px 16px;">
                             <select id="filter-difficulty" class="level-dropdown" style="padding:10px 16px;">
                                 <option value="All">All Difficulties</option>
                                 <option value="Easy">Easy</option>
@@ -570,6 +746,21 @@
                                 <option value="Pending">Pending</option>
                                 <option value="Completed">Completed</option>
                             </select>
+                        </div>
+
+                        <!-- Quick Company Selector Pills -->
+                        <div style="margin-bottom: 24px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px;">
+                            <span style="font-size:0.75rem; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.05em; display:block; margin-bottom:12px;">🔥 Popular Target Companies</span>
+                            <div id="top-companies-pills" style="display:flex; gap:8px; flex-wrap:wrap;">
+                                <button class="top-comp-pill" data-company="google">🌐 Google</button>
+                                <button class="top-comp-pill" data-company="amazon">📦 Amazon</button>
+                                <button class="top-comp-pill" data-company="microsoft">🪟 Microsoft</button>
+                                <button class="top-comp-pill" data-company="meta">♾️ Meta</button>
+                                <button class="top-comp-pill" data-company="apple">🍏 Apple</button>
+                                <button class="top-comp-pill" data-company="uber">🚗 Uber</button>
+                                <button class="top-comp-pill" data-company="netflix">🍿 Netflix</button>
+                                <button class="top-comp-pill" data-company="adobe">🎨 Adobe</button>
+                            </div>
                         </div>
 
                         <!-- Company Grid (Visible initially) -->
@@ -1261,7 +1452,7 @@
         };
     </script>
     <script src="/static/js/supabaseClient.js"></script>
-    <script src="/static/js/app.js"></script>
+    <script src="/static/js/app.js?v=3.0"></script>
     <script>
         async function handleLogout() {
             if (window.supabaseClient) {
