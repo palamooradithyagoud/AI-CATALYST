@@ -1932,6 +1932,13 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: "2226", title: "Maximum Candies Allocated to K Children", url: "https://leetcode.com/problems/maximum-candies-allocated-to-k-children/", difficulty: "Medium", topic: "Binary Search on Answers", pattern: "Binary Search on Answer" },
         { id: "2251", title: "Number of Flowers in Full Bloom", url: "https://leetcode.com/problems/number-of-flowers-in-full-bloom/", difficulty: "Hard", topic: "Binary Search on Answers", pattern: "Binary Search on Answer + Events" },
         { id: "410", title: "Split Array Largest Sum", url: "https://leetcode.com/problems/split-array-largest-sum/", difficulty: "Hard", topic: "Binary Search on Answers", pattern: "Binary Search on Answer" },
+
+        // Search in 2D Matrix
+        { id: "240", title: "Search a 2D Matrix II", url: "https://leetcode.com/problems/search-a-2d-matrix-ii/", difficulty: "Medium", topic: "Search in 2D Matrix", pattern: "Binary Search / Matrix Search" },
+        { id: "74", title: "Search a 2D Matrix", url: "https://leetcode.com/problems/search-a-2d-matrix/", difficulty: "Medium", topic: "Search in 2D Matrix", pattern: "Binary Search (Flattened Matrix)" },
+        { id: "1901", title: "Find a Peak Element II", url: "https://leetcode.com/problems/find-a-peak-element-ii/", difficulty: "Medium", topic: "Search in 2D Matrix", pattern: "Binary Search on 2D Matrix" },
+        { id: "1428", title: "Leftmost Column with at Least a One", url: "https://leetcode.com/problems/leftmost-column-with-at-least-a-one/", difficulty: "Medium", topic: "Search in 2D Matrix", pattern: "Binary Search (Interactive)" },
+        { id: "302", title: "Smallest Rectangle Enclosing Black Pixels", url: "https://leetcode.com/problems/smallest-rectangle-enclosing-black-pixels/", difficulty: "Hard", topic: "Search in 2D Matrix", pattern: "Binary Search on Rows & Columns" }
     ];
 
     const openRoadmapDrawer = (topicName = "Two Pointers") => {
@@ -1982,8 +1989,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (topicName === "Binary Search on Answers") {
                 return q.topic === "Binary Search on Answers";
             }
+            if (topicName === "Search in 2D Matrix") {
+                return q.topic === "Search in 2D Matrix";
+            }
             if (topicName === "All" || topicName === "Foundation") {
-                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum" && q.topic !== "Kadane's Algorithm" && q.topic !== "String Two Pointers" && q.topic !== "String Sliding Window" && q.topic !== "Frequency Map" && q.topic !== "Prefix Sum + HashMap" && q.topic !== "Classic Binary Search" && q.topic !== "Lower / Upper Bound" && q.topic !== "Binary Search on Answers";
+                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum" && q.topic !== "Kadane's Algorithm" && q.topic !== "String Two Pointers" && q.topic !== "String Sliding Window" && q.topic !== "Frequency Map" && q.topic !== "Prefix Sum + HashMap" && q.topic !== "Classic Binary Search" && q.topic !== "Lower / Upper Bound" && q.topic !== "Binary Search on Answers" && q.topic !== "Search in 2D Matrix";
             }
             return q.topic === topicName;
         });
