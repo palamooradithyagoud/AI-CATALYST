@@ -1881,6 +1881,18 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: "692", title: "Top K Frequent Words", url: "https://leetcode.com/problems/top-k-frequent-words/", difficulty: "Medium", topic: "Frequency Map", pattern: "Frequency Map + Heap" },
         { id: "1636", title: "Sort Array by Increasing Frequency", url: "https://leetcode.com/problems/sort-array-by-increasing-frequency/", difficulty: "Easy", topic: "Frequency Map", pattern: "Frequency Map + Sorting" },
 
+        // Prefix Sum + HashMap
+        { id: "560", title: "Subarray Sum Equals K", url: "https://leetcode.com/problems/subarray-sum-equals-k/", difficulty: "Medium", topic: "Prefix Sum + HashMap", pattern: "Prefix Sum + Hash Map" },
+        { id: "525", title: "Contiguous Array", url: "https://leetcode.com/problems/contiguous-array/", difficulty: "Medium", topic: "Prefix Sum + HashMap", pattern: "Prefix Sum + Hash Map" },
+        { id: "523", title: "Continuous Subarray Sum", url: "https://leetcode.com/problems/continuous-subarray-sum/", difficulty: "Medium", topic: "Prefix Sum + HashMap", pattern: "Prefix Sum + Hash Map" },
+        { id: "974", title: "Subarray Sums Divisible by K", url: "https://leetcode.com/problems/subarray-sums-divisible-by-k/", difficulty: "Medium", topic: "Prefix Sum + HashMap", pattern: "Prefix Sum + Hash Map" },
+        { id: "930", title: "Binary Subarrays With Sum", url: "https://leetcode.com/problems/binary-subarrays-with-sum/", difficulty: "Medium", topic: "Prefix Sum + HashMap", pattern: "Prefix Sum + Hash Map" },
+        { id: "1248", title: "Count Number of Nice Subarrays", url: "https://leetcode.com/problems/count-number-of-nice-subarrays/", difficulty: "Medium", topic: "Prefix Sum + HashMap", pattern: "Prefix Sum + Hash Map" },
+        { id: "1590", title: "Make Sum Divisible by P", url: "https://leetcode.com/problems/make-sum-divisible-by-p/", difficulty: "Medium", topic: "Prefix Sum + HashMap", pattern: "Prefix Sum + Hash Map" },
+        { id: "2845", title: "Count of Interesting Subarrays", url: "https://leetcode.com/problems/count-of-interesting-subarrays/", difficulty: "Medium", topic: "Prefix Sum + HashMap", pattern: "Prefix Sum + Hash Map" },
+        { id: "325", title: "Maximum Size Subarray Sum Equals k", url: "https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/", difficulty: "Medium", topic: "Prefix Sum + HashMap", pattern: "Prefix Sum + Hash Map" },
+        { id: "437", title: "Path Sum III", url: "https://leetcode.com/problems/path-sum-iii/", difficulty: "Medium", topic: "Prefix Sum + HashMap", pattern: "Prefix Sum + Hash Map (Tree)" },
+
         // Binary Search
         { id: "704", title: "Binary Search", url: "https://leetcode.com/problems/binary-search/", difficulty: "Easy", topic: "Binary Search", pattern: "Classic Binary Search" },
         { id: "35", title: "Search Insert Position", url: "https://leetcode.com/problems/search-insert-position/", difficulty: "Easy", topic: "Binary Search", pattern: "Lower / Upper Bound" },
@@ -1925,8 +1937,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (topicName === "Frequency Map") {
                 return q.topic === "Frequency Map";
             }
+            if (topicName === "Prefix Sum + HashMap") {
+                return q.topic === "Prefix Sum + HashMap";
+            }
             if (topicName === "All" || topicName === "Foundation") {
-                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum" && q.topic !== "Kadane's Algorithm" && q.topic !== "String Two Pointers" && q.topic !== "String Sliding Window" && q.topic !== "Frequency Map";
+                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum" && q.topic !== "Kadane's Algorithm" && q.topic !== "String Two Pointers" && q.topic !== "String Sliding Window" && q.topic !== "Frequency Map" && q.topic !== "Prefix Sum + HashMap";
             }
             return q.topic === topicName;
         });
