@@ -1892,13 +1892,26 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: "2845", title: "Count of Interesting Subarrays", url: "https://leetcode.com/problems/count-of-interesting-subarrays/", difficulty: "Medium", topic: "Prefix Sum + HashMap", pattern: "Prefix Sum + Hash Map" },
         { id: "325", title: "Maximum Size Subarray Sum Equals k", url: "https://leetcode.com/problems/maximum-size-subarray-sum-equals-k/", difficulty: "Medium", topic: "Prefix Sum + HashMap", pattern: "Prefix Sum + Hash Map" },
         { id: "437", title: "Path Sum III", url: "https://leetcode.com/problems/path-sum-iii/", difficulty: "Medium", topic: "Prefix Sum + HashMap", pattern: "Prefix Sum + Hash Map (Tree)" },
-
-        // Binary Search
-        { id: "704", title: "Binary Search", url: "https://leetcode.com/problems/binary-search/", difficulty: "Easy", topic: "Binary Search", pattern: "Classic Binary Search" },
-        { id: "35", title: "Search Insert Position", url: "https://leetcode.com/problems/search-insert-position/", difficulty: "Easy", topic: "Binary Search", pattern: "Lower / Upper Bound" },
-        { id: "278", title: "First Bad Version", url: "https://leetcode.com/problems/first-bad-version/", difficulty: "Easy", topic: "Binary Search", pattern: "Boolean Condition Search" },
-        { id: "69", title: "Sqrt(x)", url: "https://leetcode.com/problems/sqrtx/", difficulty: "Easy", topic: "Binary Search", pattern: "Binary Search on Answers" },
-        { id: "74", title: "Search a 2D Matrix", url: "https://leetcode.com/problems/search-a-2d-matrix/", difficulty: "Medium", topic: "Binary Search", pattern: "2D Matrix Search" }
+        
+        // Classic Binary Search
+        { id: "704", title: "Binary Search", url: "https://leetcode.com/problems/binary-search/", difficulty: "Easy", topic: "Classic Binary Search", pattern: "Classic Binary Search" },
+        { id: "35", title: "Search Insert Position", url: "https://leetcode.com/problems/search-insert-position/", difficulty: "Easy", topic: "Classic Binary Search", pattern: "Classic Binary Search" },
+        { id: "69", title: "Sqrt(x)", url: "https://leetcode.com/problems/sqrtx/", difficulty: "Easy", topic: "Classic Binary Search", pattern: "Binary Search on Answer" },
+        { id: "278", title: "First Bad Version", url: "https://leetcode.com/problems/first-bad-version/", difficulty: "Easy", topic: "Classic Binary Search", pattern: "First True Binary Search" },
+        { id: "374", title: "Guess Number Higher or Lower", url: "https://leetcode.com/problems/guess-number-higher-or-lower/", difficulty: "Easy", topic: "Classic Binary Search", pattern: "Classic Binary Search" },
+        { id: "1539", title: "Kth Missing Positive Number", url: "https://leetcode.com/problems/kth-missing-positive-number/", difficulty: "Easy", topic: "Classic Binary Search", pattern: "Binary Search" },
+        { id: "33", title: "Search in Rotated Sorted Array", url: "https://leetcode.com/problems/search-in-rotated-sorted-array/", difficulty: "Medium", topic: "Classic Binary Search", pattern: "Binary Search (Rotated Array)" },
+        { id: "34", title: "Find First and Last Position of Element in Sorted Array", url: "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/", difficulty: "Medium", topic: "Classic Binary Search", pattern: "Lower Bound & Upper Bound" },
+        { id: "74", title: "Search a 2D Matrix", url: "https://leetcode.com/problems/search-a-2d-matrix/", difficulty: "Medium", topic: "Classic Binary Search", pattern: "Binary Search" },
+        { id: "81", title: "Search in Rotated Sorted Array II", url: "https://leetcode.com/problems/search-in-rotated-sorted-array-ii/", difficulty: "Medium", topic: "Classic Binary Search", pattern: "Binary Search (Duplicates)" },
+        { id: "153", title: "Find Minimum in Rotated Sorted Array", url: "https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/", difficulty: "Medium", topic: "Classic Binary Search", pattern: "Binary Search" },
+        { id: "162", title: "Find Peak Element", url: "https://leetcode.com/problems/find-peak-element/", difficulty: "Medium", topic: "Classic Binary Search", pattern: "Binary Search" },
+        { id: "540", title: "Single Element in a Sorted Array", url: "https://leetcode.com/problems/single-element-in-a-sorted-array/", difficulty: "Medium", topic: "Classic Binary Search", pattern: "Binary Search" },
+        { id: "875", title: "Koko Eating Bananas", url: "https://leetcode.com/problems/koko-eating-bananas/", difficulty: "Medium", topic: "Classic Binary Search", pattern: "Binary Search on Answer" },
+        { id: "1011", title: "Capacity To Ship Packages Within D Days", url: "https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/", difficulty: "Medium", topic: "Classic Binary Search", pattern: "Binary Search on Answer" },
+        { id: "1283", title: "Find the Smallest Divisor Given a Threshold", url: "https://leetcode.com/problems/find-the-smallest-divisor-given-a-threshold/", difficulty: "Medium", topic: "Classic Binary Search", pattern: "Binary Search on Answer" },
+        { id: "2226", title: "Maximum Candies Allocated to K Children", url: "https://leetcode.com/problems/maximum-candies-allocated-to-k-children/", difficulty: "Medium", topic: "Classic Binary Search", pattern: "Binary Search on Answer" },
+        { id: "410", title: "Split Array Largest Sum", url: "https://leetcode.com/problems/split-array-largest-sum/", difficulty: "Hard", topic: "Classic Binary Search", pattern: "Binary Search on Answer" }
     ];
 
     const openRoadmapDrawer = (topicName = "Two Pointers") => {
@@ -1940,8 +1953,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (topicName === "Prefix Sum + HashMap") {
                 return q.topic === "Prefix Sum + HashMap";
             }
+            if (topicName === "Classic Binary Search") {
+                return q.topic === "Classic Binary Search";
+            }
             if (topicName === "All" || topicName === "Foundation") {
-                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum" && q.topic !== "Kadane's Algorithm" && q.topic !== "String Two Pointers" && q.topic !== "String Sliding Window" && q.topic !== "Frequency Map" && q.topic !== "Prefix Sum + HashMap";
+                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum" && q.topic !== "Kadane's Algorithm" && q.topic !== "String Two Pointers" && q.topic !== "String Sliding Window" && q.topic !== "Frequency Map" && q.topic !== "Prefix Sum + HashMap" && q.topic !== "Classic Binary Search";
             }
             return q.topic === topicName;
         });
