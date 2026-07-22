@@ -1917,6 +1917,21 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: "35", title: "Search Insert Position", url: "https://leetcode.com/problems/search-insert-position/", difficulty: "Easy", topic: "Lower / Upper Bound", pattern: "Lower Bound" },
         { id: "744", title: "Find Smallest Letter Greater Than Target", url: "https://leetcode.com/problems/find-smallest-letter-greater-than-target/", difficulty: "Easy", topic: "Lower / Upper Bound", pattern: "Upper Bound" },
         { id: "34", title: "Find First and Last Position of Element in Sorted Array", url: "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/", difficulty: "Medium", topic: "Lower / Upper Bound", pattern: "Lower Bound + Upper Bound" },
+
+        // Binary Search on Answers
+        { id: "69", title: "Sqrt(x)", url: "https://leetcode.com/problems/sqrtx/", difficulty: "Easy", topic: "Binary Search on Answers", pattern: "Binary Search on Answer" },
+        { id: "367", title: "Valid Perfect Square", url: "https://leetcode.com/problems/valid-perfect-square/", difficulty: "Easy", topic: "Binary Search on Answers", pattern: "Binary Search on Answer" },
+        { id: "875", title: "Koko Eating Bananas", url: "https://leetcode.com/problems/koko-eating-bananas/", difficulty: "Medium", topic: "Binary Search on Answers", pattern: "Binary Search on Answer" },
+        { id: "1011", title: "Capacity To Ship Packages Within D Days", url: "https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/", difficulty: "Medium", topic: "Binary Search on Answers", pattern: "Binary Search on Answer" },
+        { id: "1283", title: "Find the Smallest Divisor Given a Threshold", url: "https://leetcode.com/problems/find-the-smallest-divisor-given-a-threshold/", difficulty: "Medium", topic: "Binary Search on Answers", pattern: "Binary Search on Answer" },
+        { id: "1482", title: "Minimum Number of Days to Make m Bouquets", url: "https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/", difficulty: "Medium", topic: "Binary Search on Answers", pattern: "Binary Search on Answer" },
+        { id: "1552", title: "Magnetic Force Between Two Balls", url: "https://leetcode.com/problems/magnetic-force-between-two-balls/", difficulty: "Medium", topic: "Binary Search on Answers", pattern: "Binary Search on Answer" },
+        { id: "1760", title: "Minimum Limit of Balls in a Bag", url: "https://leetcode.com/problems/minimum-limit-of-balls-in-a-bag/", difficulty: "Medium", topic: "Binary Search on Answers", pattern: "Binary Search on Answer" },
+        { id: "1870", title: "Minimum Speed to Arrive on Time", url: "https://leetcode.com/problems/minimum-speed-to-arrive-on-time/", difficulty: "Medium", topic: "Binary Search on Answers", pattern: "Binary Search on Answer" },
+        { id: "2187", title: "Minimum Time to Complete Trips", url: "https://leetcode.com/problems/minimum-time-to-complete-trips/", difficulty: "Medium", topic: "Binary Search on Answers", pattern: "Binary Search on Answer" },
+        { id: "2226", title: "Maximum Candies Allocated to K Children", url: "https://leetcode.com/problems/maximum-candies-allocated-to-k-children/", difficulty: "Medium", topic: "Binary Search on Answers", pattern: "Binary Search on Answer" },
+        { id: "2251", title: "Number of Flowers in Full Bloom", url: "https://leetcode.com/problems/number-of-flowers-in-full-bloom/", difficulty: "Hard", topic: "Binary Search on Answers", pattern: "Binary Search on Answer + Events" },
+        { id: "410", title: "Split Array Largest Sum", url: "https://leetcode.com/problems/split-array-largest-sum/", difficulty: "Hard", topic: "Binary Search on Answers", pattern: "Binary Search on Answer" },
     ];
 
     const openRoadmapDrawer = (topicName = "Two Pointers") => {
@@ -1964,8 +1979,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (topicName === "Lower / Upper Bound") {
                 return q.topic === "Lower / Upper Bound";
             }
+            if (topicName === "Binary Search on Answers") {
+                return q.topic === "Binary Search on Answers";
+            }
             if (topicName === "All" || topicName === "Foundation") {
-                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum" && q.topic !== "Kadane's Algorithm" && q.topic !== "String Two Pointers" && q.topic !== "String Sliding Window" && q.topic !== "Frequency Map" && q.topic !== "Prefix Sum + HashMap" && q.topic !== "Classic Binary Search" && q.topic !== "Lower / Upper Bound";
+                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum" && q.topic !== "Kadane's Algorithm" && q.topic !== "String Two Pointers" && q.topic !== "String Sliding Window" && q.topic !== "Frequency Map" && q.topic !== "Prefix Sum + HashMap" && q.topic !== "Classic Binary Search" && q.topic !== "Lower / Upper Bound" && q.topic !== "Binary Search on Answers";
             }
             return q.topic === topicName;
         });
