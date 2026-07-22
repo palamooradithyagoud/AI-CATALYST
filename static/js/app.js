@@ -1812,8 +1812,22 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: "992", title: "Subarrays with K Different Integers", url: "https://leetcode.com/problems/subarrays-with-k-different-integers/", difficulty: "Hard", topic: "Sliding Window", pattern: "Variable Sliding Window" },
 
         // Prefix Sum
-        { id: "303", title: "Range Sum Query - Immutable", url: "https://leetcode.com/problems/range-sum-query-immutable/", difficulty: "Easy", topic: "Prefix Sum", pattern: "Prefix Array" },
-        { id: "724", title: "Find Pivot Index", url: "https://leetcode.com/problems/find-pivot-index/", difficulty: "Easy", topic: "Prefix Sum", pattern: "Pivot Balancing" },
+        { id: "1480", title: "Running Sum of 1d Array", url: "https://leetcode.com/problems/running-sum-of-1d-array/", difficulty: "Easy", topic: "Prefix Sum", pattern: "Prefix Sum" },
+        { id: "724", title: "Find Pivot Index", url: "https://leetcode.com/problems/find-pivot-index/", difficulty: "Easy", topic: "Prefix Sum", pattern: "Prefix Sum" },
+        { id: "303", title: "Range Sum Query – Immutable", url: "https://leetcode.com/problems/range-sum-query-immutable/", difficulty: "Easy", topic: "Prefix Sum", pattern: "Prefix Sum" },
+        { id: "1732", title: "Find the Highest Altitude", url: "https://leetcode.com/problems/find-the-highest-altitude/", difficulty: "Easy", topic: "Prefix Sum", pattern: "Prefix Sum" },
+        { id: "1991", title: "Find the Middle Index in Array", url: "https://leetcode.com/problems/find-the-middle-index-in-array/", difficulty: "Easy", topic: "Prefix Sum", pattern: "Prefix Sum" },
+        { id: "238", title: "Product of Array Except Self", url: "https://leetcode.com/problems/product-of-array-except-self/", difficulty: "Medium", topic: "Prefix Sum", pattern: "Prefix & Suffix Product" },
+        { id: "560", title: "Subarray Sum Equals K", url: "https://leetcode.com/problems/subarray-sum-equals-k/", difficulty: "Medium", topic: "Prefix Sum", pattern: "Prefix Sum + Hash Map" },
+        { id: "525", title: "Contiguous Array", url: "https://leetcode.com/problems/contiguous-array/", difficulty: "Medium", topic: "Prefix Sum", pattern: "Prefix Sum + Hash Map" },
+        { id: "523", title: "Continuous Subarray Sum", url: "https://leetcode.com/problems/continuous-subarray-sum/", difficulty: "Medium", topic: "Prefix Sum", pattern: "Prefix Sum + Hash Map" },
+        { id: "930", title: "Binary Subarrays With Sum", url: "https://leetcode.com/problems/binary-subarrays-with-sum/", difficulty: "Medium", topic: "Prefix Sum", pattern: "Prefix Sum" },
+        { id: "974", title: "Subarray Sums Divisible by K", url: "https://leetcode.com/problems/subarray-sums-divisible-by-k/", difficulty: "Medium", topic: "Prefix Sum", pattern: "Prefix Sum + Hash Map" },
+        { id: "1248", title: "Count Number of Nice Subarrays", url: "https://leetcode.com/problems/count-number-of-nice-subarrays/", difficulty: "Medium", topic: "Prefix Sum", pattern: "Prefix Sum" },
+        { id: "1314", title: "Matrix Block Sum", url: "https://leetcode.com/problems/matrix-block-sum/", difficulty: "Medium", topic: "Prefix Sum", pattern: "2D Prefix Sum" },
+        { id: "1352", title: "Product of the Last K Numbers", url: "https://leetcode.com/problems/product-of-the-last-k-numbers/", difficulty: "Medium", topic: "Prefix Sum", pattern: "Prefix Product" },
+        { id: "304", title: "Range Sum Query 2D – Immutable", url: "https://leetcode.com/problems/range-sum-query-2d-immutable/", difficulty: "Medium", topic: "Prefix Sum", pattern: "2D Prefix Sum" },
+        { id: "327", title: "Count of Range Sum", url: "https://leetcode.com/problems/count-of-range-sum/", difficulty: "Hard", topic: "Prefix Sum", pattern: "Prefix Sum + Divide & Conquer" },
 
         // Kadane's Algorithm
         { id: "53", title: "Maximum Subarray", url: "https://leetcode.com/problems/maximum-subarray/", difficulty: "Medium", topic: "Kadane's Algorithm", pattern: "Dynamic Subarray Max" },
@@ -1856,8 +1870,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (topicName === "Sliding Window") {
                 return q.topic === "Sliding Window";
             }
+            if (topicName === "Prefix Sum") {
+                return q.topic === "Prefix Sum";
+            }
             if (topicName === "All" || topicName === "Foundation") {
-                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window";
+                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum";
             }
             return q.topic === topicName;
         });
