@@ -1911,7 +1911,12 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: "1011", title: "Capacity To Ship Packages Within D Days", url: "https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/", difficulty: "Medium", topic: "Classic Binary Search", pattern: "Binary Search on Answer" },
         { id: "1283", title: "Find the Smallest Divisor Given a Threshold", url: "https://leetcode.com/problems/find-the-smallest-divisor-given-a-threshold/", difficulty: "Medium", topic: "Classic Binary Search", pattern: "Binary Search on Answer" },
         { id: "2226", title: "Maximum Candies Allocated to K Children", url: "https://leetcode.com/problems/maximum-candies-allocated-to-k-children/", difficulty: "Medium", topic: "Classic Binary Search", pattern: "Binary Search on Answer" },
-        { id: "410", title: "Split Array Largest Sum", url: "https://leetcode.com/problems/split-array-largest-sum/", difficulty: "Hard", topic: "Classic Binary Search", pattern: "Binary Search on Answer" }
+        { id: "410", title: "Split Array Largest Sum", url: "https://leetcode.com/problems/split-array-largest-sum/", difficulty: "Hard", topic: "Classic Binary Search", pattern: "Binary Search on Answer" },
+
+        // Lower / Upper Bound
+        { id: "35", title: "Search Insert Position", url: "https://leetcode.com/problems/search-insert-position/", difficulty: "Easy", topic: "Lower / Upper Bound", pattern: "Lower Bound" },
+        { id: "744", title: "Find Smallest Letter Greater Than Target", url: "https://leetcode.com/problems/find-smallest-letter-greater-than-target/", difficulty: "Easy", topic: "Lower / Upper Bound", pattern: "Upper Bound" },
+        { id: "34", title: "Find First and Last Position of Element in Sorted Array", url: "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/", difficulty: "Medium", topic: "Lower / Upper Bound", pattern: "Lower Bound + Upper Bound" },
     ];
 
     const openRoadmapDrawer = (topicName = "Two Pointers") => {
@@ -1956,8 +1961,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (topicName === "Classic Binary Search") {
                 return q.topic === "Classic Binary Search";
             }
+            if (topicName === "Lower / Upper Bound") {
+                return q.topic === "Lower / Upper Bound";
+            }
             if (topicName === "All" || topicName === "Foundation") {
-                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum" && q.topic !== "Kadane's Algorithm" && q.topic !== "String Two Pointers" && q.topic !== "String Sliding Window" && q.topic !== "Frequency Map" && q.topic !== "Prefix Sum + HashMap" && q.topic !== "Classic Binary Search";
+                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum" && q.topic !== "Kadane's Algorithm" && q.topic !== "String Two Pointers" && q.topic !== "String Sliding Window" && q.topic !== "Frequency Map" && q.topic !== "Prefix Sum + HashMap" && q.topic !== "Classic Binary Search" && q.topic !== "Lower / Upper Bound";
             }
             return q.topic === topicName;
         });
