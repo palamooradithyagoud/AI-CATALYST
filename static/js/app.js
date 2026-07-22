@@ -1793,8 +1793,23 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: "268", title: "Missing Number", url: "https://leetcode.com/problems/missing-number/", difficulty: "Easy", topic: "Arrays", pattern: "Bit Manipulation" },
 
         // Sliding Window
-        { id: "121", title: "Best Time to Buy and Sell Stock", url: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/", difficulty: "Easy", topic: "Sliding Window", pattern: "Dynamic Window" },
-        { id: "643", title: "Maximum Average Subarray I", url: "https://leetcode.com/problems/maximum-average-subarray-i/", difficulty: "Easy", topic: "Sliding Window", pattern: "Fixed Size Window" },
+        { id: "643", title: "Maximum Average Subarray I", url: "https://leetcode.com/problems/maximum-average-subarray-i/", difficulty: "Easy", topic: "Sliding Window", pattern: "Fixed Sliding Window" },
+        { id: "209", title: "Minimum Size Subarray Sum", url: "https://leetcode.com/problems/minimum-size-subarray-sum/", difficulty: "Medium", topic: "Sliding Window", pattern: "Variable Sliding Window" },
+        { id: "713", title: "Subarray Product Less Than K", url: "https://leetcode.com/problems/subarray-product-less-than-k/", difficulty: "Medium", topic: "Sliding Window", pattern: "Variable Sliding Window" },
+        { id: "904", title: "Fruit Into Baskets", url: "https://leetcode.com/problems/fruit-into-baskets/", difficulty: "Medium", topic: "Sliding Window", pattern: "Variable Sliding Window" },
+        { id: "930", title: "Binary Subarrays With Sum", url: "https://leetcode.com/problems/binary-subarrays-with-sum/", difficulty: "Medium", topic: "Sliding Window", pattern: "Sliding Window + Prefix Sum" },
+        { id: "1004", title: "Max Consecutive Ones III", url: "https://leetcode.com/problems/max-consecutive-ones-iii/", difficulty: "Medium", topic: "Sliding Window", pattern: "Variable Sliding Window" },
+        { id: "1052", title: "Grumpy Bookstore Owner", url: "https://leetcode.com/problems/grumpy-bookstore-owner/", difficulty: "Medium", topic: "Sliding Window", pattern: "Fixed Sliding Window" },
+        { id: "1248", title: "Count Number of Nice Subarrays", url: "https://leetcode.com/problems/count-number-of-nice-subarrays/", difficulty: "Medium", topic: "Sliding Window", pattern: "Sliding Window + Prefix Sum" },
+        { id: "1343", title: "Number of Sub-arrays of Size K and Average Greater than or Equal to Threshold", url: "https://leetcode.com/problems/number-of-sub-arrays-of-size-k-and-average-greater-than-or-equal-to-threshold/", difficulty: "Medium", topic: "Sliding Window", pattern: "Fixed Sliding Window" },
+        { id: "1423", title: "Maximum Points You Can Obtain from Cards", url: "https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/", difficulty: "Medium", topic: "Sliding Window", pattern: "Fixed Sliding Window" },
+        { id: "1493", title: "Longest Subarray of 1's After Deleting One Element", url: "https://leetcode.com/problems/longest-subarray-of-1s-after-deleting-one-element/", difficulty: "Medium", topic: "Sliding Window", pattern: "Variable Sliding Window" },
+        { id: "1658", title: "Minimum Operations to Reduce X to Zero", url: "https://leetcode.com/problems/minimum-operations-to-reduce-x-to-zero/", difficulty: "Medium", topic: "Sliding Window", pattern: "Sliding Window" },
+        { id: "1695", title: "Maximum Erasure Value", url: "https://leetcode.com/problems/maximum-erasure-value/", difficulty: "Medium", topic: "Sliding Window", pattern: "Sliding Window + Hash Set" },
+        { id: "1838", title: "Frequency of the Most Frequent Element", url: "https://leetcode.com/problems/frequency-of-the-most-frequent-element/", difficulty: "Medium", topic: "Sliding Window", pattern: "Sliding Window + Sorting" },
+        { id: "2024", title: "Maximize the Confusion of an Exam", url: "https://leetcode.com/problems/maximize-the-confusion-of-an-exam/", difficulty: "Medium", topic: "Sliding Window", pattern: "Variable Sliding Window" },
+        { id: "2958", title: "Length of Longest Subarray With at Most K Frequency", url: "https://leetcode.com/problems/length-of-longest-subarray-with-at-most-k-frequency/", difficulty: "Medium", topic: "Sliding Window", pattern: "Sliding Window + Hash Map" },
+        { id: "992", title: "Subarrays with K Different Integers", url: "https://leetcode.com/problems/subarrays-with-k-different-integers/", difficulty: "Hard", topic: "Sliding Window", pattern: "Variable Sliding Window" },
 
         // Prefix Sum
         { id: "303", title: "Range Sum Query - Immutable", url: "https://leetcode.com/problems/range-sum-query-immutable/", difficulty: "Easy", topic: "Prefix Sum", pattern: "Prefix Array" },
@@ -1838,8 +1853,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (topicName === "Two Pointers") {
                 return q.topic === "Two Pointers";
             }
+            if (topicName === "Sliding Window") {
+                return q.topic === "Sliding Window";
+            }
             if (topicName === "All" || topicName === "Foundation") {
-                return q.topic !== "Two Pointers";
+                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window";
             }
             return q.topic === topicName;
         });
