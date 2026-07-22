@@ -1836,10 +1836,19 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: "1191", title: "K-Concatenation Maximum Sum", url: "https://leetcode.com/problems/k-concatenation-maximum-sum/", difficulty: "Medium", topic: "Kadane's Algorithm", pattern: "Kadane's Algorithm" },
         { id: "2321", title: "Maximum Score Of Spliced Array", url: "https://leetcode.com/problems/maximum-score-of-spliced-array/", difficulty: "Hard", topic: "Kadane's Algorithm", pattern: "Kadane's Algorithm + Difference Array" },
 
-        // Strings
-        { id: "14", title: "Longest Common Prefix", url: "https://leetcode.com/problems/longest-common-prefix/", difficulty: "Easy", topic: "Strings", pattern: "Vertical Scan" },
-        { id: "20", title: "Valid Parentheses", url: "https://leetcode.com/problems/valid-parentheses/", difficulty: "Easy", topic: "Strings", pattern: "Stack Matching" },
-        { id: "28", title: "Find Index of First Occurrence in String", url: "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/", difficulty: "Easy", topic: "Strings", pattern: "Sub-string Search" },
+        // String Two Pointers
+        { id: "125", title: "Valid Palindrome", url: "https://leetcode.com/problems/valid-palindrome/", difficulty: "Easy", topic: "String Two Pointers", pattern: "Two Pointers" },
+        { id: "344", title: "Reverse String", url: "https://leetcode.com/problems/reverse-string/", difficulty: "Easy", topic: "String Two Pointers", pattern: "Two Pointers" },
+        { id: "345", title: "Reverse Vowels of a String", url: "https://leetcode.com/problems/reverse-vowels-of-a-string/", difficulty: "Easy", topic: "String Two Pointers", pattern: "Two Pointers" },
+        { id: "392", title: "Is Subsequence", url: "https://leetcode.com/problems/is-subsequence/", difficulty: "Easy", topic: "String Two Pointers", pattern: "Two Pointers" },
+        { id: "1768", title: "Merge Strings Alternately", url: "https://leetcode.com/problems/merge-strings-alternately/", difficulty: "Easy", topic: "String Two Pointers", pattern: "Two Pointers" },
+        { id: "28", title: "Find the Index of the First Occurrence in a String", url: "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/", difficulty: "Easy", topic: "String Two Pointers", pattern: "Two Pointers" },
+        { id: "151", title: "Reverse Words in a String", url: "https://leetcode.com/problems/reverse-words-in-a-string/", difficulty: "Medium", topic: "String Two Pointers", pattern: "Two Pointers" },
+        { id: "443", title: "String Compression", url: "https://leetcode.com/problems/string-compression/", difficulty: "Medium", topic: "String Two Pointers", pattern: "Two Pointers" },
+        { id: "680", title: "Valid Palindrome II", url: "https://leetcode.com/problems/valid-palindrome-ii/", difficulty: "Medium", topic: "String Two Pointers", pattern: "Two Pointers" },
+        { id: "165", title: "Compare Version Numbers", url: "https://leetcode.com/problems/compare-version-numbers/", difficulty: "Medium", topic: "String Two Pointers", pattern: "Two Pointers" },
+        { id: "2109", title: "Adding Spaces to a String", url: "https://leetcode.com/problems/adding-spaces-to-a-string/", difficulty: "Medium", topic: "String Two Pointers", pattern: "Two Pointers" },
+        { id: "408", title: "Valid Word Abbreviation", url: "https://leetcode.com/problems/valid-word-abbreviation/", difficulty: "Hard", topic: "String Two Pointers", pattern: "Two Pointers" },
 
         // Hashmap
         { id: "1", title: "Two Sum", url: "https://leetcode.com/problems/two-sum/", difficulty: "Easy", topic: "Hashmap", pattern: "Key-Value Lookup" },
@@ -1880,8 +1889,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (topicName === "Kadane's Algorithm") {
                 return q.topic === "Kadane's Algorithm";
             }
+            if (topicName === "String Two Pointers") {
+                return q.topic === "String Two Pointers";
+            }
             if (topicName === "All" || topicName === "Foundation") {
-                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum" && q.topic !== "Kadane's Algorithm";
+                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum" && q.topic !== "Kadane's Algorithm" && q.topic !== "String Two Pointers";
             }
             return q.topic === topicName;
         });
