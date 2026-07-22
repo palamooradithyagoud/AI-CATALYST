@@ -369,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ${(p.videos || []).map((v, vIdx) => `
                         <div class="playlist-video-item ${v.completed ? 'completed' : ''}" data-video-index="${vIdx}" style="display:flex; align-items:center; gap:10px; width:100%;">
                             <span class="video-status-icon" style="font-size:0.85rem;" title="${v.completed ? 'Verified completion via watch timer' : 'Watch video in player to complete'}">
-                                ${v.completed ? '✅' : '🔒'}
+                                ${v.completed ? '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>' : '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>'}
                             </span>
                             <span class="btn-play-video-item" style="cursor:pointer; flex:1; font-weight:${v.completed ? '500' : '600'};">${v.displayNum || (vIdx + 1)}. ${escapeHTML(v.title)}</span>
                             <button class="btn-play-video-item btn-watch" style="padding:4px 10px; font-size:0.7rem; border-radius:4px; font-weight:700;">▶ Play</button>
@@ -2358,7 +2358,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const elValInterview = document.getElementById('val-interview-readiness');
         const elRingInterview = document.getElementById('ring-interview-readiness');
         const elSubInterview = document.getElementById('sub-interview-readiness');
-        if (elValInterview) elValInterview.textContent = `🔒 Locked`;
+        if (elValInterview) elValInterview.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> Locked`;
         if (elRingInterview) {
             elRingInterview.style.strokeDashoffset = 251.32;
         }
@@ -3442,7 +3442,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (targetViewId === 'view-mentor') {
             loadCodingProfiles();
         } else if (targetViewId === 'view-interviews') {
-            showToast('🔒 Mock Interviews are currently locked for platform updates.');
+            showToast('Mock Interviews are currently locked for platform updates.');
         }
     };
 
