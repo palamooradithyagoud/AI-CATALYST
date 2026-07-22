@@ -1830,7 +1830,11 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: "327", title: "Count of Range Sum", url: "https://leetcode.com/problems/count-of-range-sum/", difficulty: "Hard", topic: "Prefix Sum", pattern: "Prefix Sum + Divide & Conquer" },
 
         // Kadane's Algorithm
-        { id: "53", title: "Maximum Subarray", url: "https://leetcode.com/problems/maximum-subarray/", difficulty: "Medium", topic: "Kadane's Algorithm", pattern: "Dynamic Subarray Max" },
+        { id: "53", title: "Maximum Subarray", url: "https://leetcode.com/problems/maximum-subarray/", difficulty: "Easy", topic: "Kadane's Algorithm", pattern: "Kadane's Algorithm" },
+        { id: "918", title: "Maximum Sum Circular Subarray", url: "https://leetcode.com/problems/maximum-sum-circular-subarray/", difficulty: "Medium", topic: "Kadane's Algorithm", pattern: "Kadane's Algorithm (Circular)" },
+        { id: "1749", title: "Maximum Absolute Sum of Any Subarray", url: "https://leetcode.com/problems/maximum-absolute-sum-of-any-subarray/", difficulty: "Medium", topic: "Kadane's Algorithm", pattern: "Kadane's Algorithm" },
+        { id: "1191", title: "K-Concatenation Maximum Sum", url: "https://leetcode.com/problems/k-concatenation-maximum-sum/", difficulty: "Medium", topic: "Kadane's Algorithm", pattern: "Kadane's Algorithm" },
+        { id: "2321", title: "Maximum Score Of Spliced Array", url: "https://leetcode.com/problems/maximum-score-of-spliced-array/", difficulty: "Hard", topic: "Kadane's Algorithm", pattern: "Kadane's Algorithm + Difference Array" },
 
         // Strings
         { id: "14", title: "Longest Common Prefix", url: "https://leetcode.com/problems/longest-common-prefix/", difficulty: "Easy", topic: "Strings", pattern: "Vertical Scan" },
@@ -1873,8 +1877,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (topicName === "Prefix Sum") {
                 return q.topic === "Prefix Sum";
             }
+            if (topicName === "Kadane's Algorithm") {
+                return q.topic === "Kadane's Algorithm";
+            }
             if (topicName === "All" || topicName === "Foundation") {
-                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum";
+                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum" && q.topic !== "Kadane's Algorithm";
             }
             return q.topic === topicName;
         });
