@@ -2213,12 +2213,15 @@ document.addEventListener('DOMContentLoaded', () => {
         backToPracticeCompanywise.addEventListener('click', showPracticeSelection);
     }
 
-    // Node click handlers on Roadmap Tree
+    // Node click handlers on Roadmap Tree (Only sub-branch nodes open drawers)
     document.querySelectorAll('.roadmap-node').forEach(node => {
         node.addEventListener('click', () => {
+            const title = node.getAttribute('data-title');
+            if (['Foundation', 'Arrays', 'Strings', 'Hashmap', 'Binary Search'].includes(title)) {
+                return;
+            }
             document.querySelectorAll('.roadmap-node').forEach(n => n.classList.remove('active-node'));
             node.classList.add('active-node');
-            const title = node.getAttribute('data-title');
             if (title) {
                 openRoadmapDrawer(title);
             }
