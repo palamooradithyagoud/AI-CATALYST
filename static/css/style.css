@@ -3770,6 +3770,114 @@ body {
 
 .item-status {
   font-size: 0.75rem;
+  50% { transform: translateY(-3px) scale(1.1); }
+}
+
+/* Topic Filter Buttons */
+.btn-topic-filter {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  color: var(--text-sub);
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s var(--smooth);
+}
+
+.btn-topic-filter:hover {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.btn-topic-filter.active {
+  background: #22c55e;
+  color: #080c14;
+  font-weight: 700;
+  border-color: #22c55e;
+  box-shadow: 0 0 14px rgba(34, 197, 94, 0.4);
+}
+
+/* ─────────────────────────────────────────────
+   NEETCODE-STYLE SIDE DRAWER PANEL
+───────────────────────────────────────────── */
+.roadmap-side-drawer {
+  position: fixed;
+  top: 0;
+  right: -580px;
+  width: 550px;
+  max-width: 92vw;
+  height: 100vh;
+  background: #0b1329;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: -15px 0 50px rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+}
+
+.roadmap-side-drawer.open {
+  right: 0;
+}
+
+.roadmap-drawer-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(5px);
+  z-index: 9998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.roadmap-drawer-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.esc-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #94a3b8;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.esc-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.drawer-problems-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.825rem;
+}
+.drawer-problems-table th {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+.drawer-problems-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: #e2e8f0;
+}
+.drawer-problems-table tr:hover {
+  background: rgba(59, 130, 246, 0.08);
 }
 
 

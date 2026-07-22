@@ -1761,108 +1761,150 @@ document.addEventListener('DOMContentLoaded', () => {
     const beginnerQuestionsGrid = document.getElementById('beginner-questions-grid');
 
     const beginnerQuestionsData = [
-        { id: "1", title: "Two Sum", url: "https://leetcode.com/problems/two-sum/", difficulty: "Easy", topic: "Arrays" },
-        { id: "217", title: "Contains Duplicate", url: "https://leetcode.com/problems/contains-duplicate/", difficulty: "Easy", topic: "Arrays" },
-        { id: "242", title: "Valid Anagram", url: "https://leetcode.com/problems/valid-anagram/", difficulty: "Easy", topic: "Arrays" },
-        { id: "121", title: "Best Time to Buy and Sell Stock", url: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/", difficulty: "Easy", topic: "Arrays" },
-        { id: "169", title: "Majority Element", url: "https://leetcode.com/problems/majority-element/", difficulty: "Easy", topic: "Arrays" },
-        { id: "268", title: "Missing Number", url: "https://leetcode.com/problems/missing-number/", difficulty: "Easy", topic: "Arrays" },
-        { id: "125", title: "Valid Palindrome", url: "https://leetcode.com/problems/valid-palindrome/", difficulty: "Easy", topic: "Strings" },
-        { id: "344", title: "Reverse String", url: "https://leetcode.com/problems/reverse-string/", difficulty: "Easy", topic: "Strings" },
-        { id: "14", title: "Longest Common Prefix", url: "https://leetcode.com/problems/longest-common-prefix/", difficulty: "Easy", topic: "Strings" },
-        { id: "20", title: "Valid Parentheses", url: "https://leetcode.com/problems/valid-parentheses/", difficulty: "Easy", topic: "Strings" },
-        { id: "28", title: "Find Index of First Occurrence in String", url: "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/", difficulty: "Easy", topic: "Strings" },
-        { id: "206", title: "Reverse Linked List", url: "https://leetcode.com/problems/reverse-linked-list/", difficulty: "Easy", topic: "Linked Lists" },
-        { id: "21", title: "Merge Two Sorted Lists", url: "https://leetcode.com/problems/merge-two-sorted-lists/", difficulty: "Easy", topic: "Linked Lists" },
-        { id: "141", title: "Linked List Cycle", url: "https://leetcode.com/problems/linked-list-cycle/", difficulty: "Easy", topic: "Linked Lists" },
-        { id: "83", title: "Remove Duplicates from Sorted List", url: "https://leetcode.com/problems/remove-duplicates-from-sorted-list/", difficulty: "Easy", topic: "Linked Lists" },
-        { id: "234", title: "Palindrome Linked List", url: "https://leetcode.com/problems/palindrome-linked-list/", difficulty: "Easy", topic: "Linked Lists" },
-        { id: "232", title: "Implement Queue using Stacks", url: "https://leetcode.com/problems/implement-queue-using-stacks/", difficulty: "Easy", topic: "Stacks" },
-        { id: "155", title: "Min Stack", url: "https://leetcode.com/problems/min-stack/", difficulty: "Medium", topic: "Stacks" },
-        { id: "844", title: "Backspace String Compare", url: "https://leetcode.com/problems/backspace-string-compare/", difficulty: "Easy", topic: "Stacks" },
-        { id: "704", title: "Binary Search", url: "https://leetcode.com/problems/binary-search/", difficulty: "Easy", topic: "Binary Search" },
-        { id: "35", title: "Search Insert Position", url: "https://leetcode.com/problems/search-insert-position/", difficulty: "Easy", topic: "Binary Search" },
-        { id: "278", title: "First Bad Version", url: "https://leetcode.com/problems/first-bad-version/", difficulty: "Easy", topic: "Binary Search" },
-        { id: "69", title: "Sqrt(x)", url: "https://leetcode.com/problems/sqrtx/", difficulty: "Easy", topic: "Binary Search" },
-        { id: "104", title: "Maximum Depth of Binary Tree", url: "https://leetcode.com/problems/maximum-depth-of-binary-tree/", difficulty: "Easy", topic: "Trees" },
-        { id: "226", title: "Invert Binary Tree", url: "https://leetcode.com/problems/invert-binary-tree/", difficulty: "Easy", topic: "Trees" },
-        { id: "100", title: "Same Tree", url: "https://leetcode.com/problems/same-tree/", difficulty: "Easy", topic: "Trees" },
-        { id: "101", title: "Symmetric Tree", url: "https://leetcode.com/problems/symmetric-tree/", difficulty: "Easy", topic: "Trees" },
-        { id: "572", title: "Subtree of Another Tree", url: "https://leetcode.com/problems/subtree-of-another-tree/", difficulty: "Easy", topic: "Trees" }
+        // Two Pointers (Level 1 requested question list)
+        { id: "26", title: "Remove Duplicates from Sorted Array", url: "https://leetcode.com/problems/remove-duplicates-from-sorted-array/", difficulty: "Easy", topic: "Two Pointers", pattern: "Slow & Fast Pointer" },
+        { id: "27", title: "Remove Element", url: "https://leetcode.com/problems/remove-element/", difficulty: "Easy", topic: "Two Pointers", pattern: "Slow & Fast Pointer" },
+        { id: "283", title: "Move Zeroes", url: "https://leetcode.com/problems/move-zeroes/", difficulty: "Easy", topic: "Two Pointers", pattern: "Slow & Fast Pointer" },
+        { id: "88", title: "Merge Sorted Array", url: "https://leetcode.com/problems/merge-sorted-array/", difficulty: "Easy", topic: "Two Pointers", pattern: "Two Pointers from End" },
+        { id: "977", title: "Squares of a Sorted Array", url: "https://leetcode.com/problems/squares-of-a-sorted-array/", difficulty: "Easy", topic: "Two Pointers", pattern: "Left & Right Pointer" },
+        { id: "905", title: "Sort Array By Parity", url: "https://leetcode.com/problems/sort-array-by-parity/", difficulty: "Easy", topic: "Two Pointers", pattern: "Partitioning" },
+
+        // Arrays
+        { id: "1", title: "Two Sum", url: "https://leetcode.com/problems/two-sum/", difficulty: "Easy", topic: "Arrays", pattern: "Hash Map Lookup" },
+        { id: "217", title: "Contains Duplicate", url: "https://leetcode.com/problems/contains-duplicate/", difficulty: "Easy", topic: "Arrays", pattern: "Frequency Map" },
+        { id: "242", title: "Valid Anagram", url: "https://leetcode.com/problems/valid-anagram/", difficulty: "Easy", topic: "Arrays", pattern: "Frequency Map" },
+        { id: "121", title: "Best Time to Buy and Sell Stock", url: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/", difficulty: "Easy", topic: "Arrays", pattern: "Sliding Window" },
+        { id: "169", title: "Majority Element", url: "https://leetcode.com/problems/majority-element/", difficulty: "Easy", topic: "Arrays", pattern: "Boyer-Moore Voting" },
+        { id: "268", title: "Missing Number", url: "https://leetcode.com/problems/missing-number/", difficulty: "Easy", topic: "Arrays", pattern: "Bit Manipulation" },
+
+        // Sliding Window
+        { id: "121", title: "Best Time to Buy and Sell Stock", url: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock/", difficulty: "Easy", topic: "Sliding Window", pattern: "Dynamic Window" },
+        { id: "643", title: "Maximum Average Subarray I", url: "https://leetcode.com/problems/maximum-average-subarray-i/", difficulty: "Easy", topic: "Sliding Window", pattern: "Fixed Size Window" },
+
+        // Prefix Sum
+        { id: "303", title: "Range Sum Query - Immutable", url: "https://leetcode.com/problems/range-sum-query-immutable/", difficulty: "Easy", topic: "Prefix Sum", pattern: "Prefix Array" },
+        { id: "724", title: "Find Pivot Index", url: "https://leetcode.com/problems/find-pivot-index/", difficulty: "Easy", topic: "Prefix Sum", pattern: "Pivot Balancing" },
+
+        // Kadane's Algorithm
+        { id: "53", title: "Maximum Subarray", url: "https://leetcode.com/problems/maximum-subarray/", difficulty: "Medium", topic: "Kadane's Algorithm", pattern: "Dynamic Subarray Max" },
+
+        // Strings
+        { id: "14", title: "Longest Common Prefix", url: "https://leetcode.com/problems/longest-common-prefix/", difficulty: "Easy", topic: "Strings", pattern: "Vertical Scan" },
+        { id: "20", title: "Valid Parentheses", url: "https://leetcode.com/problems/valid-parentheses/", difficulty: "Easy", topic: "Strings", pattern: "Stack Matching" },
+        { id: "28", title: "Find Index of First Occurrence in String", url: "https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/", difficulty: "Easy", topic: "Strings", pattern: "Sub-string Search" },
+
+        // Hashmap
+        { id: "1", title: "Two Sum", url: "https://leetcode.com/problems/two-sum/", difficulty: "Easy", topic: "Hashmap", pattern: "Key-Value Lookup" },
+        { id: "383", title: "Ransom Note", url: "https://leetcode.com/problems/ransom-note/", difficulty: "Easy", topic: "Hashmap", pattern: "Char Frequency Map" },
+
+        // Binary Search
+        { id: "704", title: "Binary Search", url: "https://leetcode.com/problems/binary-search/", difficulty: "Easy", topic: "Binary Search", pattern: "Classic Binary Search" },
+        { id: "35", title: "Search Insert Position", url: "https://leetcode.com/problems/search-insert-position/", difficulty: "Easy", topic: "Binary Search", pattern: "Lower / Upper Bound" },
+        { id: "278", title: "First Bad Version", url: "https://leetcode.com/problems/first-bad-version/", difficulty: "Easy", topic: "Binary Search", pattern: "Boolean Condition Search" },
+        { id: "69", title: "Sqrt(x)", url: "https://leetcode.com/problems/sqrtx/", difficulty: "Easy", topic: "Binary Search", pattern: "Binary Search on Answers" },
+        { id: "74", title: "Search a 2D Matrix", url: "https://leetcode.com/problems/search-a-2d-matrix/", difficulty: "Medium", topic: "Binary Search", pattern: "2D Matrix Search" }
     ];
 
-    let currentBeginnerTopic = "All";
+    const openRoadmapDrawer = (topicName = "Two Pointers") => {
+        const drawer = document.getElementById('roadmap-side-drawer');
+        const backdrop = document.getElementById('roadmap-drawer-backdrop');
+        const titleEl = document.getElementById('drawer-topic-title');
+        const tbody = document.getElementById('drawer-problems-tbody');
+        const countEl = document.getElementById('drawer-solved-count');
+        const fillEl = document.getElementById('drawer-progress-fill');
 
-    const renderBeginnerQuestions = (topicFilter = "All") => {
-        if (!beginnerQuestionsGrid) return;
-        beginnerQuestionsGrid.innerHTML = '';
+        if (titleEl) titleEl.textContent = topicName;
+        if (!tbody) return;
 
+        tbody.innerHTML = '';
         const solvedList = getSolvedQuestions();
+
         const filtered = beginnerQuestionsData.filter(q => {
-            if (topicFilter !== "All" && q.topic !== topicFilter) return false;
-            return true;
+            if (topicName === "All" || topicName === "Foundation") return true;
+            if (q.topic === topicName || (topicName.includes("Two Pointer") && q.topic.includes("Two Pointer"))) return true;
+            return false;
         });
+
+        const solvedCount = filtered.filter(q => solvedList.some(s => s.link === q.url)).length;
+        const totalCount = filtered.length;
+        const pct = totalCount > 0 ? Math.round((solvedCount / totalCount) * 100) : 0;
+
+        if (countEl) countEl.textContent = `(${solvedCount} / ${totalCount})`;
+        if (fillEl) fillEl.style.width = `${pct}%`;
 
         if (filtered.length === 0) {
-            beginnerQuestionsGrid.innerHTML = '<p class="empty-state">No questions found for this topic.</p>';
-            return;
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" style="text-align:center; padding: 30px; color:#64748b;">
+                        No questions available for ${escapeHTML(topicName)}.
+                    </td>
+                </tr>
+            `;
+        } else {
+            filtered.forEach((q, idx) => {
+                const tr = document.createElement('tr');
+                const isSolved = solvedList.some(s => s.link === q.url);
+
+                tr.innerHTML = `
+                    <td style="padding:10px 12px; text-align:center; font-weight:700; color:#64748b;">${idx + 1}</td>
+                    <td style="padding:10px 12px; font-weight:700; color:var(--primary);">${escapeHTML(q.id)}</td>
+                    <td style="padding:10px 12px;">
+                        <a href="${q.url}" target="_blank" rel="noopener noreferrer" style="color:#ffffff; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                            ${escapeHTML(q.title)}
+                            <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                        </a>
+                    </td>
+                    <td style="padding:10px 12px; color:#94a3b8; font-size:0.775rem;">
+                        <span style="background:rgba(59,130,246,0.12); color:#60a5fa; padding:2px 8px; border-radius:4px; border:1px solid rgba(59,130,246,0.25); font-weight:600;">
+                            ${escapeHTML(q.pattern || 'Two Pointers')}
+                        </span>
+                    </td>
+                    <td style="padding:10px 12px; text-align:center;">
+                        <input type="checkbox" class="solve-checkbox" data-link="${q.url}" data-name="${escapeHTML(q.title)}" data-diff="${q.difficulty}" data-topic="${q.topic}" ${isSolved ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px;">
+                    </td>
+                `;
+
+                const problemLink = tr.querySelector('a');
+                if (problemLink) {
+                    problemLink.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        safeOpenUrl(q.url);
+                    });
+                }
+
+                const checkbox = tr.querySelector('.solve-checkbox');
+                checkbox.addEventListener('change', (e) => {
+                    toggleSolved({ link: q.url, name: q.title, difficulty: q.difficulty, topic: q.topic }, e.target.checked);
+                    const newSolved = filtered.filter(item => getSolvedQuestions().some(s => s.link === item.url)).length;
+                    const newPct = totalCount > 0 ? Math.round((newSolved / totalCount) * 100) : 0;
+                    if (countEl) countEl.textContent = `(${newSolved} / ${totalCount})`;
+                    if (fillEl) fillEl.style.width = `${newPct}%`;
+                    updateCommandCenter();
+                });
+
+                tbody.appendChild(tr);
+            });
         }
 
-        filtered.forEach((q) => {
-            const card = document.createElement('div');
-            card.className = 'resource-card show';
-            const isSolved = solvedList.some(s => s.link === q.url);
-            const diffClass = q.difficulty === 'Easy' ? 'diff-easy' : q.difficulty === 'Medium' ? 'diff-medium' : 'diff-hard';
-
-            card.innerHTML = `
-                <div class="card-header">
-                    <span class="rank-badge lc-id">#${escapeHTML(q.id)}</span>
-                    <div class="card-badges">
-                        <span class="pill-badge diff-pill ${diffClass}">${escapeHTML(q.difficulty)}</span>
-                        <span class="pill-badge" style="background:rgba(37,99,235,0.08); color:var(--primary); font-weight:700; border-color:transparent;">${escapeHTML(q.topic)}</span>
-                    </div>
-                </div>
-
-                <div class="card-check-wrap">
-                    <input type="checkbox" class="solve-checkbox"
-                        data-link="${q.url}"
-                        data-name="${escapeHTML(q.title)}"
-                        data-diff="${q.difficulty}"
-                        data-topic="${q.topic}"
-                        ${isSolved ? 'checked' : ''}>
-                    <span class="solve-label">${isSolved ? '✅ Solved' : 'Mark as Solved'}</span>
-                </div>
-
-                <h3 class="card-title" style="font-size:1.05rem; margin-top:8px;">${escapeHTML(q.title)}</h3>
-
-                <div style="font-size:0.75rem; color:var(--text-sub); margin-bottom:12px;">
-                    <span>Target: <strong>Foundational ${escapeHTML(q.topic)}</strong></span>
-                </div>
-
-                <a href="${q.url}" target="_blank" class="btn-watch" rel="noopener noreferrer" style="margin-top:auto;">
-                    Solve on LeetCode →
-                </a>
-            `;
-
-            const solveLink = card.querySelector('.btn-watch');
-            if (solveLink) {
-                solveLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    safeOpenUrl(q.url);
-                });
-            }
-
-            const checkbox = card.querySelector('.solve-checkbox');
-            checkbox.addEventListener('change', (e) => {
-                toggleSolved({ link: q.url, name: q.title, difficulty: q.difficulty, topic: q.topic }, e.target.checked);
-                card.querySelector('.solve-label').textContent = e.target.checked ? '✅ Solved' : 'Mark as Solved';
-                updateCommandCenter();
-            });
-
-            beginnerQuestionsGrid.appendChild(card);
-        });
+        if (drawer) drawer.classList.add('open');
+        if (backdrop) backdrop.classList.add('open');
     };
+
+    const closeRoadmapDrawer = () => {
+        const drawer = document.getElementById('roadmap-side-drawer');
+        const backdrop = document.getElementById('roadmap-drawer-backdrop');
+        if (drawer) drawer.classList.remove('open');
+        if (backdrop) backdrop.classList.remove('open');
+    };
+
+    const closeBtn = document.getElementById('close-roadmap-drawer');
+    const backdropEl = document.getElementById('roadmap-drawer-backdrop');
+    if (closeBtn) closeBtn.addEventListener('click', closeRoadmapDrawer);
+    if (backdropEl) backdropEl.addEventListener('click', closeRoadmapDrawer);
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeRoadmapDrawer();
+    });
 
     const drawRoadmapLines = () => {
         const wrapper = document.getElementById('roadmap-canvas-wrapper');
@@ -1876,29 +1918,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const wrapperRect = wrapper.getBoundingClientRect();
 
         const connections = [
-            ['node-arrays', 'node-twopointers'],
-            ['node-arrays', 'node-stack'],
-            ['node-twopointers', 'node-binarysearch'],
-            ['node-twopointers', 'node-slidingwindow'],
-            ['node-twopointers', 'node-linkedlist'],
-            ['node-binarysearch', 'node-trees'],
-            ['node-slidingwindow', 'node-trees'],
-            ['node-linkedlist', 'node-trees'],
-            ['node-stack', 'node-trees'],
-            ['node-trees', 'node-tries'],
-            ['node-trees', 'node-heap'],
-            ['node-trees', 'node-backtracking'],
-            ['node-heap', 'node-intervals'],
-            ['node-heap', 'node-greedy'],
-            ['node-heap', 'node-advgraphs'],
-            ['node-backtracking', 'node-graphs'],
-            ['node-backtracking', 'node-dp1d'],
-            ['node-graphs', 'node-advgraphs'],
-            ['node-graphs', 'node-dp2d'],
-            ['node-dp1d', 'node-dp2d'],
-            ['node-dp1d', 'node-bitmanip'],
-            ['node-dp2d', 'node-math'],
-            ['node-bitmanip', 'node-math']
+            // Level 1: Foundation -> Level 2 Categories
+            ['node-arrays', 'node-level2-arrays'],
+            ['node-arrays', 'node-level2-strings'],
+            ['node-arrays', 'node-level2-hashmap'],
+            ['node-arrays', 'node-level2-binarysearch'],
+
+            // Level 2 -> Level 3 Sub-nodes
+            // Arrays Sub-nodes
+            ['node-level2-arrays', 'node-arrays-twopointers'],
+            ['node-level2-arrays', 'node-arrays-slidingwindow'],
+            ['node-level2-arrays', 'node-arrays-prefixsum'],
+            ['node-level2-arrays', 'node-arrays-kadane'],
+
+            // Strings Sub-nodes
+            ['node-level2-strings', 'node-strings-twopointer'],
+            ['node-level2-strings', 'node-strings-slidingwindow'],
+
+            // Hashmap Sub-nodes
+            ['node-level2-hashmap', 'node-hashmap-frequencymap'],
+            ['node-level2-hashmap', 'node-hashmap-prefixsum'],
+
+            // Binary Search Sub-nodes
+            ['node-level2-binarysearch', 'node-bs-classic'],
+            ['node-level2-binarysearch', 'node-bs-bounds'],
+            ['node-level2-binarysearch', 'node-bs-answers'],
+            ['node-level2-binarysearch', 'node-bs-matrix']
         ];
 
         connections.forEach(([fromId, toId]) => {
@@ -1989,7 +2034,9 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.roadmap-node').forEach(n => n.classList.remove('active-node'));
             node.classList.add('active-node');
             const title = node.getAttribute('data-title');
-            if (title) showToast(`🌱 Module: ${title}`);
+            if (title) {
+                openRoadmapDrawer(title);
+            }
         });
     });
 
@@ -1999,17 +2046,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cardModeCompanywise) {
         cardModeCompanywise.addEventListener('click', () => switchPracticeMode('companywise'));
     }
-
-    // Beginner topic filter buttons
-    const beginnerTopicBtns = document.querySelectorAll('.beginner-topic-btn');
-    beginnerTopicBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            beginnerTopicBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentBeginnerTopic = btn.getAttribute('data-topic');
-            renderBeginnerQuestions(currentBeginnerTopic);
-        });
-    });
 
     // Top Company Quick Select Pills
     const topCompPills = document.querySelectorAll('.top-comp-pill');
