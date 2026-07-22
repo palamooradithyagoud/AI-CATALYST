@@ -1849,6 +1849,16 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: "165", title: "Compare Version Numbers", url: "https://leetcode.com/problems/compare-version-numbers/", difficulty: "Medium", topic: "String Two Pointers", pattern: "Two Pointers" },
         { id: "2109", title: "Adding Spaces to a String", url: "https://leetcode.com/problems/adding-spaces-to-a-string/", difficulty: "Medium", topic: "String Two Pointers", pattern: "Two Pointers" },
         { id: "408", title: "Valid Word Abbreviation", url: "https://leetcode.com/problems/valid-word-abbreviation/", difficulty: "Hard", topic: "String Two Pointers", pattern: "Two Pointers" },
+        // String Sliding Window
+        { id: "1456", title: "Maximum Number of Vowels in a Substring of Given Length", url: "https://leetcode.com/problems/maximum-number-of-vowels-in-a-substring-of-given-length/", difficulty: "Easy", topic: "String Sliding Window", pattern: "Fixed Sliding Window" },
+        { id: "2379", title: "Minimum Recolors to Get K Consecutive Black Blocks", url: "https://leetcode.com/problems/minimum-recolors-to-get-k-consecutive-black-blocks/", difficulty: "Easy", topic: "String Sliding Window", pattern: "Fixed Sliding Window" },
+        { id: "3090", title: "Maximum Length Substring With Two Occurrences", url: "https://leetcode.com/problems/maximum-length-substring-with-two-occurrences/", difficulty: "Easy", topic: "String Sliding Window", pattern: "Variable Sliding Window" },
+        { id: "3", title: "Longest Substring Without Repeating Characters", url: "https://leetcode.com/problems/longest-substring-without-repeating-characters/", difficulty: "Medium", topic: "String Sliding Window", pattern: "Variable Sliding Window" },
+        { id: "424", title: "Longest Repeating Character Replacement", url: "https://leetcode.com/problems/longest-repeating-character-replacement/", difficulty: "Medium", topic: "String Sliding Window", pattern: "Variable Sliding Window" },
+        { id: "438", title: "Find All Anagrams in a String", url: "https://leetcode.com/problems/find-all-anagrams-in-a-string/", difficulty: "Medium", topic: "String Sliding Window", pattern: "Fixed Sliding Window" },
+        { id: "567", title: "Permutation in String", url: "https://leetcode.com/problems/permutation-in-string/", difficulty: "Medium", topic: "String Sliding Window", pattern: "Fixed Sliding Window" },
+        { id: "2516", title: "Take K of Each Character From Left and Right", url: "https://leetcode.com/problems/take-k-of-each-character-from-left-and-right/", difficulty: "Medium", topic: "String Sliding Window", pattern: "Sliding Window" },
+        { id: "76", title: "Minimum Window Substring", url: "https://leetcode.com/problems/minimum-window-substring/", difficulty: "Hard", topic: "String Sliding Window", pattern: "Variable Sliding Window" },
 
         // Hashmap
         { id: "1", title: "Two Sum", url: "https://leetcode.com/problems/two-sum/", difficulty: "Easy", topic: "Hashmap", pattern: "Key-Value Lookup" },
@@ -1892,8 +1902,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (topicName === "String Two Pointers") {
                 return q.topic === "String Two Pointers";
             }
+            if (topicName === "String Sliding Window") {
+                return q.topic === "String Sliding Window";
+            }
             if (topicName === "All" || topicName === "Foundation") {
-                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum" && q.topic !== "Kadane's Algorithm" && q.topic !== "String Two Pointers";
+                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum" && q.topic !== "Kadane's Algorithm" && q.topic !== "String Two Pointers" && q.topic !== "String Sliding Window";
             }
             return q.topic === topicName;
         });
