@@ -1835,9 +1835,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const solvedList = getSolvedQuestions();
 
         const filtered = beginnerQuestionsData.filter(q => {
-            if (topicName === "All" || topicName === "Foundation") return true;
-            if (q.topic === topicName || (topicName.includes("Two Pointer") && q.topic.includes("Two Pointer"))) return true;
-            return false;
+            if (topicName === "Two Pointers") {
+                return q.topic === "Two Pointers";
+            }
+            if (topicName === "All" || topicName === "Foundation") {
+                return q.topic !== "Two Pointers";
+            }
+            return q.topic === topicName;
         });
 
         const solvedCount = filtered.filter(q => solvedList.some(s => s.link === q.url)).length;
