@@ -1846,21 +1846,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isSolved = solvedList.some(s => s.link === q.url);
 
                 tr.innerHTML = `
-                    <td style="padding:10px 12px; text-align:center; font-weight:700; color:#64748b;">${idx + 1}</td>
-                    <td style="padding:10px 12px; font-weight:700; color:var(--primary);">${escapeHTML(q.id)}</td>
-                    <td style="padding:10px 12px;">
-                        <a href="${q.url}" target="_blank" rel="noopener noreferrer" style="color:#ffffff; font-weight:600; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                    <td style="padding:14px 16px; text-align:center; font-weight:700; color:#64748b; font-size:0.85rem;">${idx + 1}</td>
+                    <td style="padding:14px 16px; font-weight:700; color:#3b82f6; font-size:0.9rem;">${escapeHTML(q.id)}</td>
+                    <td style="padding:14px 16px;">
+                        <a href="${q.url}" target="_blank" rel="noopener noreferrer" style="color:#ffffff; font-weight:600; font-size:0.9rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:color 0.2s ease;">
                             ${escapeHTML(q.title)}
-                            <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#3b82f6" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                         </a>
                     </td>
-                    <td style="padding:10px 12px; color:#94a3b8; font-size:0.775rem;">
-                        <span style="background:rgba(59,130,246,0.12); color:#60a5fa; padding:2px 8px; border-radius:4px; border:1px solid rgba(59,130,246,0.25); font-weight:600;">
+                    <td style="padding:14px 16px; color:#94a3b8; font-size:0.8rem;">
+                        <span style="background:rgba(59,130,246,0.14); color:#60a5fa; padding:4px 10px; border-radius:6px; border:1px solid rgba(59,130,246,0.3); font-weight:600; display:inline-block; white-space:nowrap;">
                             ${escapeHTML(q.pattern || 'Two Pointers')}
                         </span>
                     </td>
-                    <td style="padding:10px 12px; text-align:center;">
-                        <input type="checkbox" class="solve-checkbox" data-link="${q.url}" data-name="${escapeHTML(q.title)}" data-diff="${q.difficulty}" data-topic="${q.topic}" ${isSolved ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px;">
+                    <td style="padding:14px 16px; text-align:center;">
+                        <input type="checkbox" class="solve-checkbox" data-link="${q.url}" data-name="${escapeHTML(q.title)}" data-diff="${q.difficulty}" data-topic="${q.topic}" ${isSolved ? 'checked' : ''} style="cursor:pointer; width:18px; height:18px; accent-color:#2563eb;">
                     </td>
                 `;
 
@@ -3557,7 +3557,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const notificationsBtn = document.getElementById('notifications-btn');
     if (notificationsBtn) {
         notificationsBtn.addEventListener('click', () => {
-            showToast('🔔 You have no unread notifications.');
+            showToast('You have no unread notifications.');
         });
     }
 
