@@ -1761,13 +1761,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const beginnerQuestionsGrid = document.getElementById('beginner-questions-grid');
 
     const beginnerQuestionsData = [
-        // Two Pointers (Level 1 requested question list)
-        { id: "26", title: "Remove Duplicates from Sorted Array", url: "https://leetcode.com/problems/remove-duplicates-from-sorted-array/", difficulty: "Easy", topic: "Two Pointers", pattern: "Slow & Fast Pointer" },
-        { id: "27", title: "Remove Element", url: "https://leetcode.com/problems/remove-element/", difficulty: "Easy", topic: "Two Pointers", pattern: "Slow & Fast Pointer" },
-        { id: "283", title: "Move Zeroes", url: "https://leetcode.com/problems/move-zeroes/", difficulty: "Easy", topic: "Two Pointers", pattern: "Slow & Fast Pointer" },
-        { id: "88", title: "Merge Sorted Array", url: "https://leetcode.com/problems/merge-sorted-array/", difficulty: "Easy", topic: "Two Pointers", pattern: "Two Pointers from End" },
-        { id: "977", title: "Squares of a Sorted Array", url: "https://leetcode.com/problems/squares-of-a-sorted-array/", difficulty: "Easy", topic: "Two Pointers", pattern: "Left & Right Pointer" },
-        { id: "905", title: "Sort Array By Parity", url: "https://leetcode.com/problems/sort-array-by-parity/", difficulty: "Easy", topic: "Two Pointers", pattern: "Partitioning" },
+        // Two Pointers
+        { id: "26", title: "Remove Duplicates from Sorted Array", url: "https://leetcode.com/problems/remove-duplicates-from-sorted-array/", difficulty: "Easy", topic: "Two Pointers", pattern: "Two Pointers" },
+        { id: "27", title: "Remove Element", url: "https://leetcode.com/problems/remove-element/", difficulty: "Easy", topic: "Two Pointers", pattern: "Two Pointers" },
+        { id: "88", title: "Merge Sorted Array", url: "https://leetcode.com/problems/merge-sorted-array/", difficulty: "Easy", topic: "Two Pointers", pattern: "Two Pointers" },
+        { id: "283", title: "Move Zeroes", url: "https://leetcode.com/problems/move-zeroes/", difficulty: "Easy", topic: "Two Pointers", pattern: "Two Pointers" },
+        { id: "349", title: "Intersection of Two Arrays", url: "https://leetcode.com/problems/intersection-of-two-arrays/", difficulty: "Easy", topic: "Two Pointers", pattern: "Two Pointers + Sorting" },
+        { id: "350", title: "Intersection of Two Arrays II", url: "https://leetcode.com/problems/intersection-of-two-arrays-ii/", difficulty: "Easy", topic: "Two Pointers", pattern: "Two Pointers + Sorting" },
+        { id: "455", title: "Assign Cookies", url: "https://leetcode.com/problems/assign-cookies/", difficulty: "Easy", topic: "Two Pointers", pattern: "Two Pointers + Greedy" },
+        { id: "905", title: "Sort Array By Parity", url: "https://leetcode.com/problems/sort-array-by-parity/", difficulty: "Easy", topic: "Two Pointers", pattern: "Two Pointers" },
+        { id: "922", title: "Sort Array By Parity II", url: "https://leetcode.com/problems/sort-array-by-parity-ii/", difficulty: "Easy", topic: "Two Pointers", pattern: "Two Pointers" },
+        { id: "977", title: "Squares of a Sorted Array", url: "https://leetcode.com/problems/squares-of-a-sorted-array/", difficulty: "Easy", topic: "Two Pointers", pattern: "Two Pointers" },
+        { id: "2460", title: "Apply Operations to an Array", url: "https://leetcode.com/problems/apply-operations-to-an-array/", difficulty: "Easy", topic: "Two Pointers", pattern: "Two Pointers" },
+        { id: "11", title: "Container With Most Water", url: "https://leetcode.com/problems/container-with-most-water/", difficulty: "Medium", topic: "Two Pointers", pattern: "Two Pointers" },
+        { id: "15", title: "3Sum", url: "https://leetcode.com/problems/3sum/", difficulty: "Medium", topic: "Two Pointers", pattern: "Two Pointers + Sorting" },
+        { id: "16", title: "3Sum Closest", url: "https://leetcode.com/problems/3sum-closest/", difficulty: "Medium", topic: "Two Pointers", pattern: "Two Pointers + Sorting" },
+        { id: "18", title: "4Sum", url: "https://leetcode.com/problems/4sum/", difficulty: "Medium", topic: "Two Pointers", pattern: "Two Pointers + Sorting" },
+        { id: "80", title: "Remove Duplicates from Sorted Array II", url: "https://leetcode.com/problems/remove-duplicates-from-sorted-array-ii/", difficulty: "Medium", topic: "Two Pointers", pattern: "Two Pointers" },
+        { id: "167", title: "Two Sum II – Input Array Is Sorted", url: "https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/", difficulty: "Medium", topic: "Two Pointers", pattern: "Two Pointers" },
+        { id: "189", title: "Rotate Array", url: "https://leetcode.com/problems/rotate-array/", difficulty: "Medium", topic: "Two Pointers", pattern: "Two Pointers" },
+        { id: "611", title: "Valid Triangle Number", url: "https://leetcode.com/problems/valid-triangle-number/", difficulty: "Medium", topic: "Two Pointers", pattern: "Two Pointers" },
+        { id: "881", title: "Boats to Save People", url: "https://leetcode.com/problems/boats-to-save-people/", difficulty: "Medium", topic: "Two Pointers", pattern: "Two Pointers" },
+        { id: "42", title: "Trapping Rain Water", url: "https://leetcode.com/problems/trapping-rain-water/", difficulty: "Hard", topic: "Two Pointers", pattern: "Two Pointers" },
 
         // Arrays
         { id: "1", title: "Two Sum", url: "https://leetcode.com/problems/two-sum/", difficulty: "Easy", topic: "Arrays", pattern: "Hash Map Lookup" },
@@ -1835,7 +1850,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (filtered.length === 0) {
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="5" style="text-align:center; padding: 30px; color:#64748b;">
+                    <td colspan="6" style="text-align:center; padding: 30px; color:#64748b;">
                         No questions available for ${escapeHTML(topicName)}.
                     </td>
                 </tr>
@@ -1845,21 +1860,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 const tr = document.createElement('tr');
                 const isSolved = solvedList.some(s => s.link === q.url);
 
+                let diffBadge = '';
+                if (q.difficulty === 'Easy') {
+                    diffBadge = '<span style="background:rgba(34,197,94,0.15); color:#4ade80; padding:4px 8px; border-radius:6px; border:1px solid rgba(34,197,94,0.3); font-weight:600; font-size:0.75rem; display:inline-block;">Easy</span>';
+                } else if (q.difficulty === 'Medium') {
+                    diffBadge = '<span style="background:rgba(234,179,8,0.15); color:#fde047; padding:4px 8px; border-radius:6px; border:1px solid rgba(234,179,8,0.3); font-weight:600; font-size:0.75rem; display:inline-block;">Medium</span>';
+                } else {
+                    diffBadge = '<span style="background:rgba(239,68,68,0.15); color:#fca5a5; padding:4px 8px; border-radius:6px; border:1px solid rgba(239,68,68,0.3); font-weight:600; font-size:0.75rem; display:inline-block;">Hard</span>';
+                }
+
                 tr.innerHTML = `
-                    <td style="padding:14px 16px; text-align:center; font-weight:700; color:#64748b; font-size:0.85rem;">${idx + 1}</td>
-                    <td style="padding:14px 16px; font-weight:700; color:#3b82f6; font-size:0.9rem;">${escapeHTML(q.id)}</td>
-                    <td style="padding:14px 16px;">
-                        <a href="${q.url}" target="_blank" rel="noopener noreferrer" style="color:#ffffff; font-weight:600; font-size:0.9rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:color 0.2s ease;">
+                    <td style="padding:12px 14px; text-align:center; font-weight:700; color:#64748b; font-size:0.85rem;">${idx + 1}</td>
+                    <td style="padding:12px 14px; font-weight:700; color:#3b82f6; font-size:0.9rem;">${escapeHTML(q.id)}</td>
+                    <td style="padding:12px 14px;">
+                        <a href="${q.url}" target="_blank" rel="noopener noreferrer" style="color:#ffffff; font-weight:600; font-size:0.875rem; text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:color 0.2s ease;">
                             ${escapeHTML(q.title)}
-                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#3b82f6" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#3b82f6" stroke-width="2.5" style="flex-shrink:0;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                         </a>
                     </td>
-                    <td style="padding:14px 16px; color:#94a3b8; font-size:0.8rem;">
+                    <td style="padding:12px 14px; color:#94a3b8; font-size:0.8rem;">
+                        ${diffBadge}
+                    </td>
+                    <td style="padding:12px 14px; color:#94a3b8; font-size:0.8rem;">
                         <span style="background:rgba(59,130,246,0.14); color:#60a5fa; padding:4px 10px; border-radius:6px; border:1px solid rgba(59,130,246,0.3); font-weight:600; display:inline-block; white-space:nowrap;">
                             ${escapeHTML(q.pattern || 'Two Pointers')}
                         </span>
                     </td>
-                    <td style="padding:14px 16px; text-align:center;">
+                    <td style="padding:12px 14px; text-align:center;">
                         <input type="checkbox" class="solve-checkbox" data-link="${q.url}" data-name="${escapeHTML(q.title)}" data-diff="${q.difficulty}" data-topic="${q.topic}" ${isSolved ? 'checked' : ''} style="cursor:pointer; width:18px; height:18px; accent-color:#2563eb;">
                     </td>
                 `;

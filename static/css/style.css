@@ -3800,30 +3800,31 @@ body {
 .roadmap-side-drawer {
   position: fixed;
   top: 0;
-  right: -720px;
-  width: 680px;
-  max-width: 95vw;
+  right: -950px;
+  width: 780px;
+  max-width: 90vw;
   height: 100vh;
   background: #0b1329;
   border-left: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.8);
-  z-index: 9999;
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.85);
+  z-index: 99999;
   display: flex;
   flex-direction: column;
   transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .roadmap-side-drawer.open {
-  right: 0;
+  right: 0 !important;
 }
 
 .roadmap-drawer-backdrop {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(5px);
-  z-index: 9998;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(6px);
+  z-index: 99998;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;

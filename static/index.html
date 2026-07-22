@@ -875,59 +875,7 @@
                             </div>
                         </div>
 
-                        <!-- NeetCode-Style Side Drawer Panel -->
-                        <div id="roadmap-side-drawer" class="roadmap-side-drawer">
-                            <div class="drawer-header-bar" style="padding:24px 28px; border-bottom:1px solid rgba(255,255,255,0.12); background:rgba(11,19,41,0.98); position:sticky; top:0; z-index:10; backdrop-filter:blur(10px);">
-                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-                                    <span id="close-roadmap-drawer" class="esc-btn">ESC</span>
-                                    <div style="font-size:0.9rem; font-weight:700; color:var(--text-sub); display:flex; align-items:center; gap:8px;">
-                                        Solved: <span id="drawer-solved-count" style="color:#22c55e; font-weight:800;">(0 / 6)</span>
-                                    </div>
-                                </div>
-                                <h3 id="drawer-topic-title" style="font-family:'Outfit', sans-serif; font-size:1.65rem; font-weight:800; color:#ffffff; margin:0 0 12px 0; letter-spacing:-0.01em;">Two Pointers</h3>
-                                <div style="width:100%; height:8px; background:rgba(255,255,255,0.08); border-radius:100px; overflow:hidden;">
-                                    <div id="drawer-progress-fill" style="width:0%; height:100%; background:linear-gradient(90deg, #3b82f6, #22c55e); transition:width 0.35s ease;"></div>
-                                </div>
-                            </div>
 
-                            <div class="drawer-body" style="padding:24px 28px;">
-                                <!-- Prerequisites section -->
-                                <div style="margin-bottom:28px;">
-                                    <div style="font-size:0.8rem; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:12px;">Prerequisites</div>
-                                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
-                                        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:14px 16px;">
-                                            <div style="font-weight:700; font-size:0.925rem; color:#fff; margin-bottom:2px;">Arrays & Pointers</div>
-                                            <div style="font-size:0.8rem; color:#94a3b8;">Basic Traversal</div>
-                                        </div>
-                                        <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:14px 16px;">
-                                            <div style="font-weight:700; font-size:0.925rem; color:#fff; margin-bottom:2px;">In-Place Swapping</div>
-                                            <div style="font-size:0.8rem; color:#94a3b8;">O(1) Space Memory</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Problems Table -->
-                                <div style="background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.1); border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
-                                    <table class="drawer-problems-table" style="width:100%; border-collapse:collapse; text-align:left; font-size:0.9rem;">
-                                        <thead>
-                                            <tr style="background:rgba(255,255,255,0.05); border-bottom:1px solid rgba(255,255,255,0.1); color:#94a3b8; font-weight:700; font-size:0.8rem; text-transform:uppercase; letter-spacing:0.05em;">
-                                                <th style="padding:14px 16px; width:36px; text-align:center;">#</th>
-                                                <th style="padding:14px 16px; width:80px;">LeetCode</th>
-                                                <th style="padding:14px 16px;">Problem</th>
-                                                <th style="padding:14px 16px;">Pattern</th>
-                                                <th style="padding:14px 16px; width:70px; text-align:center;">Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="drawer-problems-tbody">
-                                            <!-- Dynamic rows -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Drawer Backdrop -->
-                        <div id="roadmap-drawer-backdrop" class="roadmap-drawer-backdrop"></div>
                     </div>
 
                     <!-- WORKSPACE 2: Company-Wise Track (Dedicated Page) -->
@@ -1656,6 +1604,61 @@
             <div id="mentor-result" style="margin-top:20px;"></div>
         </div>
     </div>
+
+    <!-- NeetCode-Style Side Drawer Panel -->
+    <div id="roadmap-side-drawer" class="roadmap-side-drawer">
+        <div class="drawer-header-bar" style="padding:24px 28px; border-bottom:1px solid rgba(255,255,255,0.12); background:rgba(11,19,41,0.98); position:sticky; top:0; z-index:10; backdrop-filter:blur(10px);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <span id="close-roadmap-drawer" class="esc-btn">ESC</span>
+                <div style="font-size:0.9rem; font-weight:700; color:var(--text-sub); display:flex; align-items:center; gap:8px;">
+                    Solved: <span id="drawer-solved-count" style="color:#22c55e; font-weight:800;">(0 / 21)</span>
+                </div>
+            </div>
+            <h3 id="drawer-topic-title" style="font-family:'Outfit', sans-serif; font-size:1.65rem; font-weight:800; color:#ffffff; margin:0 0 12px 0; letter-spacing:-0.01em;">Two Pointers</h3>
+            <div style="width:100%; height:8px; background:rgba(255,255,255,0.08); border-radius:100px; overflow:hidden;">
+                <div id="drawer-progress-fill" style="width:0%; height:100%; background:linear-gradient(90deg, #3b82f6, #22c55e); transition:width 0.35s ease;"></div>
+            </div>
+        </div>
+
+        <div class="drawer-body" style="padding:24px 28px; overflow-y:auto;">
+            <!-- Prerequisites section -->
+            <div style="margin-bottom:28px;">
+                <div style="font-size:0.8rem; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:12px;">Prerequisites</div>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+                    <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:14px 16px;">
+                        <div style="font-weight:700; font-size:0.925rem; color:#fff; margin-bottom:2px;">Arrays & Pointers</div>
+                        <div style="font-size:0.8rem; color:#94a3b8;">Basic Traversal</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:10px; padding:14px 16px;">
+                        <div style="font-weight:700; font-size:0.925rem; color:#fff; margin-bottom:2px;">In-Place Swapping</div>
+                        <div style="font-size:0.8rem; color:#94a3b8;">O(1) Space Memory</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problems Table -->
+            <div style="background:rgba(15,23,42,0.7); border:1px solid rgba(255,255,255,0.1); border-radius:12px; overflow-x:auto; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+                <table class="drawer-problems-table" style="width:100%; min-width:640px; border-collapse:collapse; text-align:left; font-size:0.875rem;">
+                    <thead>
+                        <tr style="background:rgba(255,255,255,0.05); border-bottom:1px solid rgba(255,255,255,0.1); color:#94a3b8; font-weight:700; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em;">
+                            <th style="padding:12px 14px; width:40px; text-align:center;">#</th>
+                            <th style="padding:12px 14px; width:80px;">LeetCode</th>
+                            <th style="padding:12px 14px;">Problem</th>
+                            <th style="padding:12px 14px; width:85px;">Level</th>
+                            <th style="padding:12px 14px; width:160px;">Pattern</th>
+                            <th style="padding:12px 14px; width:70px; text-align:center;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="drawer-problems-tbody">
+                        <!-- Dynamic rows -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Drawer Backdrop -->
+    <div id="roadmap-drawer-backdrop" class="roadmap-drawer-backdrop"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
