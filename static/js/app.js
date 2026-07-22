@@ -1860,9 +1860,26 @@ document.addEventListener('DOMContentLoaded', () => {
         { id: "2516", title: "Take K of Each Character From Left and Right", url: "https://leetcode.com/problems/take-k-of-each-character-from-left-and-right/", difficulty: "Medium", topic: "String Sliding Window", pattern: "Sliding Window" },
         { id: "76", title: "Minimum Window Substring", url: "https://leetcode.com/problems/minimum-window-substring/", difficulty: "Hard", topic: "String Sliding Window", pattern: "Variable Sliding Window" },
 
-        // Hashmap
-        { id: "1", title: "Two Sum", url: "https://leetcode.com/problems/two-sum/", difficulty: "Easy", topic: "Hashmap", pattern: "Key-Value Lookup" },
-        { id: "383", title: "Ransom Note", url: "https://leetcode.com/problems/ransom-note/", difficulty: "Easy", topic: "Hashmap", pattern: "Char Frequency Map" },
+        // Frequency Map
+        { id: "1", title: "Two Sum", url: "https://leetcode.com/problems/two-sum/", difficulty: "Easy", topic: "Frequency Map", pattern: "Hash Map" },
+        { id: "217", title: "Contains Duplicate", url: "https://leetcode.com/problems/contains-duplicate/", difficulty: "Easy", topic: "Frequency Map", pattern: "Hash Set / Frequency Map" },
+        { id: "219", title: "Contains Duplicate II", url: "https://leetcode.com/problems/contains-duplicate-ii/", difficulty: "Easy", topic: "Frequency Map", pattern: "Hash Map" },
+        { id: "242", title: "Valid Anagram", url: "https://leetcode.com/problems/valid-anagram/", difficulty: "Easy", topic: "Frequency Map", pattern: "Frequency Map" },
+        { id: "383", title: "Ransom Note", url: "https://leetcode.com/problems/ransom-note/", difficulty: "Easy", topic: "Frequency Map", pattern: "Frequency Map" },
+        { id: "387", title: "First Unique Character in a String", url: "https://leetcode.com/problems/first-unique-character-in-a-string/", difficulty: "Easy", topic: "Frequency Map", pattern: "Frequency Map" },
+        { id: "389", title: "Find the Difference", url: "https://leetcode.com/problems/find-the-difference/", difficulty: "Easy", topic: "Frequency Map", pattern: "Frequency Map" },
+        { id: "1207", title: "Unique Number of Occurrences", url: "https://leetcode.com/problems/unique-number-of-occurrences/", difficulty: "Easy", topic: "Frequency Map", pattern: "Frequency Map" },
+        { id: "1512", title: "Number of Good Pairs", url: "https://leetcode.com/problems/number-of-good-pairs/", difficulty: "Easy", topic: "Frequency Map", pattern: "Frequency Map" },
+        { id: "169", title: "Majority Element", url: "https://leetcode.com/problems/majority-element/", difficulty: "Easy", topic: "Frequency Map", pattern: "Frequency Map" },
+        { id: "1748", title: "Sum of Unique Elements", url: "https://leetcode.com/problems/sum-of-unique-elements/", difficulty: "Easy", topic: "Frequency Map", pattern: "Frequency Map" },
+        { id: "350", title: "Intersection of Two Arrays II", url: "https://leetcode.com/problems/intersection-of-two-arrays-ii/", difficulty: "Easy", topic: "Frequency Map", pattern: "Frequency Map" },
+        { id: "49", title: "Group Anagrams", url: "https://leetcode.com/problems/group-anagrams/", difficulty: "Medium", topic: "Frequency Map", pattern: "Frequency Map" },
+        { id: "347", title: "Top K Frequent Elements", url: "https://leetcode.com/problems/top-k-frequent-elements/", difficulty: "Medium", topic: "Frequency Map", pattern: "Frequency Map + Heap" },
+        { id: "451", title: "Sort Characters By Frequency", url: "https://leetcode.com/problems/sort-characters-by-frequency/", difficulty: "Medium", topic: "Frequency Map", pattern: "Frequency Map + Sorting" },
+        { id: "560", title: "Subarray Sum Equals K", url: "https://leetcode.com/problems/subarray-sum-equals-k/", difficulty: "Medium", topic: "Frequency Map", pattern: "Prefix Sum + Hash Map" },
+        { id: "659", title: "Split Array into Consecutive Subsequences", url: "https://leetcode.com/problems/split-array-into-consecutive-subsequences/", difficulty: "Medium", topic: "Frequency Map", pattern: "Frequency Map + Greedy" },
+        { id: "692", title: "Top K Frequent Words", url: "https://leetcode.com/problems/top-k-frequent-words/", difficulty: "Medium", topic: "Frequency Map", pattern: "Frequency Map + Heap" },
+        { id: "1636", title: "Sort Array by Increasing Frequency", url: "https://leetcode.com/problems/sort-array-by-increasing-frequency/", difficulty: "Easy", topic: "Frequency Map", pattern: "Frequency Map + Sorting" },
 
         // Binary Search
         { id: "704", title: "Binary Search", url: "https://leetcode.com/problems/binary-search/", difficulty: "Easy", topic: "Binary Search", pattern: "Classic Binary Search" },
@@ -1905,8 +1922,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (topicName === "String Sliding Window") {
                 return q.topic === "String Sliding Window";
             }
+            if (topicName === "Frequency Map") {
+                return q.topic === "Frequency Map";
+            }
             if (topicName === "All" || topicName === "Foundation") {
-                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum" && q.topic !== "Kadane's Algorithm" && q.topic !== "String Two Pointers" && q.topic !== "String Sliding Window";
+                return q.topic !== "Two Pointers" && q.topic !== "Sliding Window" && q.topic !== "Prefix Sum" && q.topic !== "Kadane's Algorithm" && q.topic !== "String Two Pointers" && q.topic !== "String Sliding Window" && q.topic !== "Frequency Map";
             }
             return q.topic === topicName;
         });
