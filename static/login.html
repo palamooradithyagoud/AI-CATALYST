@@ -323,13 +323,26 @@
       -webkit-appearance: none;
     }
     input:not([type="checkbox"])::placeholder { color: var(--text-muted); }
-    input:not([type="checkbox"]):focus {
-      border-color: var(--primary);
-      background: rgba(30, 41, 59, 0.95);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+    input:not([type="checkbox"]):focus,
+    input:not([type="checkbox"]):active {
+      border-color: var(--primary) !important;
+      background-color: rgba(30, 41, 59, 0.95) !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25) !important;
     }
     input:not([type="checkbox"]):focus ~ .input-icon-svg {
       color: #818cf8;
+    }
+
+    /* Override Browser Autofill Light Blue/White Background Bug */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus, 
+    input:-webkit-autofill:active {
+      -webkit-text-fill-color: #ffffff !important;
+      -webkit-box-shadow: 0 0 0px 1000px rgba(30, 41, 59, 0.95) inset !important;
+      transition: background-color 50000s ease-in-out 0s !important;
+      caret-color: #ffffff !important;
     }
 
     .pw-toggle {
