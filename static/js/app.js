@@ -4400,7 +4400,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (fullname) {
             const banner = document.getElementById('welcome-title-banner');
-            if (banner) banner.textContent = `Welcome back, ${fullname.split(' ')[0]}! 👋`;
+            if (banner) banner.innerHTML = `Welcome back, ${fullname.split(' ')[0]}! <span class="welcome-status-widget"><span class="widget-pulse-glow"></span>Active</span>`;
         }
 
         if (dbSaved) {
@@ -4548,7 +4548,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const banner = document.getElementById('welcome-title-banner');
-        if (banner) banner.textContent = `Welcome back, ${name.split(' ')[0]}! 👋`;
+        if (banner) banner.innerHTML = `Welcome back, ${name.split(' ')[0]}! <span class="welcome-status-widget"><span class="widget-pulse-glow"></span>Active</span>`;
         
         const avatarInitials = document.getElementById('user-avatar-initials');
         if (avatarInitials) avatarInitials.textContent = initials;

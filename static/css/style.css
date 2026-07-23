@@ -4211,6 +4211,40 @@ select:-webkit-autofill:focus {
   caret-color: #ffffff !important;
 }
 
+/* Welcome Title Status Widget Pill */
+.welcome-status-widget {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  background: rgba(99, 102, 241, 0.15) !important;
+  border: 1px solid rgba(99, 102, 241, 0.35) !important;
+  color: #818cf8 !important;
+  padding: 4px 13px !important;
+  border-radius: 20px !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  vertical-align: middle !important;
+  margin-left: 12px !important;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.2) !important;
+}
+
+.widget-pulse-glow {
+  width: 7px !important;
+  height: 7px !important;
+  background: #10b981 !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0 8px #10b981 !important;
+  animation: widgetPulse 2s infinite ease-in-out !important;
+}
+
+@keyframes widgetPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+
 
 
 
