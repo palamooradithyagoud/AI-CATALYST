@@ -30,7 +30,7 @@
         }
         const sessionKey = Object.keys(localStorage).find(key => key.startsWith('sb-') && key.endsWith('-auth-token'));
         if (!sessionKey || !localStorage.getItem(sessionKey)) {
-          window.location.href = '/login-page';
+          window.location.replace('/login-page');
         }
       })();
     </script>
@@ -1681,7 +1681,7 @@
             }
             localStorage.clear();
             sessionStorage.clear();
-            window.location.href = '/login-page';
+            window.location.replace('/login-page');
         }
     </script>
 </body>

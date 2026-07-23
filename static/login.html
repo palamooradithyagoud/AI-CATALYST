@@ -1142,7 +1142,7 @@
       }
 
       triggerLaunchSequence('Welcome Back! 🚀', email.split('@')[0], () => {
-        window.location.href = '/dashboard';
+        window.location.replace('/dashboard');
       });
 
     } catch (err) {
@@ -1199,7 +1199,7 @@
         });
       } else {
         triggerLaunchSequence('Account Created! 🎉', name || email.split('@')[0], () => {
-          window.location.href = '/dashboard';
+          window.location.replace('/dashboard');
         });
       }
 
@@ -1337,14 +1337,36 @@
   }
 
   // ── Bootstrap Initialization ──
-  window.addEventListener('DOMContentLoaded', () => {
+  const checkAutoRedirect = async () => {
     const params = new URLSearchParams(window.location.search);
     const isRecovery = params.get('type') === 'recovery' || window.location.hash.includes('type=recovery');
     
     if (isRecovery) {
       showPanel('reset');
-    } else {
-      showPanel('login');
+      return;
+    }
+
+    try {
+      await db.init();
+      if (window.supabaseClient) {
+        const { data: { session } } = await window.supabaseClient.auth.getSession();
+        if (session && session.user) {
+          console.log("[AUTH] Active session token found. Redirecting to dashboard...");
+          window.location.replace('/dashboard');
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn("[AUTH] Session check error:", e);
+    }
+
+    showPanel('login');
+  };
+
+  window.addEventListener('DOMContentLoaded', checkAutoRedirect);
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      checkAutoRedirect();
     }
   });
 </script>
