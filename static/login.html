@@ -314,7 +314,7 @@
       color: var(--text-muted); pointer-events: none;
       transition: color 0.2s var(--smooth);
     }
-    input {
+    input:not([type="checkbox"]) {
       width: 100%; height: 44px; padding: 0 40px 0 40px;
       background: var(--bg-input); border: 1px solid var(--border);
       border-radius: var(--radius-md); color: #ffffff;
@@ -322,13 +322,13 @@
       outline: none; transition: all 0.2s var(--smooth);
       -webkit-appearance: none;
     }
-    input::placeholder { color: var(--text-muted); }
-    input:focus {
+    input:not([type="checkbox"])::placeholder { color: var(--text-muted); }
+    input:not([type="checkbox"]):focus {
       border-color: var(--primary);
       background: rgba(30, 41, 59, 0.95);
       box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
     }
-    input:focus ~ .input-icon-svg {
+    input:not([type="checkbox"]):focus ~ .input-icon-svg {
       color: #818cf8;
     }
 
@@ -346,7 +346,16 @@
       font-size: 12.5px; color: var(--text-sub); cursor: pointer; font-weight: 500;
     }
     input[type="checkbox"] {
-      width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer;
+      width: 16px !important;
+      height: 16px !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      accent-color: #6366f1 !important;
+      cursor: pointer !important;
+      -webkit-appearance: checkbox !important;
+      appearance: checkbox !important;
+      flex-shrink: 0 !important;
+      border-radius: 4px !important;
     }
     .forgot-link { font-size: 12.5px; color: #818cf8; font-weight: 600; text-decoration: none; cursor: pointer; transition: color 0.2s var(--smooth); }
     .forgot-link:hover { color: #38bdf8; text-decoration: underline; }
