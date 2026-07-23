@@ -4145,10 +4145,16 @@ body {
 
 /* Coding mini profiles subgrid */
 .coding-profiles-subgrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)) !important;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)) !important;
   gap: 12px !important;
   margin-bottom: 18px !important;
+}
+
+@media (min-width: 1100px) {
+  .coding-profiles-subgrid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
 }
 
 .mini-profile-card {
@@ -4177,9 +4183,16 @@ body {
   white-space: nowrap !important;
 }
 
+.leetcode-badge { color: #f59e0b !important; }
+.github-badge { color: #f8fafc !important; }
+.hackerrank-badge { color: #22c55e !important; }
+.codechef-badge { color: #d97706 !important; }
+.gfg-badge { color: #16a34a !important; }
+.codeforces-badge { color: #3b82f6 !important; }
+
 .profile-summary-tag {
   font-size: 10px !important;
-  color: #64748b !important;
+  color: #94a3b8 !important;
   font-weight: 600 !important;
   white-space: nowrap !important;
   flex-shrink: 0 !important;

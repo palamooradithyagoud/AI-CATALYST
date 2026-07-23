@@ -1167,23 +1167,31 @@
                     <h2 style="font-family:'Outfit', sans-serif; font-weight:800; color:var(--text-main); margin-bottom:6px;">💻 Coding Standings Mentor</h2>
                     <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:20px;">Your coding profile handles and database metrics will be analyzed to pinpoint where you are lagging.</p>
                     
-                    <!-- Stats / Profiles Summary Grid -->
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
-                        <div style="background:var(--bg-main); border:1px solid var(--border); padding:12px 16px; border-radius:8px; display:flex; flex-direction:column; gap:4px;">
-                            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">LeetCode Profile</span>
-                            <span id="summary-leetcode" style="font-size:0.9rem; font-weight:600; color:var(--text-main); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Loading...</span>
+                    <!-- Stats / Profiles Summary Grid (Priority Order: LeetCode, GitHub, HackerRank, CodeChef, GFG, Codeforces) -->
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:10px; margin-bottom:20px;">
+                        <div style="background:var(--bg-main); border:1px solid var(--border); padding:10px 14px; border-radius:8px; display:flex; flex-direction:column; gap:3px;">
+                            <span style="font-size:0.72rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">⚡ LeetCode</span>
+                            <span id="summary-leetcode" style="font-size:0.85rem; font-weight:600; color:var(--text-main); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Loading...</span>
                         </div>
-                        <div style="background:var(--bg-main); border:1px solid var(--border); padding:12px 16px; border-radius:8px; display:flex; flex-direction:column; gap:4px;">
-                            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">GitHub Profile</span>
-                            <span id="summary-github" style="font-size:0.9rem; font-weight:600; color:var(--text-main); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Loading...</span>
+                        <div style="background:var(--bg-main); border:1px solid var(--border); padding:10px 14px; border-radius:8px; display:flex; flex-direction:column; gap:3px;">
+                            <span style="font-size:0.72rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">🐙 GitHub</span>
+                            <span id="summary-github" style="font-size:0.85rem; font-weight:600; color:var(--text-main); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Loading...</span>
                         </div>
-                        <div style="background:var(--bg-main); border:1px solid var(--border); padding:12px 16px; border-radius:8px; display:flex; flex-direction:column; gap:4px;">
-                            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Codeforces Profile</span>
-                            <span id="summary-codeforces" style="font-size:0.9rem; font-weight:600; color:var(--text-main); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Loading...</span>
+                        <div style="background:var(--bg-main); border:1px solid var(--border); padding:10px 14px; border-radius:8px; display:flex; flex-direction:column; gap:3px;">
+                            <span style="font-size:0.72rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">🎯 HackerRank</span>
+                            <span id="summary-hackerrank" style="font-size:0.85rem; font-weight:600; color:var(--text-main); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Loading...</span>
                         </div>
-                        <div style="background:var(--bg-main); border:1px solid var(--border); padding:12px 16px; border-radius:8px; display:flex; flex-direction:column; gap:4px;">
-                            <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">Codementor Profile</span>
-                            <span id="summary-codementor" style="font-size:0.9rem; font-weight:600; color:var(--text-main); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Loading...</span>
+                        <div style="background:var(--bg-main); border:1px solid var(--border); padding:10px 14px; border-radius:8px; display:flex; flex-direction:column; gap:3px;">
+                            <span style="font-size:0.72rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">👨‍💻 CodeChef</span>
+                            <span id="summary-codechef" style="font-size:0.85rem; font-weight:600; color:var(--text-main); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Loading...</span>
+                        </div>
+                        <div style="background:var(--bg-main); border:1px solid var(--border); padding:10px 14px; border-radius:8px; display:flex; flex-direction:column; gap:3px;">
+                            <span style="font-size:0.72rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">🟢 GeeksforGeeks</span>
+                            <span id="summary-gfg" style="font-size:0.85rem; font-weight:600; color:var(--text-main); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Loading...</span>
+                        </div>
+                        <div style="background:var(--bg-main); border:1px solid var(--border); padding:10px 14px; border-radius:8px; display:flex; flex-direction:column; gap:3px;">
+                            <span style="font-size:0.72rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">🏆 Codeforces</span>
+                            <span id="summary-codeforces" style="font-size:0.85rem; font-weight:600; color:var(--text-main); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Loading...</span>
                         </div>
                     </div>
 
@@ -1532,6 +1540,7 @@
                             </div>
                         </div>
                         <div class="coding-profiles-subgrid">
+                            <!-- Priority 1: LeetCode -->
                             <div class="mini-profile-card">
                                 <div class="mini-card-head">
                                     <span class="platform-badge leetcode-badge">⚡ LeetCode</span>
@@ -1539,6 +1548,7 @@
                                 </div>
                                 <input id="settings-leetcode" type="text" placeholder="Username or URL" class="skill-input mini-input" />
                             </div>
+                            <!-- Priority 2: GitHub -->
                             <div class="mini-profile-card">
                                 <div class="mini-card-head">
                                     <span class="platform-badge github-badge">🐙 GitHub</span>
@@ -1546,19 +1556,37 @@
                                 </div>
                                 <input id="settings-github" type="text" placeholder="Username or URL" class="skill-input mini-input" />
                             </div>
+                            <!-- Priority 3: HackerRank -->
+                            <div class="mini-profile-card">
+                                <div class="mini-card-head">
+                                    <span class="platform-badge hackerrank-badge">🎯 HackerRank</span>
+                                    <span id="summary-hackerrank" class="profile-summary-tag">Not configured</span>
+                                </div>
+                                <input id="settings-hackerrank" type="text" placeholder="Username or URL" class="skill-input mini-input" />
+                            </div>
+                            <!-- Priority 4: CodeChef -->
+                            <div class="mini-profile-card">
+                                <div class="mini-card-head">
+                                    <span class="platform-badge codechef-badge">👨‍💻 CodeChef</span>
+                                    <span id="summary-codechef" class="profile-summary-tag">Not configured</span>
+                                </div>
+                                <input id="settings-codechef" type="text" placeholder="Username or URL" class="skill-input mini-input" />
+                            </div>
+                            <!-- Priority 5: GeeksforGeeks -->
+                            <div class="mini-profile-card">
+                                <div class="mini-card-head">
+                                    <span class="platform-badge gfg-badge">🟢 GeeksforGeeks</span>
+                                    <span id="summary-gfg" class="profile-summary-tag">Not configured</span>
+                                </div>
+                                <input id="settings-gfg" type="text" placeholder="Username or URL" class="skill-input mini-input" />
+                            </div>
+                            <!-- Priority 6: Codeforces -->
                             <div class="mini-profile-card">
                                 <div class="mini-card-head">
                                     <span class="platform-badge codeforces-badge">🏆 Codeforces</span>
                                     <span id="summary-codeforces" class="profile-summary-tag">Not configured</span>
                                 </div>
                                 <input id="settings-codeforces" type="text" placeholder="Username or URL" class="skill-input mini-input" />
-                            </div>
-                            <div class="mini-profile-card">
-                                <div class="mini-card-head">
-                                    <span class="platform-badge codementor-badge">👨‍💻 Codementor</span>
-                                    <span id="summary-codementor" class="profile-summary-tag">Not configured</span>
-                                </div>
-                                <input id="settings-codementor" type="text" placeholder="Username or URL" class="skill-input mini-input" />
                             </div>
                         </div>
                         <button id="btn-save-profiles" class="cta-button profile-btn-primary">

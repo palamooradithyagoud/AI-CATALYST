@@ -1701,8 +1701,10 @@ def get_user_session():
         "target_role": profile.get("target_role") or "",
         "leetcode_profile": profile.get("leetcode_profile") or "",
         "github_profile": profile.get("github_profile") or "",
-        "codeforces_profile": profile.get("codeforces_profile") or "",
-        "codementor_profile": profile.get("codementor_profile") or ""
+        "hackerrank_profile": profile.get("hackerrank_profile") or "",
+        "codechef_profile": profile.get("codechef_profile") or "",
+        "gfg_profile": profile.get("gfg_profile") or "",
+        "codeforces_profile": profile.get("codeforces_profile") or ""
     })
 
 
@@ -1892,8 +1894,10 @@ def save_profile_details():
         target_role = body.get("target_role", "").strip()
         leetcode = body.get("leetcode_profile", "").strip()
         github = body.get("github_profile", "").strip()
+        hackerrank = body.get("hackerrank_profile", "").strip()
+        codechef = body.get("codechef_profile", "").strip()
+        gfg = body.get("gfg_profile", "").strip()
         codeforces = body.get("codeforces_profile", "").strip()
-        codementor = body.get("codementor_profile", "").strip()
 
         profile_data = {
             "id": g.user_id,
@@ -1906,8 +1910,10 @@ def save_profile_details():
         if target_role: profile_data["target_role"] = target_role
         if leetcode: profile_data["leetcode_profile"] = leetcode
         if github: profile_data["github_profile"] = github
+        if hackerrank: profile_data["hackerrank_profile"] = hackerrank
+        if codechef: profile_data["codechef_profile"] = codechef
+        if gfg: profile_data["gfg_profile"] = gfg
         if codeforces: profile_data["codeforces_profile"] = codeforces
-        if codementor: profile_data["codementor_profile"] = codementor
 
         try:
             sb.table("profiles").upsert(profile_data, on_conflict="id").execute()
@@ -1928,8 +1934,10 @@ def save_profile_details():
             if target_role: fallback_data["target_role"] = target_role
             if leetcode: fallback_data["leetcode_profile"] = leetcode
             if github: fallback_data["github_profile"] = github
+            if hackerrank: fallback_data["hackerrank_profile"] = hackerrank
+            if codechef: fallback_data["codechef_profile"] = codechef
+            if gfg: fallback_data["gfg_profile"] = gfg
             if codeforces: fallback_data["codeforces_profile"] = codeforces
-            if codementor: fallback_data["codementor_profile"] = codementor
             sb.table("profiles").upsert(fallback_data, on_conflict="id").execute()
             print(f"[PROFILES] Saved profile details via JSON fallback for user {g.user_id}.")
 
@@ -1949,8 +1957,10 @@ def save_coding_profiles():
         body = request.get_json(silent=True) or {}
         leetcode = body.get("leetcode_profile", "").strip()
         github = body.get("github_profile", "").strip()
+        hackerrank = body.get("hackerrank_profile", "").strip()
+        codechef = body.get("codechef_profile", "").strip()
+        gfg = body.get("gfg_profile", "").strip()
         codeforces = body.get("codeforces_profile", "").strip()
-        codementor = body.get("codementor_profile", "").strip()
         college = body.get("college", "").strip()
         department = body.get("department", "").strip()
         academic_class = body.get("academic_class", "").strip()
@@ -1962,8 +1972,10 @@ def save_coding_profiles():
             "email": g.user_email,
             "leetcode_profile": leetcode,
             "github_profile": github,
-            "codeforces_profile": codeforces,
-            "codementor_profile": codementor
+            "hackerrank_profile": hackerrank,
+            "codechef_profile": codechef,
+            "gfg_profile": gfg,
+            "codeforces_profile": codeforces
         }
         if full_name: profile_data["full_name"] = full_name
         if college: profile_data["college"] = college
@@ -1984,8 +1996,10 @@ def save_coding_profiles():
                 "email": g.user_email,
                 "leetcode_profile": leetcode,
                 "github_profile": github,
+                "hackerrank_profile": hackerrank,
+                "codechef_profile": codechef,
+                "gfg_profile": gfg,
                 "codeforces_profile": codeforces,
-                "codementor_profile": codementor,
                 "preferred_learning_path": json.dumps(academic_payload)
             }
             if full_name: fallback_data["full_name"] = full_name

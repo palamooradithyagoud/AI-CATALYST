@@ -4346,14 +4346,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveCodingProfiles = async () => {
         const leetcode = document.getElementById('settings-leetcode')?.value.trim() || "";
         const github = document.getElementById('settings-github')?.value.trim() || "";
+        const hackerrank = document.getElementById('settings-hackerrank')?.value.trim() || "";
+        const codechef = document.getElementById('settings-codechef')?.value.trim() || "";
+        const gfg = document.getElementById('settings-gfg')?.value.trim() || "";
         const codeforces = document.getElementById('settings-codeforces')?.value.trim() || "";
-        const codementor = document.getElementById('settings-codementor')?.value.trim() || "";
 
         // Save to local storage for safety/instant feedback
         localStorage.setItem('profile_leetcode', leetcode);
         localStorage.setItem('profile_github', github);
+        localStorage.setItem('profile_hackerrank', hackerrank);
+        localStorage.setItem('profile_codechef', codechef);
+        localStorage.setItem('profile_gfg', gfg);
         localStorage.setItem('profile_codeforces', codeforces);
-        localStorage.setItem('profile_codementor', codementor);
 
         // Save to DB via backend endpoint (robust, bypasses client-side RLS issues)
         let dbSaved = false;
@@ -4364,8 +4368,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({
                     leetcode_profile: leetcode,
                     github_profile: github,
-                    codeforces_profile: codeforces,
-                    codementor_profile: codementor
+                    hackerrank_profile: hackerrank,
+                    codechef_profile: codechef,
+                    gfg_profile: gfg,
+                    codeforces_profile: codeforces
                 })
             });
             if (res.ok) {
@@ -4471,8 +4477,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadCodingProfiles = async () => {
         let leetcode = localStorage.getItem('profile_leetcode') || '';
         let github = localStorage.getItem('profile_github') || '';
+        let hackerrank = localStorage.getItem('profile_hackerrank') || '';
+        let codechef = localStorage.getItem('profile_codechef') || '';
+        let gfg = localStorage.getItem('profile_gfg') || '';
         let codeforces = localStorage.getItem('profile_codeforces') || '';
-        let codementor = localStorage.getItem('profile_codementor') || '';
         let college = localStorage.getItem('profile_college') || '';
         let dept = localStorage.getItem('profile_dept') || '';
         let cls = localStorage.getItem('profile_class') || '';
@@ -4484,7 +4492,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const { data } = await window.supabaseClient
                     .from('profiles')
-                    .select('full_name, college, department, academic_class, target_role, leetcode_profile, github_profile, codeforces_profile, codementor_profile')
+                    .select('full_name, college, department, academic_class, target_role, leetcode_profile, github_profile, hackerrank_profile, codechef_profile, gfg_profile, codeforces_profile')
                     .eq('id', currentUserId)
                     .single();
                     
@@ -4496,8 +4504,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (data.target_role) targetRole = data.target_role;
                     if (data.leetcode_profile) leetcode = data.leetcode_profile;
                     if (data.github_profile) github = data.github_profile;
+                    if (data.hackerrank_profile) hackerrank = data.hackerrank_profile;
+                    if (data.codechef_profile) codechef = data.codechef_profile;
+                    if (data.gfg_profile) gfg = data.gfg_profile;
                     if (data.codeforces_profile) codeforces = data.codeforces_profile;
-                    if (data.codementor_profile) codementor = data.codementor_profile;
 
                     if (fullname) localStorage.setItem('profile_fullname', fullname);
                     if (college) localStorage.setItem('profile_college', college);
@@ -4506,8 +4516,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (targetRole) localStorage.setItem('profile_target_role', targetRole);
                     if (leetcode) localStorage.setItem('profile_leetcode', leetcode);
                     if (github) localStorage.setItem('profile_github', github);
+                    if (hackerrank) localStorage.setItem('profile_hackerrank', hackerrank);
+                    if (codechef) localStorage.setItem('profile_codechef', codechef);
+                    if (gfg) localStorage.setItem('profile_gfg', gfg);
                     if (codeforces) localStorage.setItem('profile_codeforces', codeforces);
-                    if (codementor) localStorage.setItem('profile_codementor', codementor);
                 }
             } catch (e) {
                 console.warn("[PROFILES] Cloud profile fetch deferred:", e);
@@ -4529,14 +4541,16 @@ document.addEventListener('DOMContentLoaded', () => {
             setVal(id, val);
             const summaryEl = document.getElementById(summaryId);
             if (summaryEl) {
-                summaryEl.textContent = val ? val : "Not configured 🛑";
-                summaryEl.style.color = val ? "var(--text-main)" : "var(--danger)";
+                summaryEl.textContent = val ? val : "Not configured";
+                summaryEl.style.color = val ? "var(--text-main)" : "var(--text-muted)";
             }
         };
         setValAndSummary('settings-leetcode', 'summary-leetcode', leetcode);
         setValAndSummary('settings-github', 'summary-github', github);
+        setValAndSummary('settings-hackerrank', 'summary-hackerrank', hackerrank);
+        setValAndSummary('settings-codechef', 'summary-codechef', codechef);
+        setValAndSummary('settings-gfg', 'summary-gfg', gfg);
         setValAndSummary('settings-codeforces', 'summary-codeforces', codeforces);
-        setValAndSummary('settings-codementor', 'summary-codementor', codementor);
 
         // Update Hero Card Chips
         const chipClass = document.getElementById('chip-class-val');
@@ -4709,13 +4723,15 @@ document.addEventListener('DOMContentLoaded', () => {
         codingSubmitBtnPage.addEventListener('click', async () => {
             const leetcode = document.getElementById('settings-leetcode')?.value.trim() || localStorage.getItem('profile_leetcode') || "";
             const github = document.getElementById('settings-github')?.value.trim() || localStorage.getItem('profile_github') || "";
+            const hackerrank = document.getElementById('settings-hackerrank')?.value.trim() || localStorage.getItem('profile_hackerrank') || "";
+            const codechef = document.getElementById('settings-codechef')?.value.trim() || localStorage.getItem('profile_codechef') || "";
+            const gfg = document.getElementById('settings-gfg')?.value.trim() || localStorage.getItem('profile_gfg') || "";
             const codeforces = document.getElementById('settings-codeforces')?.value.trim() || localStorage.getItem('profile_codeforces') || "";
-            const codementor = document.getElementById('settings-codementor')?.value.trim() || localStorage.getItem('profile_codementor') || "";
 
-            if (!leetcode && !github && !codeforces && !codementor) {
+            if (!leetcode && !github && !hackerrank && !codechef && !gfg && !codeforces) {
                 codingResultPage.innerHTML = `
                     <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); border-radius:8px; padding:12px; color:#ef4444; font-size:0.85rem; font-weight:600; margin-top:16px;">
-                        ⚠️ Please configure at least one coding profile (LeetCode, GitHub, Codeforces, or Codementor) in Settings to execute the analysis.
+                        ⚠️ Please configure at least one coding profile in Settings to execute the analysis.
                     </div>
                 `;
                 return;
@@ -4735,8 +4751,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         current_skills: "Software development and problem solving",
                         leetcode_profile: leetcode,
                         github_profile: github,
-                        codeforces_profile: codeforces,
-                        codementor_profile: codementor
+                        hackerrank_profile: hackerrank,
+                        codechef_profile: codechef,
+                        gfg_profile: gfg,
+                        codeforces_profile: codeforces
                     })
                 });
                 const data = await res.json();
