@@ -4378,6 +4378,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await res.json();
                 if (data.status === 'success') {
                     dbSaved = true;
+                    if (data.extracted_stats) {
+                        const s = data.extracted_stats;
+                        if (s.leetcode?.summary) setValAndSummary('settings-leetcode', 'summary-leetcode', leetcode, s.leetcode.summary);
+                        if (s.github?.summary) setValAndSummary('settings-github', 'summary-github', github, s.github.summary);
+                        if (s.hackerrank?.summary) setValAndSummary('settings-hackerrank', 'summary-hackerrank', hackerrank, s.hackerrank.summary);
+                        if (s.codechef?.summary) setValAndSummary('settings-codechef', 'summary-codechef', codechef, s.codechef.summary);
+                        if (s.gfg?.summary) setValAndSummary('settings-gfg', 'summary-gfg', gfg, s.gfg.summary);
+                        if (s.codeforces?.summary) setValAndSummary('settings-codeforces', 'summary-codeforces', codeforces, s.codeforces.summary);
+                        localStorage.setItem('user_coding_stats', JSON.stringify(s));
+                    }
                 }
             }
         } catch (e) {
@@ -4385,7 +4395,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (dbSaved) {
-            showToast('✅ Coding profiles saved successfully to Cloud & local storage!');
+            showToast('✅ Profiles & live student stats synced successfully to Database!');
         } else {
             showToast('✅ Coding profiles saved locally (Cloud sync failed or pending schema migration).');
         }
@@ -4537,20 +4547,26 @@ document.addEventListener('DOMContentLoaded', () => {
         setVal('settings-class', cls);
         setVal('settings-target-role', targetRole);
 
-        const setValAndSummary = (id, summaryId, val) => {
+        const setValAndSummary = (id, summaryId, val, customSummary) => {
             setVal(id, val);
             const summaryEl = document.getElementById(summaryId);
             if (summaryEl) {
-                summaryEl.textContent = val ? val : "Not configured";
+                summaryEl.textContent = customSummary ? customSummary : (val ? val : "Not configured");
                 summaryEl.style.color = val ? "var(--text-main)" : "var(--text-muted)";
             }
         };
-        setValAndSummary('settings-leetcode', 'summary-leetcode', leetcode);
-        setValAndSummary('settings-github', 'summary-github', github);
-        setValAndSummary('settings-hackerrank', 'summary-hackerrank', hackerrank);
-        setValAndSummary('settings-codechef', 'summary-codechef', codechef);
-        setValAndSummary('settings-gfg', 'summary-gfg', gfg);
-        setValAndSummary('settings-codeforces', 'summary-codeforces', codeforces);
+        
+        let cachedStats = {};
+        try {
+            cachedStats = JSON.parse(localStorage.getItem('user_coding_stats') || '{}');
+        } catch (e) {}
+
+        setValAndSummary('settings-leetcode', 'summary-leetcode', leetcode, cachedStats.leetcode?.summary);
+        setValAndSummary('settings-github', 'summary-github', github, cachedStats.github?.summary);
+        setValAndSummary('settings-hackerrank', 'summary-hackerrank', hackerrank, cachedStats.hackerrank?.summary);
+        setValAndSummary('settings-codechef', 'summary-codechef', codechef, cachedStats.codechef?.summary);
+        setValAndSummary('settings-gfg', 'summary-gfg', gfg, cachedStats.gfg?.summary);
+        setValAndSummary('settings-codeforces', 'summary-codeforces', codeforces, cachedStats.codeforces?.summary);
 
         // Update Hero Card Chips
         const chipClass = document.getElementById('chip-class-val');

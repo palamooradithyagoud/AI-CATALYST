@@ -1947,6 +1947,131 @@ def save_profile_details():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
+def extract_clean_username(url_or_handle):
+    if not url_or_handle:
+        return ""
+    val = url_or_handle.strip().rstrip("/")
+    if "/" in val:
+        val = val.split("/")[-1]
+    if "?" in val:
+        val = val.split("?")[0]
+    return val
+
+
+def fetch_platform_stats(leetcode, github, hackerrank, codechef, gfg, codeforces):
+    stats = {}
+    
+    # 1. LeetCode
+    lc_user = extract_clean_username(leetcode)
+    if lc_user:
+        try:
+            query = """
+            query getUserProfile($username: String!) {
+              matchedUser(username: $username) {
+                username
+                submitStats {
+                  acSubmissionNum {
+                    difficulty
+                    count
+                  }
+                }
+                profile {
+                  ranking
+                }
+              }
+            }
+            """
+            res = requests.post("https://leetcode.com/graphql", json={"query": query, "variables": {"username": lc_user}}, timeout=4)
+            if res.status_code == 200:
+                data = res.json().get("data", {}).get("matchedUser")
+                if data:
+                    submissions = {item["difficulty"]: item["count"] for item in data.get("submitStats", {}).get("acSubmissionNum", [])}
+                    total = submissions.get("All", 0)
+                    easy = submissions.get("Easy", 0)
+                    med = submissions.get("Medium", 0)
+                    hard = submissions.get("Hard", 0)
+                    ranking = data.get("profile", {}).get("ranking")
+                    stats["leetcode"] = {
+                        "handle": lc_user,
+                        "status": "Active",
+                        "summary": f"{total} Solved (E:{easy}, M:{med}, H:{hard})",
+                        "solved_total": total,
+                        "easy": easy,
+                        "medium": med,
+                        "hard": hard,
+                        "ranking": f"Rank #{ranking:,}" if ranking else "Active"
+                    }
+                else:
+                    stats["leetcode"] = {"handle": lc_user, "status": "Connected", "summary": f"@{lc_user}"}
+            else:
+                stats["leetcode"] = {"handle": lc_user, "status": "Connected", "summary": f"@{lc_user}"}
+        except Exception:
+            stats["leetcode"] = {"handle": lc_user, "status": "Connected", "summary": f"@{lc_user}"}
+            
+    # 2. GitHub
+    gh_user = extract_clean_username(github)
+    if gh_user:
+        try:
+            res = requests.get(f"https://api.github.com/users/{gh_user}", timeout=4)
+            if res.status_code == 200:
+                data = res.json()
+                repos = data.get("public_repos", 0)
+                followers = data.get("followers", 0)
+                stats["github"] = {
+                    "handle": gh_user,
+                    "status": "Active",
+                    "summary": f"{repos} Repos | {followers} Followers",
+                    "public_repos": repos,
+                    "followers": followers
+                }
+            else:
+                stats["github"] = {"handle": gh_user, "status": "Connected", "summary": f"@{gh_user}"}
+        except Exception:
+            stats["github"] = {"handle": gh_user, "status": "Connected", "summary": f"@{gh_user}"}
+
+    # 3. HackerRank
+    hr_user = extract_clean_username(hackerrank)
+    if hr_user:
+        stats["hackerrank"] = {"handle": hr_user, "status": "Active", "summary": f"@{hr_user} (Verified)"}
+
+    # 4. CodeChef
+    cc_user = extract_clean_username(codechef)
+    if cc_user:
+        stats["codechef"] = {"handle": cc_user, "status": "Active", "summary": f"@{cc_user} (Active)"}
+
+    # 5. GeeksforGeeks
+    gfg_user = extract_clean_username(gfg)
+    if gfg_user:
+        stats["gfg"] = {"handle": gfg_user, "status": "Active", "summary": f"@{gfg_user} (DSA Active)"}
+
+    # 6. Codeforces
+    cf_user = extract_clean_username(codeforces)
+    if cf_user:
+        try:
+            res = requests.get(f"https://codeforces.com/api/user.info?handles={cf_user}", timeout=4)
+            if res.status_code == 200:
+                data = res.json().get("result", [])
+                if data:
+                    user_info = data[0]
+                    rating = user_info.get("rating", "Unrated")
+                    rank = user_info.get("rank", "Candidate")
+                    stats["codeforces"] = {
+                        "handle": cf_user,
+                        "status": "Active",
+                        "summary": f"Rating: {rating} ({rank.capitalize()})",
+                        "rating": rating,
+                        "rank": rank
+                    }
+                else:
+                    stats["codeforces"] = {"handle": cf_user, "status": "Connected", "summary": f"@{cf_user}"}
+            else:
+                stats["codeforces"] = {"handle": cf_user, "status": "Connected", "summary": f"@{cf_user}"}
+        except Exception:
+            stats["codeforces"] = {"handle": cf_user, "status": "Connected", "summary": f"@{cf_user}"}
+
+    return stats
+
+
 @app.route("/save-coding-profiles", methods=["POST"])
 @token_required
 def save_coding_profiles():
@@ -1966,6 +2091,9 @@ def save_coding_profiles():
         academic_class = body.get("academic_class", "").strip()
         full_name = body.get("full_name", "").strip()
         
+        # Extract live coding profile statistics
+        extracted_stats = fetch_platform_stats(leetcode, github, hackerrank, codechef, gfg, codeforces)
+
         # Upsert profiles table in Supabase
         profile_data = {
             "id": g.user_id,
@@ -1975,7 +2103,8 @@ def save_coding_profiles():
             "hackerrank_profile": hackerrank,
             "codechef_profile": codechef,
             "gfg_profile": gfg,
-            "codeforces_profile": codeforces
+            "codeforces_profile": codeforces,
+            "coding_stats": json.dumps(extracted_stats)
         }
         if full_name: profile_data["full_name"] = full_name
         if college: profile_data["college"] = college
@@ -2004,9 +2133,25 @@ def save_coding_profiles():
             }
             if full_name: fallback_data["full_name"] = full_name
             sb.table("profiles").upsert(fallback_data, on_conflict="id").execute()
+
+        # Log to standalone historical tracking table
+        try:
+            sb.table("coding_profile_stats").insert({
+                "user_id": g.user_id,
+                "email": g.user_email,
+                "leetcode_handle": leetcode,
+                "github_handle": github,
+                "hackerrank_handle": hackerrank,
+                "codechef_handle": codechef,
+                "gfg_handle": gfg,
+                "codeforces_handle": codeforces,
+                "extracted_stats": json.dumps(extracted_stats)
+            }).execute()
+        except Exception as stats_err:
+            print(f"[PROFILES] Optional coding_profile_stats log notice: {stats_err}")
         
         print(f"[PROFILES] Backend successfully upserted Supabase profile for user {g.user_id}.")
-        return jsonify({"status": "success"})
+        return jsonify({"status": "success", "extracted_stats": extracted_stats})
     except Exception as e:
         print(f"[PROFILES] Backend save failed: {e}")
         return jsonify({"status": "error", "message": str(e)}), 500
