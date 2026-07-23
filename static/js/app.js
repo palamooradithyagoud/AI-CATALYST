@@ -492,6 +492,24 @@ document.addEventListener('DOMContentLoaded', () => {
         return (match && match[2].length === 11) ? match[2] : '';
     };
 
+    const extractYouTubePlaylistId = (url) => {
+        if (!url) return '';
+        const match = url.match(/[?&]list=([A-Za-z0-9_\-]+)/);
+        return match ? match[1] : '';
+    };
+
+    const getFallbackVideoId = (skill = '', title = '') => {
+        const s = (skill + ' ' + title).toLowerCase();
+        if (s.includes('python')) return 'rfscVS0vtbw'; // freeCodeCamp - Python for Beginners
+        if (s.includes('java') && !s.includes('javascript')) return 'eIrMbAQSU34'; // Programming with Mosh - Java
+        if (s.includes('javascript') || s.includes('js') || s.includes('web')) return 'PkZNo7MFNFg'; // freeCodeCamp - JavaScript
+        if (s.includes('c++') || s.includes('cpp') || s.includes('c ')) return 'vLnPwxZdW4Y'; // freeCodeCamp - C++
+        if (s.includes('dsa') || s.includes('algo') || s.includes('data structure')) return '8hly31xKLI0'; // freeCodeCamp - DSA
+        if (s.includes('react')) return 'bMknfKXIFA8'; // freeCodeCamp - React
+        if (s.includes('machine learning') || s.includes('ai')) return 'i_LwzRVP7bg'; // freeCodeCamp - ML
+        return 'rfscVS0vtbw'; // Default Python / Coding fallback
+    };
+
     const openLearningPlayer = (playlistUrl, videoIndex = 0) => {
         const saved = getSavedPlaylists();
         let targetPlaylist = saved.find(p => p.url === playlistUrl);
@@ -600,53 +618,92 @@ document.addEventListener('DOMContentLoaded', () => {
         renderPlayerHeader();
         renderPlayerSidebar();
 
-        let ytId = video.videoId || extractYouTubeVideoId(video.url || currentPlaylist.url);
-        if (!ytId) {
-            ytId = 'dQw4w9WgXcQ';
+        let ytId = video.videoId || extractYouTubeVideoId(video.url || '');
+        let playlistId = extractYouTubePlaylistId(currentPlaylist.url || video.url || '');
+        const fallbackId = getFallbackVideoId(currentPlaylist.skill || currentSkill || currentPlaylist.title, video.title);
+
+        if (!ytId && !playlistId) {
+            ytId = fallbackId;
         }
 
         if (ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
             try {
-                ytPlayer.loadVideoById({ videoId: ytId });
+                if (ytId) {
+                    ytPlayer.loadVideoById({ videoId: ytId });
+                } else if (playlistId && typeof ytPlayer.loadPlaylist === 'function') {
+                    ytPlayer.loadPlaylist({
+                        listType: 'playlist',
+                        list: playlistId,
+                        index: currentVideoIndex
+                    });
+                } else {
+                    ytPlayer.loadVideoById({ videoId: fallbackId });
+                }
             } catch(e) {
-                console.error("YT Player loadVideoById failed:", e);
+                console.error("YT Player load failed:", e);
             }
         } else if (window.YT && window.YT.Player) {
             try {
-                ytPlayer = new YT.Player('yt-player-anchor', {
+                const playerVars = {
+                    autoplay: 1,
+                    modestbranding: 1,
+                    rel: 0
+                };
+                
+                let initConfig = {
                     height: '100%',
                     width: '100%',
-                    videoId: ytId,
-                    playerVars: {
-                        autoplay: 1,
-                        modestbranding: 1,
-                        rel: 0
-                    },
+                    playerVars: playerVars,
                     events: {
                         onReady: onYTPlayerReady,
                         onStateChange: onYTPlayerStateChange
                     }
-                });
+                };
+
+                if (ytId) {
+                    initConfig.videoId = ytId;
+                } else if (playlistId) {
+                    playerVars.listType = 'playlist';
+                    playerVars.list = playlistId;
+                    playerVars.index = currentVideoIndex;
+                } else {
+                    initConfig.videoId = fallbackId;
+                }
+
+                ytPlayer = new YT.Player('yt-player-anchor', initConfig);
             } catch(e) {
                 console.error("YT.Player init failed:", e);
             }
         } else {
             window.onYouTubeIframeAPIReady = () => {
                 try {
-                    ytPlayer = new YT.Player('yt-player-anchor', {
+                    const playerVars = {
+                        autoplay: 1,
+                        modestbranding: 1,
+                        rel: 0
+                    };
+                    
+                    let initConfig = {
                         height: '100%',
                         width: '100%',
-                        videoId: ytId,
-                        playerVars: {
-                            autoplay: 1,
-                            modestbranding: 1,
-                            rel: 0
-                        },
+                        playerVars: playerVars,
                         events: {
                             onReady: onYTPlayerReady,
                             onStateChange: onYTPlayerStateChange
                         }
-                    });
+                    };
+
+                    if (ytId) {
+                        initConfig.videoId = ytId;
+                    } else if (playlistId) {
+                        playerVars.listType = 'playlist';
+                        playerVars.list = playlistId;
+                        playerVars.index = currentVideoIndex;
+                    } else {
+                        initConfig.videoId = fallbackId;
+                    }
+
+                    ytPlayer = new YT.Player('yt-player-anchor', initConfig);
                 } catch(e) {}
             };
         }
