@@ -20,18 +20,28 @@
     <!-- YouTube IFrame Player API -->
     <script src="https://www.youtube.com/iframe_api"></script>
     <link rel="stylesheet" href="/static/css/style.css?v=3.0">
-    <!-- Route Guard: Fast check for active Supabase Auth session token -->
+    <!-- Route Guard & Browser History Trap -->
     <script>
       (function() {
-        // If we are currently handling an OAuth/Supabase redirection callback, 
-        // bypass the route guard to let the Supabase SDK parse the tokens at the bottom of the page.
         if (window.location.hash && (window.location.hash.includes('access_token=') || window.location.hash.includes('error='))) {
           return;
         }
         const sessionKey = Object.keys(localStorage).find(key => key.startsWith('sb-') && key.endsWith('-auth-token'));
         if (!sessionKey || !localStorage.getItem(sessionKey)) {
           window.location.replace('/login-page');
+          return;
         }
+
+        // Trap browser history state so Back button stays on dashboard while authenticated
+        window.history.pushState({ isDashboard: true }, '', window.location.href);
+
+        window.addEventListener('popstate', function(e) {
+          const activeSession = Object.keys(localStorage).find(key => key.startsWith('sb-') && key.endsWith('-auth-token'));
+          if (activeSession && localStorage.getItem(activeSession)) {
+            // Keep user on dashboard when back button is pressed
+            window.history.pushState({ isDashboard: true }, '', window.location.href);
+          }
+        });
       })();
     </script>
 </head>

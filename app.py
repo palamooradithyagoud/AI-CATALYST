@@ -2959,6 +2959,14 @@ def index():
 def dashboard():
     return app.send_static_file("index.html")
 
+@app.after_request
+def add_no_cache_headers(response):
+    if response.content_type and "text/html" in response.content_type:
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, max-age=0"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
+    return response
+
 handler = app
 
 if __name__ == "__main__":

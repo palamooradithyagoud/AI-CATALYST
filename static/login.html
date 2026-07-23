@@ -4,6 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Login — SkillPath AI</title>
+  <script>
+    // Synchronous Auth Check: Immediately redirect logged-in users before DOM renders
+    (function() {
+      try {
+        const sessionKey = Object.keys(localStorage).find(key => key.startsWith('sb-') && key.endsWith('-auth-token'));
+        if (sessionKey && localStorage.getItem(sessionKey)) {
+          const val = localStorage.getItem(sessionKey);
+          if (val && val.includes('access_token')) {
+            window.location.replace('/dashboard');
+          }
+        }
+      } catch (e) {}
+    })();
+  </script>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-01N4B95WZ5"></script>
   <script>
