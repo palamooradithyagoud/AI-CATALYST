@@ -4183,12 +4183,27 @@ body {
   white-space: nowrap !important;
 }
 
-.leetcode-badge { color: #f59e0b !important; }
-.github-badge { color: #f8fafc !important; }
-.hackerrank-badge { color: #22c55e !important; }
-.codechef-badge { color: #d97706 !important; }
-.gfg-badge { color: #16a34a !important; }
-.codeforces-badge { color: #3b82f6 !important; }
+.leetcode-badge { color: #f59e0b !important; display: flex !important; align-items: center !important; gap: 5px !important; }
+.github-badge { color: #f8fafc !important; display: flex !important; align-items: center !important; gap: 5px !important; }
+.hackerrank-badge { color: #22c55e !important; display: flex !important; align-items: center !important; gap: 5px !important; }
+.codechef-badge { color: #ea580c !important; display: flex !important; align-items: center !important; gap: 5px !important; }
+.gfg-badge { color: #10b981 !important; display: flex !important; align-items: center !important; gap: 5px !important; }
+.codeforces-badge { color: #3b82f6 !important; display: flex !important; align-items: center !important; gap: 5px !important; }
+
+.widget-dot-sm {
+  display: inline-block !important;
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 50% !important;
+  flex-shrink: 0 !important;
+}
+
+.widget-dot-sm.gold { background: #f59e0b !important; box-shadow: 0 0 6px rgba(245, 158, 11, 0.6) !important; }
+.widget-dot-sm.white { background: #f8fafc !important; box-shadow: 0 0 6px rgba(248, 250, 252, 0.6) !important; }
+.widget-dot-sm.green { background: #22c55e !important; box-shadow: 0 0 6px rgba(34, 197, 94, 0.6) !important; }
+.widget-dot-sm.orange { background: #ea580c !important; box-shadow: 0 0 6px rgba(234, 88, 12, 0.6) !important; }
+.widget-dot-sm.emerald { background: #10b981 !important; box-shadow: 0 0 6px rgba(16, 185, 129, 0.6) !important; }
+.widget-dot-sm.blue { background: #3b82f6 !important; box-shadow: 0 0 6px rgba(59, 130, 246, 0.6) !important; }
 
 .profile-summary-tag {
   font-size: 10px !important;
