@@ -54,33 +54,67 @@
             box-shadow: 0 0 14px rgba(168, 85, 247, 0.9), 0 0 28px rgba(59, 130, 246, 0.7);
         }
 
-        /* Realistic Botanical Tree & Foliage Animations */
+        /* Realistic Botanical Tree & High-Tech Visualizer Animations */
         @keyframes treeWindBreathe {
-            0%, 100% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(2deg) scale(1.02); }
+            0%, 100% { transform: rotate(0deg) scale(1); filter: drop-shadow(0 4px 10px rgba(16,185,129,0.5)); }
+            50% { transform: rotate(3deg) scale(1.03); filter: drop-shadow(0 8px 20px rgba(52,211,153,0.85)); }
+        }
+
+        @keyframes sapCorePulse {
+            0% { stroke-dashoffset: 85; opacity: 0.5; }
+            50% { stroke-dashoffset: 0; opacity: 1; filter: drop-shadow(0 0 8px #6ee7b7); }
+            100% { stroke-dashoffset: -85; opacity: 0.5; }
+        }
+
+        @keyframes cardAuraGlow {
+            0%, 100% { border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 16px 40px rgba(0,0,0,0.7), 0 0 25px rgba(16,185,129,0.25); }
+            50% { border-color: rgba(168, 85, 247, 0.6); box-shadow: 0 16px 45px rgba(0,0,0,0.8), 0 0 35px rgba(168,85,247,0.4); }
         }
 
         @keyframes fireflyFloat1 {
-            0%, 100% { transform: translate(0, 0) scale(0.8); opacity: 0.3; }
-            50% { transform: translate(-14px, -28px) scale(1.3); opacity: 0.95; }
+            0%, 100% { transform: translate(0, 0) scale(0.7); opacity: 0.2; }
+            50% { transform: translate(-18px, -35px) scale(1.4); opacity: 1; }
         }
 
         @keyframes fireflyFloat2 {
-            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
-            50% { transform: translate(16px, -32px) scale(1.4); opacity: 1; }
+            0%, 100% { transform: translate(0, 0) scale(0.9); opacity: 0.3; }
+            50% { transform: translate(20px, -40px) scale(1.5); opacity: 1; }
+        }
+
+        @keyframes fireflyFloat3 {
+            0%, 100% { transform: translate(0, 0) scale(0.8); opacity: 0.25; }
+            50% { transform: translate(-12px, -20px) scale(1.3); opacity: 0.9; }
+        }
+
+        @keyframes fruitPulseGlow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(255,255,255,0.6)); }
+            50% { transform: scale(1.25); filter: drop-shadow(0 0 12px rgba(255,255,255,1)); }
+        }
+
+        .botanical-card-aura {
+            animation: cardAuraGlow 6s ease-in-out infinite;
         }
 
         .realistic-foliage-sway {
             transform-origin: 50% 90%;
-            animation: treeWindBreathe 4s ease-in-out infinite;
+            animation: treeWindBreathe 4.5s ease-in-out infinite;
         }
 
         .firefly-spore-1 {
-            animation: fireflyFloat1 3.5s ease-in-out infinite;
+            animation: fireflyFloat1 3.8s ease-in-out infinite;
         }
 
         .firefly-spore-2 {
-            animation: fireflyFloat2 4.2s ease-in-out infinite;
+            animation: fireflyFloat2 4.5s ease-in-out infinite;
+        }
+
+        .firefly-spore-3 {
+            animation: fireflyFloat3 3.2s ease-in-out infinite;
+        }
+
+        .fruit-glow-pulse {
+            transform-origin: center;
+            animation: fruitPulseGlow 2.5s ease-in-out infinite;
         }
     </style>
     <!-- Route Guard & Browser History Trap -->

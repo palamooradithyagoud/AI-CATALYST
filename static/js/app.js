@@ -4177,7 +4177,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
 
                     <!-- Right Column: Sticky Botanical Growth Card (Grows as you scroll down!) -->
-                    <div style="position: sticky; top: 90px; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; box-shadow: 0 16px 40px rgba(0,0,0,0.7), inset 0 0 20px rgba(16,185,129,0.08);">
+                    <div class="botanical-card-aura" style="position: sticky; top: 90px; background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(24px); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; transition: all 0.3s ease;">
                         <!-- Card Header Badge (No Emojis) -->
                         <div style="display: flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); padding: 6px 16px; border-radius: 20px; font-size: 0.78rem; font-weight: 800; color: #a7f3d0; letter-spacing: 0.03em;">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.4 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
@@ -4185,12 +4185,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
 
                         <!-- Large Photorealistic Growing SVG Canvas -->
-                        <div style="position: relative; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(16,185,129,0.18) 0%, rgba(15,23,42,0) 72%); border-radius: 50%;">
+                        <div style="position: relative; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(16,185,129,0.2) 0%, rgba(15,23,42,0) 75%); border-radius: 50%;">
                             <!-- Ambient Floating Fireflies / Spores -->
                             <svg width="220" height="220" style="position: absolute; inset: 0; pointer-events: none;">
-                                <circle class="firefly-spore-1" cx="40" cy="140" r="2.5" fill="#a7f3d0" opacity="0.8"/>
-                                <circle class="firefly-spore-2" cx="180" cy="120" r="3" fill="#6ee7b7" opacity="0.9"/>
-                                <circle class="firefly-spore-1" cx="150" cy="60" r="2" fill="#34d399" opacity="0.7"/>
+                                <circle class="firefly-spore-1" cx="35" cy="145" r="2.5" fill="#a7f3d0" opacity="0.85"/>
+                                <circle class="firefly-spore-2" cx="185" cy="115" r="3" fill="#6ee7b7" opacity="0.9"/>
+                                <circle class="firefly-spore-3" cx="145" cy="55" r="2.2" fill="#34d399" opacity="0.8"/>
+                                <circle class="firefly-spore-1" cx="75" cy="175" r="2" fill="#f59e0b" opacity="0.75"/>
+                                <circle class="firefly-spore-2" cx="160" cy="165" r="2.8" fill="#38bdf8" opacity="0.85"/>
                             </svg>
 
                             <svg id="scroll-tree-growth-svg" width="210" height="210" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -4272,11 +4274,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <path d="M50 16 Q55 26 60 30" stroke="#a7f3d0" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
 
                                     <!-- Glowing Bioluminescent Energy Fruits -->
-                                    <circle cx="36" cy="26" r="4.5" fill="#f43f5e"/>
+                                    <circle class="fruit-glow-pulse" cx="36" cy="26" r="4.5" fill="#f43f5e"/>
                                     <circle cx="36" cy="26" r="2" fill="#ffe4e6"/>
-                                    <circle cx="64" cy="30" r="4.5" fill="#fbbf24"/>
+                                    <circle class="fruit-glow-pulse" cx="64" cy="30" r="4.5" fill="#fbbf24"/>
                                     <circle cx="64" cy="30" r="2" fill="#fef3c7"/>
-                                    <circle cx="50" cy="14" r="5" fill="#a855f7"/>
+                                    <circle class="fruit-glow-pulse" cx="50" cy="14" r="5" fill="#a855f7"/>
                                     <circle cx="50" cy="14" r="2.5" fill="#f3e8ff"/>
                                 </g>
                             </svg>
@@ -4304,14 +4306,16 @@ document.addEventListener('DOMContentLoaded', () => {
             stagesContainer.querySelectorAll('.roadmap-topic-check').forEach(cb => {
                 cb.addEventListener('change', () => {
                     const label = cb.closest('label');
-                    if (cb.checked) {
-                        label.style.background = 'rgba(139, 92, 246, 0.2)';
-                        label.style.borderColor = 'rgba(139, 92, 246, 0.6)';
-                        label.style.color = '#ffffff';
-                    } else {
-                        label.style.background = 'rgba(255,255,255,0.04)';
-                        label.style.borderColor = 'rgba(255,255,255,0.1)';
-                        label.style.color = '#e2e8f0';
+                    if (label) {
+                        if (cb.checked) {
+                            label.style.background = 'rgba(139, 92, 246, 0.2)';
+                            label.style.borderColor = 'rgba(139, 92, 246, 0.6)';
+                            label.style.color = '#ffffff';
+                        } else {
+                            label.style.background = 'rgba(255,255,255,0.04)';
+                            label.style.borderColor = 'rgba(255,255,255,0.1)';
+                            label.style.color = '#e2e8f0';
+                        }
                     }
                     updateRoadmapProgressStats();
                 });
