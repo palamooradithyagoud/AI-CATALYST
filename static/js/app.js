@@ -3767,6 +3767,268 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // ── Dedicated Role Roadmaps Selection & Page Navigation ──
+    const roleHeroDetails = {
+        'fullstack': {
+            title: 'Become a Full-Stack Developer',
+            subtitle: 'Master in-demand skills, build real-world projects and get job-ready.',
+            rating: '4.9 (12.4K)',
+            hours: '210 Hours',
+            projects: '06 Projects',
+            level: 'Beginner → Advanced',
+            accent1: '#a855f7',
+            accent2: '#3b82f6',
+            codeText: '</>',
+            demandText: '+24.5% Growth',
+            openingsText: '125,000+ Active Roles',
+            salaryText: '₹8 – 24 LPA',
+            stages: [
+                { title: '🌱 Stage 1: Foundations', items: ['HTML5 & Semantic Markup', 'CSS3, Flexbox & Responsive Layouts', 'Modern JavaScript (ES6+) & DOM Manipulation', 'Git & GitHub Version Control'] },
+                { title: '🔥 Stage 2: Core Tools', items: ['React.js / Next.js Framework & State Management', 'Node.js & Express RESTful API Development', 'PostgreSQL / Supabase Database Architecture', 'Tailwind CSS Component Systems'] },
+                { title: '🚀 Stage 3: Advanced', items: ['System Design & Scalable Microservices', 'Redis In-Memory Caching', 'CI/CD Automated Deployment Pipelines', 'Docker & Cloud Containerization'] },
+                { title: '🛠️ Stage 4: Portfolio Projects', items: ['SaaS Analytics Dashboard Application', 'Real-Time Collaboration Platform', 'E-Commerce Platform with Payment Gateway'] }
+            ]
+        },
+        'aiml': {
+            title: 'Become an AI/ML Engineer',
+            subtitle: 'Master Python, Deep Learning, PyTorch, LLMs & MLOps deployment.',
+            rating: '4.9 (15.8K)',
+            hours: '240 Hours',
+            projects: '08 Projects',
+            level: 'Beginner → Advanced',
+            accent1: '#a855f7',
+            accent2: '#ec4899',
+            codeText: 'AI',
+            demandText: '+74.2% Growth',
+            openingsText: '85,000+ Active Roles',
+            salaryText: '₹12 – 35 LPA',
+            stages: [
+                { title: '🌱 Stage 1: Foundations', items: ['Python Syntax, Data Structures & OOP', 'Linear Algebra, Probability & Calculus', 'Pandas & NumPy for Data Engineering', 'Data Visualization with Matplotlib & Seaborn'] },
+                { title: '🔥 Stage 2: Core Tools', items: ['Scikit-Learn Machine Learning Algorithms', 'Deep Learning Architectures with PyTorch', 'Computer Vision Fundamentals using OpenCV', 'NLP & HuggingFace Transformer Models'] },
+                { title: '🚀 Stage 3: Advanced', items: ['Large Language Models (LLMs) & Prompting', 'RAG Architecture (Retrieval-Augmented)', 'Vector Databases (Pinecone, ChromaDB)', 'MLOps & FastAPI Model Deployment'] },
+                { title: '🛠️ Stage 4: Portfolio Projects', items: ['AI Document Summarizer & Q&A Assistant', 'Fine-Tuned Code Generation Bot', 'Real-Time Vision Tracking System'] }
+            ]
+        },
+        'data-analyst': {
+            title: 'Become a Data Analyst',
+            subtitle: 'Master SQL, Advanced Excel, PowerBI, Tableau & Business Intelligence.',
+            rating: '4.8 (9.6K)',
+            hours: '160 Hours',
+            projects: '05 Projects',
+            level: 'Beginner → Advanced',
+            accent1: '#10b981',
+            accent2: '#3b82f6',
+            codeText: 'SQL',
+            demandText: '+21.8% Growth',
+            openingsText: '95,000+ Active Roles',
+            salaryText: '₹6 – 18 LPA',
+            stages: [
+                { title: '🌱 Stage 1: Foundations', items: ['Excel Advanced Formulas & Pivot Tables', 'SQL Core Queries, Aggregations & Joins', 'Data Cleaning & Preprocessing Best Practices'] },
+                { title: '🔥 Stage 2: Core Tools', items: ['Python for Data Analysis (Pandas & NumPy)', 'Exploratory Data Analysis (EDA)', 'Interactive Dashboards in Power BI & Tableau', 'Descriptive & Inferential Statistics'] },
+                { title: '🚀 Stage 3: Advanced', items: ['Hypothesis Testing & Statistical Inference', 'A/B Testing Analysis & Growth Metrics', 'Automated ETL Data Extraction Pipelines'] },
+                { title: '🛠️ Stage 4: Portfolio Projects', items: ['Company Revenue & Growth Dashboard', 'User Churn & Cohort Analysis', 'E-Commerce A/B Test Impact Study'] }
+            ]
+        },
+        'data-scientist': {
+            title: 'Become a Data Scientist',
+            subtitle: 'Master Statistical Modeling, Machine Learning Algorithms & Big Data Analytics.',
+            rating: '4.9 (11.2K)',
+            hours: '220 Hours',
+            projects: '07 Projects',
+            level: 'Beginner → Advanced',
+            accent1: '#f59e0b',
+            accent2: '#ef4444',
+            codeText: 'ML',
+            demandText: '+35.4% Growth',
+            openingsText: '70,000+ Active Roles',
+            salaryText: '₹10 – 30 LPA',
+            stages: [
+                { title: '🌱 Stage 1: Foundations', items: ['Python Scientific Computing', 'Multivariable Calculus & Linear Algebra', 'Probability Distributions & Foundations', 'Advanced SQL Window Functions'] },
+                { title: '🔥 Stage 2: Core Tools', items: ['Feature Engineering & Selection', 'Supervised & Unsupervised Machine Learning', 'Ensemble Methods (XGBoost / RandomForest)', 'Cross-Validation & Metric Tuning'] },
+                { title: '🚀 Stage 3: Advanced', items: ['Deep Learning (CNNs, Transformers)', 'Time Series Forecasting & Anomaly Detection', 'Big Data Processing with Apache Spark', 'Model Interpretability (SHAP & LIME)'] },
+                { title: '🛠️ Stage 4: Portfolio Projects', items: ['Predictive Maintenance ML Pipeline', 'Credit Risk & Default Classifier', 'Customer Lifetime Value Engine'] }
+            ]
+        },
+        'devops': {
+            title: 'Become a DevOps Engineer',
+            subtitle: 'Master Docker, Kubernetes, CI/CD Pipelines, Terraform & Cloud Architecture.',
+            rating: '4.9 (8.4K)',
+            hours: '190 Hours',
+            projects: '06 Projects',
+            level: 'Beginner → Advanced',
+            accent1: '#6366f1',
+            accent2: '#0ea5e9',
+            codeText: 'K8S',
+            demandText: '+31.2% Growth',
+            openingsText: '80,000+ Active Roles',
+            salaryText: '₹9 – 28 LPA',
+            stages: [
+                { title: '🌱 Stage 1: Foundations', items: ['Linux Administration & Shell Scripting', 'Git Version Control & Branching', 'Networking Protocols (TCP/IP, DNS, SSL)'] },
+                { title: '🔥 Stage 2: Core Tools', items: ['Docker Containerization & Multi-Stage Builds', 'CI/CD Pipelines (GitHub Actions)', 'Cloud Infrastructure (AWS / GCP)', 'Infrastructure as Code with Terraform'] },
+                { title: '🚀 Stage 3: Advanced', items: ['Kubernetes Orchestration & Helm Charts', 'Service Mesh Architecture (Istio)', 'Prometheus & Grafana Observability', 'Cloud Security & IAM Automation'] },
+                { title: '🛠️ Stage 4: Portfolio Projects', items: ['Automated Multi-Stage CI/CD Pipeline', 'Production Kubernetes Microservices Cluster', 'Terraform AWS Infrastructure'] }
+            ]
+        },
+        'cybersecurity': {
+            title: 'Become a Cybersecurity Specialist',
+            subtitle: 'Master Ethical Hacking, Network Security, SIEM & Penetration Testing.',
+            rating: '4.8 (7.9K)',
+            hours: '185 Hours',
+            projects: '05 Projects',
+            level: 'Beginner → Advanced',
+            accent1: '#ef4444',
+            accent2: '#f59e0b',
+            codeText: 'SEC',
+            demandText: '+32.7% Growth',
+            openingsText: '65,000+ Active Roles',
+            salaryText: '₹10 – 32 LPA',
+            stages: [
+                { title: '🌱 Stage 1: Foundations', items: ['Network Packet Analysis (Wireshark)', 'Linux & Windows System Hardening', 'Cryptography Concepts & Hashing', 'Python for Security Automation'] },
+                { title: '🔥 Stage 2: Core Tools', items: ['Ethical Hacking & Penetration Testing', 'OWASP Top 10 Web Vulnerabilities', 'SIEM Log Monitoring & Analysis', 'Firewalls & Network Segmentation'] },
+                { title: '🚀 Stage 3: Advanced', items: ['Incident Response & Digital Forensics', 'Cloud Security Architecture (AWS)', 'Malware Analysis & Reverse Engineering', 'Zero Trust Architecture & IAM'] },
+                { title: '🛠️ Stage 4: Portfolio Projects', items: ['Web Application Vulnerability Audit', 'Automated Security Scanner Tool', 'SOC SIEM Log Detection Pipeline'] }
+            ]
+        }
+    };
+
+    const openRoleDetailPage = (roleKey) => {
+        const info = roleHeroDetails[roleKey];
+        if (!info) return;
+
+        const selectionView = document.getElementById('roadmap-selection-view');
+        const detailPageView = document.getElementById('roadmap-detail-page-view');
+
+        if (selectionView) selectionView.style.display = 'none';
+        if (detailPageView) detailPageView.style.display = 'block';
+
+        // Update Hero Banner
+        const titleEl = document.getElementById('roadmap-hero-title');
+        const subtitleEl = document.getElementById('roadmap-hero-subtitle');
+        const ratingEl = document.getElementById('roadmap-hero-rating');
+        const hoursEl = document.getElementById('roadmap-metric-hours');
+        const projectsEl = document.getElementById('roadmap-metric-projects');
+        const levelEl = document.getElementById('roadmap-metric-level');
+        const svgCodeText = document.getElementById('roadmap-svg-codetext');
+        const stop1 = document.getElementById('stop1');
+        const stop2 = document.getElementById('stop2');
+        const demandEl = document.getElementById('roadmap-demand-text');
+        const openingsEl = document.getElementById('roadmap-openings-text');
+        const salaryEl = document.getElementById('roadmap-salary-text');
+
+        if (titleEl) titleEl.textContent = info.title;
+        if (subtitleEl) subtitleEl.textContent = info.subtitle;
+        if (ratingEl) ratingEl.textContent = info.rating;
+        if (hoursEl) hoursEl.textContent = info.hours;
+        if (projectsEl) projectsEl.textContent = info.projects;
+        if (levelEl) levelEl.textContent = info.level;
+        if (svgCodeText) svgCodeText.textContent = info.codeText;
+        if (stop1) stop1.setAttribute('stop-color', info.accent1);
+        if (stop2) stop2.setAttribute('stop-color', info.accent2);
+        if (demandEl && info.demandText) demandEl.textContent = info.demandText;
+        if (openingsEl && info.openingsText) openingsEl.textContent = info.openingsText;
+        if (salaryEl && info.salaryText) salaryEl.textContent = info.salaryText;
+
+        // Reset progress and stats to 0 initially
+        const updateRoadmapProgressStats = () => {
+            const checkboxes = document.querySelectorAll('.roadmap-topic-check');
+            const total = checkboxes.length || 1;
+            const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+            const pct = Math.round((checked / total) * 100);
+
+            const pctEl = document.getElementById('roadmap-page-progress-pct');
+            const subEl = document.getElementById('roadmap-progress-subtitle');
+            const arcCircle = document.getElementById('progressArcCircle');
+            const streakEl = document.getElementById('stat-streak');
+            const xpEl = document.getElementById('stat-xp');
+            const lessonsEl = document.getElementById('stat-lessons');
+            const badgesEl = document.getElementById('stat-badges');
+
+            if (pctEl) pctEl.textContent = `${pct}%`;
+            if (subEl) subEl.textContent = `${pct}% Completed`;
+            if (arcCircle) {
+                const offset = 201 - Math.round(201 * (pct / 100));
+                arcCircle.setAttribute('stroke-dashoffset', offset);
+            }
+
+            if (streakEl) streakEl.textContent = checked > 0 ? '1' : '0';
+            if (xpEl) xpEl.textContent = (checked * 100).toLocaleString();
+            if (lessonsEl) lessonsEl.textContent = checked;
+            if (badgesEl) badgesEl.textContent = Math.floor(checked / 2);
+        };
+
+        // Render Stages with interactive topic checkboxes
+        const stagesContainer = document.getElementById('roadmap-page-stages-container');
+        if (stagesContainer) {
+            stagesContainer.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="font-family:'Outfit',sans-serif; font-weight:800; font-size:1.3rem; color:var(--text-main); margin:0;">
+                        Structured Learning Path
+                    </h3>
+                    <span style="font-size: 0.8rem; color: #94a3b8;">Check items as you learn to track progress</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+                    ${info.stages.map((stg, i) => `
+                        <div style="background: var(--bg-main); border: 1px solid var(--border); border-top: 4px solid ${i === 0 ? 'var(--success)' : i === 1 ? 'var(--primary)' : i === 2 ? '#a855f7' : 'var(--warning)'}; padding: 20px; border-radius: var(--radius-md); display: flex; flex-direction: column; gap: 12px;">
+                            <strong style="color: var(--text-main); font-size: 0.95rem; font-family:'Outfit',sans-serif;">${stg.title}</strong>
+                            <ul style="padding: 0; margin: 0; font-size: 0.85rem; color: var(--text-sub); display: flex; flex-direction: column; gap: 10px; list-style: none;">
+                                ${stg.items.map((item, itemIdx) => `
+                                    <li style="display: flex; align-items: flex-start; gap: 10px;">
+                                        <input type="checkbox" class="roadmap-topic-check" id="stg-${i}-item-${itemIdx}" style="accent-color: #8b5cf6; width: 16px; height: 16px; margin-top: 2px; cursor: pointer;">
+                                        <label for="stg-${i}-item-${itemIdx}" style="cursor: pointer; line-height: 1.4;">${escapeHTML(item)}</label>
+                                    </li>
+                                `).join('')}
+                            </ul>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            // Attach checkbox change handlers
+            stagesContainer.querySelectorAll('.roadmap-topic-check').forEach(cb => {
+                cb.addEventListener('change', updateRoadmapProgressStats);
+            });
+        }
+
+        // Initialize progress and stats to 0
+        updateRoadmapProgressStats();
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    // Attach click listeners to role buttons
+    document.querySelectorAll('.roadmap-role-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const roleKey = btn.getAttribute('data-role');
+            openRoleDetailPage(roleKey);
+        });
+    });
+
+    // Back to Roadmaps Button listener
+    const btnRoadmapBack = document.getElementById('btn-roadmap-back');
+    if (btnRoadmapBack) {
+        btnRoadmapBack.addEventListener('click', () => {
+            const selectionView = document.getElementById('roadmap-selection-view');
+            const detailPageView = document.getElementById('roadmap-detail-page-view');
+            if (detailPageView) detailPageView.style.display = 'none';
+            if (selectionView) selectionView.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // Start Learning Button listener
+    const btnRoadmapContinue = document.getElementById('btn-roadmap-continue');
+    if (btnRoadmapContinue) {
+        btnRoadmapContinue.addEventListener('click', () => {
+            const stagesContainer = document.getElementById('roadmap-page-stages-container');
+            if (stagesContainer) {
+                stagesContainer.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                const learningTabBtn = document.getElementById('btn-sidebar-learning');
+                if (learningTabBtn) learningTabBtn.click();
+            }
+        });
+    }
+
     // AI Recommendations Auto Search click triggers
     const triggerRecommendationSearch = (skillName) => {
         const learningTabBtn = document.getElementById('btn-sidebar-learning');

@@ -4286,6 +4286,25 @@ select:-webkit-autofill:focus {
   50% { opacity: 0.4; transform: scale(0.85); }
 }
 
+/* Roadmap Role Selection Buttons */
+.roadmap-role-btn {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  transition: all 0.25s var(--smooth) !important;
+}
+
+.roadmap-role-btn:hover {
+  border-color: var(--primary) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.roadmap-role-btn.active {
+  border-color: var(--primary) !important;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(99, 102, 241, 0.08)) !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3) !important;
+}
+
 
 
 
