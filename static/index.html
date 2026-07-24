@@ -20,6 +20,69 @@
     <!-- YouTube IFrame Player API -->
     <script src="https://www.youtube.com/iframe_api"></script>
     <link rel="stylesheet" href="/static/css/style.css?v=3.0">
+    <style>
+        /* Animated Laser Beam down Timeline Spine Line */
+        @keyframes laserFlowBeam {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 0% 300%; }
+        }
+
+        @keyframes nodePulseGlow {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 10px rgba(168, 85, 247, 0.6), 0 0 20px rgba(59, 130, 246, 0.4);
+            }
+            50% {
+                transform: scale(1.22);
+                box-shadow: 0 0 24px rgba(168, 85, 247, 0.95), 0 0 40px rgba(59, 130, 246, 0.8), 0 0 60px rgba(16, 185, 129, 0.6);
+            }
+        }
+
+        .timeline-bullet-marker {
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .timeline-bullet-marker.active-node {
+            animation: nodePulseGlow 2.4s ease-in-out infinite;
+            border-color: #a855f7 !important;
+        }
+
+        .timeline-laser-progress {
+            background: linear-gradient(to bottom, #a855f7 0%, #3b82f6 33%, #10b981 66%, #a855f7 100%);
+            background-size: 100% 300%;
+            animation: laserFlowBeam 3s linear infinite;
+            box-shadow: 0 0 14px rgba(168, 85, 247, 0.9), 0 0 28px rgba(59, 130, 246, 0.7);
+        }
+
+        /* Realistic Botanical Tree & Foliage Animations */
+        @keyframes treeWindBreathe {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(2deg) scale(1.02); }
+        }
+
+        @keyframes fireflyFloat1 {
+            0%, 100% { transform: translate(0, 0) scale(0.8); opacity: 0.3; }
+            50% { transform: translate(-14px, -28px) scale(1.3); opacity: 0.95; }
+        }
+
+        @keyframes fireflyFloat2 {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+            50% { transform: translate(16px, -32px) scale(1.4); opacity: 1; }
+        }
+
+        .realistic-foliage-sway {
+            transform-origin: 50% 90%;
+            animation: treeWindBreathe 4s ease-in-out infinite;
+        }
+
+        .firefly-spore-1 {
+            animation: fireflyFloat1 3.5s ease-in-out infinite;
+        }
+
+        .firefly-spore-2 {
+            animation: fireflyFloat2 4.2s ease-in-out infinite;
+        }
+    </style>
     <!-- Route Guard & Browser History Trap -->
     <script>
       (function() {
@@ -1382,6 +1445,71 @@
                                 <div style="display: flex; flex-direction: column;">
                                     <strong style="font-family:'Outfit',sans-serif; font-weight: 700; font-size: 0.95rem; color: #ffffff;">Your Progress</strong>
                                     <span id="roadmap-progress-subtitle" style="color: #94a3b8; font-size: 0.78rem;">0% Completed</span>
+                                </div>
+                            </div>
+
+                            <!-- Interactive Plant Growth Widget (Seed -> Sprout -> Plant -> Tree) -->
+                            <div id="plant-growth-widget" style="display: flex; align-items: center; gap: 12px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); padding: 8px 14px; border-radius: 12px; transition: all 0.3s ease;">
+                                <div style="position: relative; width: 44px; height: 44px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                                    <svg id="tree-growth-svg" width="44" height="44" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <defs>
+                                            <linearGradient id="stemGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                                                <stop offset="0%" stop-color="#059669"/>
+                                                <stop offset="100%" stop-color="#34d399"/>
+                                            </linearGradient>
+                                            <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" stop-color="#a7f3d0"/>
+                                                <stop offset="100%" stop-color="#10b981"/>
+                                            </linearGradient>
+                                            <filter id="treeGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#10b981" flood-opacity="0.6"/>
+                                            </filter>
+                                        </defs>
+                                        
+                                        <!-- Soil Base -->
+                                        <path d="M15 82 Q50 86 85 82" stroke="rgba(255,255,255,0.25)" stroke-width="3" stroke-linecap="round"/>
+
+                                        <!-- Seed (0-24%) -->
+                                        <g id="stage-seed" filter="url(#treeGlow)">
+                                            <ellipse cx="50" cy="78" rx="7" ry="5" fill="#f59e0b"/>
+                                            <path d="M50 78 Q47 83 44 86" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round"/>
+                                            <path d="M50 78 Q53 83 56 86" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round"/>
+                                            <path d="M50 73 Q50 68 50 64" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
+                                        </g>
+
+                                        <!-- Sprout (25-49%) -->
+                                        <g id="stage-sprout" style="display: none;" filter="url(#treeGlow)">
+                                            <path d="M50 80 Q50 62 50 50" stroke="url(#stemGrad)" stroke-width="3.5" stroke-linecap="round"/>
+                                            <path d="M50 55 Q38 48 38 42 Q48 48 50 55 Z" fill="url(#leafGrad)"/>
+                                            <path d="M50 50 Q62 43 62 37 Q50 43 50 50 Z" fill="url(#leafGrad)"/>
+                                        </g>
+
+                                        <!-- Young Plant (50-74%) -->
+                                        <g id="stage-plant" style="display: none;" filter="url(#treeGlow)">
+                                            <path d="M50 80 Q49 52 50 32" stroke="url(#stemGrad)" stroke-width="4.5" stroke-linecap="round"/>
+                                            <path d="M50 62 Q34 52 28 46" stroke="url(#stemGrad)" stroke-width="3" stroke-linecap="round"/>
+                                            <circle cx="26" cy="44" r="8" fill="url(#leafGrad)"/>
+                                            <path d="M50 54 Q66 44 72 38" stroke="url(#stemGrad)" stroke-width="3" stroke-linecap="round"/>
+                                            <circle cx="74" cy="36" r="8" fill="url(#leafGrad)"/>
+                                            <circle cx="50" cy="26" r="11" fill="url(#leafGrad)"/>
+                                        </g>
+
+                                        <!-- Full Tree (75-100%) -->
+                                        <g id="stage-tree" style="display: none;" filter="url(#treeGlow)">
+                                            <path d="M44 82 L47 40 L53 40 L56 82 Z" fill="#854d0e"/>
+                                            <circle cx="50" cy="32" r="20" fill="#10b981" opacity="0.9"/>
+                                            <circle cx="34" cy="40" r="15" fill="#34d399" opacity="0.85"/>
+                                            <circle cx="66" cy="40" r="15" fill="#059669" opacity="0.85"/>
+                                            <circle cx="50" cy="18" r="15" fill="#6ee7b7" opacity="0.9"/>
+                                            <circle cx="40" cy="28" r="3.5" fill="#f43f5e"/>
+                                            <circle cx="60" cy="32" r="3.5" fill="#fbbf24"/>
+                                            <circle cx="52" cy="18" r="4" fill="#a855f7"/>
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div style="display: flex; flex-direction: column;">
+                                    <strong id="tree-stage-title" style="font-family:'Outfit',sans-serif; font-weight: 800; font-size: 0.82rem; color: #a7f3d0;">🌱 Seedling Stage</strong>
+                                    <span id="tree-stage-desc" style="color: #94a3b8; font-size: 0.72rem;">Start topics to grow your tree!</span>
                                 </div>
                             </div>
 

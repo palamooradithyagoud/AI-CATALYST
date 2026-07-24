@@ -3768,125 +3768,259 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ── Dedicated Role Roadmaps Selection & Page Navigation ──
+    // ── Dedicated Role Roadmaps Selection & Page Navigation ──
     const roleHeroDetails = {
         'fullstack': {
-            title: 'Become a Full-Stack Developer',
-            subtitle: 'Master in-demand skills, build real-world projects and get job-ready.',
+            title: 'Full Stack Developer',
+            subtitle: "Here's a timeline of the Full Stack Developer journey.",
             rating: '4.9 (12.4K)',
-            hours: '210 Hours',
-            projects: '06 Projects',
-            level: 'Beginner → Advanced',
-            accent1: '#a855f7',
-            accent2: '#3b82f6',
-            codeText: '</>',
             demandText: '+24.5% Growth',
             openingsText: '125,000+ Active Roles',
             salaryText: '₹8 – 24 LPA',
+            accent1: '#a855f7',
+            accent2: '#3b82f6',
+            codeText: '</>',
             stages: [
-                { title: 'Stage 1: Foundations', items: ['HTML5 & Semantic Markup', 'CSS3, Flexbox & Responsive Layouts', 'Modern JavaScript (ES6+) & DOM Manipulation', 'Git & GitHub Version Control'] },
-                { title: 'Stage 2: Core Tools', items: ['React.js / Next.js Framework & State Management', 'Node.js & Express RESTful API Development', 'PostgreSQL / Supabase Database Architecture', 'Tailwind CSS Component Systems'] },
-                { title: 'Stage 3: Advanced', items: ['System Design & Scalable Microservices', 'Redis In-Memory Caching', 'CI/CD Automated Deployment Pipelines', 'Docker & Cloud Containerization'] },
-                { title: 'Stage 4: Portfolio Projects', items: ['SaaS Analytics Dashboard Application', 'Real-Time Collaboration Platform', 'E-Commerce Platform with Payment Gateway'] }
+                {
+                    title: 'Frontend Fundamentals',
+                    description: 'Master HTML5, CSS3, and JavaScript ES6+ to build responsive and interactive web interfaces.',
+                    items: ['HTML5', 'CSS3', 'JavaScript', 'React', 'Tailwind CSS']
+                },
+                {
+                    title: 'Git Fundamentals',
+                    description: 'Learn the essential concepts and commands to manage code with Git effectively.',
+                    items: ['Basic Git', 'Core Commands', 'Branching and Merging', 'Remote Repositories', 'Undoing Changes', 'Stashing', 'Tags', 'Collaboration', 'Advanced Essentials']
+                },
+                {
+                    title: 'Backend Development',
+                    description: 'Build server-side applications with Node.js, Express.js, and understand server architecture.',
+                    items: ['Node.js', 'Express.js', 'Fastify', 'TypeScript', 'Python (FastAPI, Django)', 'Go (Gin)', 'REST APIs', 'GraphQL']
+                },
+                {
+                    title: 'Advanced Git',
+                    description: 'Master advanced Git workflows, rebasing, hooks, and CI/CD integration for production environments.',
+                    items: ['GitHub', 'GitLab', 'Bitbucket', 'Git Hooks', 'GitHub Actions', 'Git Rebase', 'Git Cherry-pick', 'Git Bisect']
+                },
+                {
+                    title: 'RESTful APIs',
+                    description: 'Design and develop scalable REST APIs with proper HTTP methods, status codes, and documentation.',
+                    items: ['Express.js', 'FastAPI', 'Postman', 'Swagger (OpenAPI)', 'JWT Authentication', 'OAuth 2.0', 'Rate Limiting', 'API Versioning']
+                },
+                {
+                    title: 'Databases',
+                    description: 'Work with SQL and NoSQL databases, design schemas, and optimize queries for performance.',
+                    items: ['PostgreSQL', 'MongoDB', 'MySQL', 'Redis', 'Prisma ORM', 'Sequelize ORM', 'Mongoose', 'Database Indexing', 'ACID Transactions']
+                },
+                {
+                    title: 'Deployment',
+                    description: 'Deploy applications using Docker, cloud platforms, and implement CI/CD pipelines.',
+                    items: ['AWS (EC2, S3, Lambda)', 'Vercel', 'Render', 'Railway', 'Docker Swarm', 'Nginx', 'CI/CD Pipelines', 'Monitoring (Prometheus, Grafana)']
+                }
             ]
         },
         'aiml': {
-            title: 'Become an AI/ML Engineer',
-            subtitle: 'Master Python, Deep Learning, PyTorch, LLMs & MLOps deployment.',
+            title: 'AI/ML Engineer',
+            subtitle: "Here's a timeline of the AI/ML Engineer journey.",
             rating: '4.9 (15.8K)',
-            hours: '240 Hours',
-            projects: '08 Projects',
-            level: 'Beginner → Advanced',
-            accent1: '#a855f7',
-            accent2: '#ec4899',
-            codeText: 'AI',
             demandText: '+74.2% Growth',
             openingsText: '85,000+ Active Roles',
             salaryText: '₹12 – 35 LPA',
+            accent1: '#a855f7',
+            accent2: '#ec4899',
+            codeText: 'AI',
             stages: [
-                { title: 'Stage 1: Foundations', items: ['Python Syntax, Data Structures & OOP', 'Linear Algebra, Probability & Calculus', 'Pandas & NumPy for Data Engineering', 'Data Visualization with Matplotlib & Seaborn'] },
-                { title: 'Stage 2: Core Tools', items: ['Scikit-Learn Machine Learning Algorithms', 'Deep Learning Architectures with PyTorch', 'Computer Vision Fundamentals using OpenCV', 'NLP & HuggingFace Transformer Models'] },
-                { title: 'Stage 3: Advanced', items: ['Large Language Models (LLMs) & Prompting', 'RAG Architecture (Retrieval-Augmented)', 'Vector Databases (Pinecone, ChromaDB)', 'MLOps & FastAPI Model Deployment'] },
-                { title: 'Stage 4: Portfolio Projects', items: ['AI Document Summarizer & Q&A Assistant', 'Fine-Tuned Code Generation Bot', 'Real-Time Vision Tracking System'] }
+                {
+                    title: 'Python & Math Foundations',
+                    description: 'Master Python syntax, data structures, linear algebra, and statistical calculus.',
+                    items: ['Python ES6+', 'Linear Algebra', 'Calculus & Optimization', 'Probability & Statistics', 'NumPy', 'Pandas', 'Matplotlib & Seaborn']
+                },
+                {
+                    title: 'Machine Learning Core',
+                    description: 'Understand supervised and unsupervised machine learning algorithms with Scikit-Learn.',
+                    items: ['Scikit-Learn', 'Supervised Learning', 'Unsupervised Learning', 'Regression Models', 'Decision Trees', 'Random Forests', 'XGBoost', 'Model Evaluation Metrics']
+                },
+                {
+                    title: 'Deep Learning & Neural Networks',
+                    description: 'Design and train multi-layer neural networks using PyTorch and TensorFlow.',
+                    items: ['PyTorch', 'TensorFlow & Keras', 'Convolutional Neural Networks (CNNs)', 'Recurrent Neural Networks (RNNs & LSTMs)', 'Transformers Architecture', 'Hyperparameter Tuning']
+                },
+                {
+                    title: 'NLP & Computer Vision',
+                    description: 'Process text, audio, image, and video data using cutting-edge deep learning frameworks.',
+                    items: ['OpenCV', 'Hugging Face Transformers', 'Tokenization & Embeddings', 'BERT & T5 Models', 'Object Detection (YOLO)', 'Image Segmentation']
+                },
+                {
+                    title: 'Generative AI & LLMs',
+                    description: 'Build GenAI applications leveraging Large Language Models, RAG, and Vector Databases.',
+                    items: ['LangChain', 'LlamaIndex', 'RAG Architecture', 'Pinecone Vector DB', 'ChromaDB', 'Prompt Engineering', 'Fine-Tuning (LoRA, PEFT)']
+                },
+                {
+                    title: 'MLOps & Production Deployment',
+                    description: 'Deploy, monitor, scale, and maintain machine learning pipelines in production.',
+                    items: ['FastAPI', 'Docker Containerization', 'MLflow Tracking', 'Kubeflow Pipelines', 'Triton Inference Server', 'Model Drift Detection', 'CI/CD for Machine Learning']
+                }
             ]
         },
         'data-analyst': {
-            title: 'Become a Data Analyst',
-            subtitle: 'Master SQL, Advanced Excel, PowerBI, Tableau & Business Intelligence.',
+            title: 'Data Analyst',
+            subtitle: "Here's a timeline of the Data Analyst journey.",
             rating: '4.8 (9.6K)',
-            hours: '160 Hours',
-            projects: '05 Projects',
-            level: 'Beginner → Advanced',
-            accent1: '#10b981',
-            accent2: '#3b82f6',
-            codeText: 'SQL',
             demandText: '+21.8% Growth',
             openingsText: '95,000+ Active Roles',
             salaryText: '₹6 – 18 LPA',
+            accent1: '#10b981',
+            accent2: '#3b82f6',
+            codeText: 'SQL',
             stages: [
-                { title: 'Stage 1: Foundations', items: ['Excel Advanced Formulas & Pivot Tables', 'SQL Core Queries, Aggregations & Joins', 'Data Cleaning & Preprocessing Best Practices'] },
-                { title: 'Stage 2: Core Tools', items: ['Python for Data Analysis (Pandas & NumPy)', 'Exploratory Data Analysis (EDA)', 'Interactive Dashboards in Power BI & Tableau', 'Descriptive & Inferential Statistics'] },
-                { title: 'Stage 3: Advanced', items: ['Hypothesis Testing & Statistical Inference', 'A/B Testing Analysis & Growth Metrics', 'Automated ETL Data Extraction Pipelines'] },
-                { title: 'Stage 4: Portfolio Projects', items: ['Company Revenue & Growth Dashboard', 'User Churn & Cohort Analysis', 'E-Commerce A/B Test Impact Study'] }
+                {
+                    title: 'Spreadsheets & Data Foundations',
+                    description: 'Clean raw datasets and build foundational reports using Microsoft Excel and Google Sheets.',
+                    items: ['Advanced Excel', 'Pivot Tables & Charts', 'VLOOKUP & XLOOKUP', 'Data Cleaning', 'Descriptive Statistics']
+                },
+                {
+                    title: 'SQL & Relational Databases',
+                    description: 'Query, join, aggregate, and manipulate complex enterprise data stored in relational databases.',
+                    items: ['Basic SQL Queries', 'Joins & Unions', 'Group By & Aggregations', 'Subqueries', 'Window Functions', 'Database Schema Design']
+                },
+                {
+                    title: 'Data Visualization & BI Tools',
+                    description: 'Transform complex analysis into interactive dashboards for stakeholders.',
+                    items: ['Power BI', 'DAX Formulas', 'Tableau Desktop', 'Chart Selection Strategy', 'Interactive Dashboards', 'Data Storytelling']
+                },
+                {
+                    title: 'Python for Data Analysis',
+                    description: 'Automate data processing workflows and perform exploratory data analysis.',
+                    items: ['Python (Pandas)', 'NumPy Operations', 'Matplotlib & Seaborn', 'Jupyter Notebooks', 'Exploratory Data Analysis (EDA)']
+                },
+                {
+                    title: 'Business & Statistical Analysis',
+                    description: 'Derive actionable business insights using statistical hypothesis testing and cohort analysis.',
+                    items: ['A/B Testing', 'Hypothesis Testing', 'Cohort Analysis', 'Customer Churn Analysis', 'KPI Dashboard Reporting']
+                }
             ]
         },
         'data-scientist': {
-            title: 'Become a Data Scientist',
-            subtitle: 'Master Statistical Modeling, Machine Learning Algorithms & Big Data Analytics.',
+            title: 'Data Scientist',
+            subtitle: "Here's a timeline of the Data Scientist journey.",
             rating: '4.9 (11.2K)',
-            hours: '220 Hours',
-            projects: '07 Projects',
-            level: 'Beginner → Advanced',
-            accent1: '#f59e0b',
-            accent2: '#ef4444',
-            codeText: 'ML',
             demandText: '+35.4% Growth',
             openingsText: '70,000+ Active Roles',
             salaryText: '₹10 – 30 LPA',
+            accent1: '#f59e0b',
+            accent2: '#ef4444',
+            codeText: 'ML',
             stages: [
-                { title: 'Stage 1: Foundations', items: ['Python Scientific Computing', 'Multivariable Calculus & Linear Algebra', 'Probability Distributions & Foundations', 'Advanced SQL Window Functions'] },
-                { title: 'Stage 2: Core Tools', items: ['Feature Engineering & Selection', 'Supervised & Unsupervised Machine Learning', 'Ensemble Methods (XGBoost / RandomForest)', 'Cross-Validation & Metric Tuning'] },
-                { title: 'Stage 3: Advanced', items: ['Deep Learning (CNNs, Transformers)', 'Time Series Forecasting & Anomaly Detection', 'Big Data Processing with Apache Spark', 'Model Interpretability (SHAP & LIME)'] },
-                { title: 'Stage 4: Portfolio Projects', items: ['Predictive Maintenance ML Pipeline', 'Credit Risk & Default Classifier', 'Customer Lifetime Value Engine'] }
+                {
+                    title: 'Programming & Mathematics',
+                    description: 'Master mathematical foundations, linear algebra, probability, and numerical computing.',
+                    items: ['Python (NumPy, SciPy)', 'Linear Algebra', 'Multivariable Calculus', 'Probability Distributions', 'Bayesian Statistics']
+                },
+                {
+                    title: 'Data Wrangling & Feature Engineering',
+                    description: 'Clean, preprocess, and engineer features from unstructured enterprise data.',
+                    items: ['Advanced SQL', 'Pandas Manipulation', 'Feature Selection & Extraction', 'Missing Value Imputation', 'Data Normalization']
+                },
+                {
+                    title: 'Predictive Modeling & Machine Learning',
+                    description: 'Train regression, classification, clustering, and time-series forecasting models.',
+                    items: ['Scikit-Learn', 'Statistical Inference', 'Time Series (ARIMA, Prophet)', 'Random Forest & XGBoost', 'Cross-Validation']
+                },
+                {
+                    title: 'Deep Learning & Big Data Analytics',
+                    description: 'Scale analytics to massive datasets using PySpark and deep learning architectures.',
+                    items: ['PyTorch', 'Apache Spark', 'PySpark', 'Google BigQuery', 'Distributed Systems', 'Deep Neural Networks']
+                },
+                {
+                    title: 'Model Interpretability & MLOps',
+                    description: 'Explain AI decision-making models and deploy microservices to cloud APIs.',
+                    items: ['SHAP & LIME Interpretability', 'Model Evaluation Metrics', 'FastAPI', 'Docker', 'Model Drift Monitoring']
+                }
             ]
         },
         'devops': {
-            title: 'Become a DevOps Engineer',
-            subtitle: 'Master Docker, Kubernetes, CI/CD Pipelines, Terraform & Cloud Architecture.',
+            title: 'DevOps Engineer',
+            subtitle: "Here's a timeline of the DevOps Engineer journey.",
             rating: '4.9 (8.4K)',
-            hours: '190 Hours',
-            projects: '06 Projects',
-            level: 'Beginner → Advanced',
-            accent1: '#6366f1',
-            accent2: '#0ea5e9',
-            codeText: 'K8S',
             demandText: '+31.2% Growth',
             openingsText: '80,000+ Active Roles',
             salaryText: '₹9 – 28 LPA',
+            accent1: '#6366f1',
+            accent2: '#0ea5e9',
+            codeText: 'K8S',
             stages: [
-                { title: 'Stage 1: Foundations', items: ['Linux Administration & Shell Scripting', 'Git Version Control & Branching', 'Networking Protocols (TCP/IP, DNS, SSL)'] },
-                { title: 'Stage 2: Core Tools', items: ['Docker Containerization & Multi-Stage Builds', 'CI/CD Pipelines (GitHub Actions)', 'Cloud Infrastructure (AWS / GCP)', 'Infrastructure as Code with Terraform'] },
-                { title: 'Stage 3: Advanced', items: ['Kubernetes Orchestration & Helm Charts', 'Service Mesh Architecture (Istio)', 'Prometheus & Grafana Observability', 'Cloud Security & IAM Automation'] },
-                { title: 'Stage 4: Portfolio Projects', items: ['Automated Multi-Stage CI/CD Pipeline', 'Production Kubernetes Microservices Cluster', 'Terraform AWS Infrastructure'] }
+                {
+                    title: 'Linux & Scripting',
+                    description: 'Administer Linux server environments and automate tasks with Bash and Python scripting.',
+                    items: ['Linux Server Administration', 'Bash Shell Scripting', 'Python Automation', 'Networking (TCP/IP, DNS)', 'SSH & Key Management']
+                },
+                {
+                    title: 'Version Control & Workflow',
+                    description: 'Manage production code repositories and team branching strategies with Git.',
+                    items: ['Git Core Commands', 'GitHub / GitLab', 'Branching & Rebase Strategies', 'Git Hooks', 'Code Reviews & PR Workflows']
+                },
+                {
+                    title: 'Containerization',
+                    description: 'Package applications into reproducible, isolated containers with Docker.',
+                    items: ['Docker Engine', 'Dockerfile Optimization', 'Docker Compose', 'Container Security', 'Container Registries (ECR/DockerHub)']
+                },
+                {
+                    title: 'CI/CD Automation',
+                    description: 'Automate software build, test, and release pipelines.',
+                    items: ['GitHub Actions', 'Jenkins Pipelines', 'GitLab CI/CD', 'Automated Testing', 'Artifact Management']
+                },
+                {
+                    title: 'Infrastructure as Code (IaC)',
+                    description: 'Provision, configure, and manage cloud infrastructure declarative scripts.',
+                    items: ['Terraform', 'Ansible Configuration', 'AWS CloudFormation', 'Infrastructure State Management', 'Modular Infrastructure']
+                },
+                {
+                    title: 'Kubernetes & Cloud Orchestration',
+                    description: 'Orchestrate scalable microservices across enterprise Kubernetes clusters.',
+                    items: ['Kubernetes Core Objects', 'Helm Charts', 'Ingress Controllers', 'AWS EKS / GCP GKE', 'Cluster Scaling']
+                },
+                {
+                    title: 'Monitoring & Observability',
+                    description: 'Track infrastructure metrics, analyze system logs, and set up alerts.',
+                    items: ['Prometheus', 'Grafana Dashboards', 'ELK Stack (Elasticsearch, Logstash, Kibana)', 'Alertmanager', 'Tracing (Jaeger)']
+                }
             ]
         },
         'cybersecurity': {
-            title: 'Become a Cybersecurity Specialist',
-            subtitle: 'Master Ethical Hacking, Network Security, SIEM & Penetration Testing.',
+            title: 'Cybersecurity Specialist',
+            subtitle: "Here's a timeline of the Cybersecurity Specialist journey.",
             rating: '4.8 (7.9K)',
-            hours: '185 Hours',
-            projects: '05 Projects',
-            level: 'Beginner → Advanced',
-            accent1: '#ef4444',
-            accent2: '#f59e0b',
-            codeText: 'SEC',
             demandText: '+32.7% Growth',
             openingsText: '65,000+ Active Roles',
             salaryText: '₹10 – 32 LPA',
+            accent1: '#ef4444',
+            accent2: '#f59e0b',
+            codeText: 'SEC',
             stages: [
-                { title: 'Stage 1: Foundations', items: ['Network Packet Analysis (Wireshark)', 'Linux & Windows System Hardening', 'Cryptography Concepts & Hashing', 'Python for Security Automation'] },
-                { title: 'Stage 2: Core Tools', items: ['Ethical Hacking & Penetration Testing', 'OWASP Top 10 Web Vulnerabilities', 'SIEM Log Monitoring & Analysis', 'Firewalls & Network Segmentation'] },
-                { title: 'Stage 3: Advanced', items: ['Incident Response & Digital Forensics', 'Cloud Security Architecture (AWS)', 'Malware Analysis & Reverse Engineering', 'Zero Trust Architecture & IAM'] },
-                { title: 'Stage 4: Portfolio Projects', items: ['Web Application Vulnerability Audit', 'Automated Security Scanner Tool', 'SOC SIEM Log Detection Pipeline'] }
+                {
+                    title: 'Networking & Systems Fundamentals',
+                    description: 'Understand low-level networking protocols, OS security, and system architecture.',
+                    items: ['Network Protocols (TCP/IP, UDP)', 'Wireshark Packet Analysis', 'Linux Hardening', 'Windows Administration', 'Firewalls & VPNs']
+                },
+                {
+                    title: 'Cryptography & Security Policies',
+                    description: 'Implement encryption, public key infrastructure, and enterprise security governance.',
+                    items: ['Symmetric & Asymmetric Encryption', 'PKI & SSL/TLS Certificates', 'Identity & Access Management (IAM)', 'Multi-Factor Authentication (MFA)', 'Security Policies & Frameworks']
+                },
+                {
+                    title: 'Penetration Testing & Ethical Hacking',
+                    description: 'Assess security postures by discovering and exploiting vulnerabilities ethically.',
+                    items: ['Nmap Reconnaissance', 'Metasploit Framework', 'Burp Suite', 'OWASP Top 10 Web Vulnerabilities', 'Vulnerability Scanners']
+                },
+                {
+                    title: 'Security Operations & SIEM',
+                    description: 'Monitor threat activity, analyze security logs, and respond to real-time incidents.',
+                    items: ['SIEM Tools (Splunk, Elastic)', 'SOC Operations', 'Incident Response Playbooks', 'Log Analysis', 'Endpoint Detection & Response (EDR)']
+                },
+                {
+                    title: 'Cloud & Enterprise Security',
+                    description: 'Secure cloud environments, zero-trust architectures, and ensure regulatory compliance.',
+                    items: ['Cloud Security (AWS/Azure)', 'Zero Trust Architecture', 'Compliance (ISO 27001, SOC 2)', 'Threat Intelligence', 'Container Security']
+                }
             ]
         }
     };
@@ -3954,39 +4088,350 @@ document.addEventListener('DOMContentLoaded', () => {
             if (xpEl) xpEl.textContent = (checked * 100).toLocaleString();
             if (lessonsEl) lessonsEl.textContent = checked;
             if (badgesEl) badgesEl.textContent = Math.floor(checked / 2);
+
+            // Update Plant Growth Tree SVG Widget Stage
+            const seedGroup = document.getElementById('stage-seed');
+            const sproutGroup = document.getElementById('stage-sprout');
+            const plantGroup = document.getElementById('stage-plant');
+            const treeGroup = document.getElementById('stage-tree');
+            const treeTitle = document.getElementById('tree-stage-title');
+            const treeDesc = document.getElementById('tree-stage-desc');
+
+            if (seedGroup) seedGroup.style.display = 'none';
+            if (sproutGroup) sproutGroup.style.display = 'none';
+            if (plantGroup) plantGroup.style.display = 'none';
+            if (treeGroup) treeGroup.style.display = 'none';
+
+            if (pct < 25) {
+                if (seedGroup) seedGroup.style.display = 'block';
+                if (treeTitle) treeTitle.textContent = '🌱 Seedling Stage';
+                if (treeDesc) treeDesc.textContent = 'Start topics to grow your tree!';
+            } else if (pct < 50) {
+                if (sproutGroup) sproutGroup.style.display = 'block';
+                if (treeTitle) treeTitle.textContent = '🌿 Sprout Stage';
+                if (treeDesc) treeDesc.textContent = 'Your knowledge is sprouting!';
+            } else if (pct < 75) {
+                if (plantGroup) plantGroup.style.display = 'block';
+                if (treeTitle) treeTitle.textContent = '🪴 Flourishing Plant';
+                if (treeDesc) treeDesc.textContent = 'Growing strong branches!';
+            } else {
+                if (treeGroup) treeGroup.style.display = 'block';
+                if (treeTitle) treeTitle.textContent = '🌳 Career Mastery Tree';
+                if (treeDesc) treeDesc.textContent = 'Full tree bloomed!';
+            }
         };
 
-        // Render Stages with interactive topic checkboxes
+        // Render Vertical Timeline Tree Structure
         const stagesContainer = document.getElementById('roadmap-page-stages-container');
         if (stagesContainer) {
             stagesContainer.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3 style="font-family:'Outfit',sans-serif; font-weight:800; font-size:1.3rem; color:var(--text-main); margin:0;">
-                        Structured Learning Path
-                    </h3>
-                    <span style="font-size: 0.8rem; color: #94a3b8;">Check items as you learn to track progress</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                    <div>
+                        <h3 style="font-family:'Outfit',sans-serif; font-weight:800; font-size:1.35rem; color:var(--text-main); margin:0 0 4px 0;">
+                            ${escapeHTML(info.title)} Timeline Tree
+                        </h3>
+                        <span style="font-size: 0.82rem; color: #94a3b8;">${escapeHTML(info.subtitle)}</span>
+                    </div>
+                    <span style="font-size: 0.78rem; color: #a855f7; font-weight: 700; background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); padding: 6px 14px; border-radius: 20px;">
+                        Interactive Learning Path
+                    </span>
                 </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
-                    ${info.stages.map((stg, i) => `
-                        <div style="background: var(--bg-main); border: 1px solid var(--border); border-top: 4px solid ${i === 0 ? 'var(--success)' : i === 1 ? 'var(--primary)' : i === 2 ? '#a855f7' : 'var(--warning)'}; padding: 20px; border-radius: var(--radius-md); display: flex; flex-direction: column; gap: 12px;">
-                            <strong style="color: var(--text-main); font-size: 0.95rem; font-family:'Outfit',sans-serif;">${stg.title}</strong>
-                            <ul style="padding: 0; margin: 0; font-size: 0.85rem; color: var(--text-sub); display: flex; flex-direction: column; gap: 10px; list-style: none;">
-                                ${stg.items.map((item, itemIdx) => `
-                                    <li style="display: flex; align-items: flex-start; gap: 10px;">
-                                        <input type="checkbox" class="roadmap-topic-check" id="stg-${i}-item-${itemIdx}" style="accent-color: #8b5cf6; width: 16px; height: 16px; margin-top: 2px; cursor: pointer;">
-                                        <label for="stg-${i}-item-${itemIdx}" style="cursor: pointer; line-height: 1.4;">${escapeHTML(item)}</label>
-                                    </li>
-                                `).join('')}
-                            </ul>
+
+                <!-- 2-Column Grid Layout: Left = Timeline Tree; Right = Sticky Tree Growth Card -->
+                <div style="display: grid; grid-template-columns: 1fr 300px; gap: 32px; align-items: start;">
+
+                    <!-- Left Column: Timeline Tree -->
+                    <div class="roadmap-timeline-tree" style="position: relative; padding-left: 32px; display: flex; flex-direction: column; gap: 36px;">
+                        <!-- Dark Base Track Line -->
+                        <div style="position: absolute; left: 11px; top: 12px; bottom: 12px; width: 3px; background: rgba(255,255,255,0.08); border-radius: 2px;"></div>
+
+                        <!-- Active Animated Laser Beam Line -->
+                        <div id="timeline-laser-spine" class="timeline-laser-progress" style="position: absolute; left: 11px; top: 12px; height: 15%; width: 3px; border-radius: 2px; z-index: 1; transition: height 0.2s ease-out;"></div>
+
+                        ${info.stages.map((stg, i) => `
+                            <div class="timeline-tree-node" style="position: relative; display: flex; flex-direction: column; gap: 10px;">
+                                <!-- Glowing Circle Bullet Marker on Line -->
+                                <div class="timeline-bullet-marker ${i === 0 ? 'active-node' : ''}" style="position: absolute; left: -32px; top: 4px; width: 22px; height: 22px; border-radius: 50%; background: #0f172a; border: 3px solid ${i % 3 === 0 ? '#a855f7' : i % 3 === 1 ? '#3b82f6' : '#10b981'}; box-shadow: 0 0 10px ${i % 3 === 0 ? 'rgba(168,85,247,0.5)' : i % 3 === 1 ? 'rgba(59,130,246,0.5)' : 'rgba(16,185,129,0.5)'}; display: flex; align-items: center; justify-content: center; z-index: 2;">
+                                    <div style="width: 8px; height: 8px; border-radius: 50%; background: #ffffff;"></div>
+                                </div>
+
+                                <!-- Node Header -->
+                                <div>
+                                    <h3 style="font-family:'Outfit',sans-serif; font-size: 1.25rem; font-weight: 800; color: #ffffff; margin: 0 0 6px 0;">
+                                        ${escapeHTML(stg.title)}
+                                    </h3>
+                                    ${stg.description ? `<p style="font-size: 0.85rem; color: #94a3b8; margin: 0 0 14px 0; line-height: 1.5;">${escapeHTML(stg.description)}</p>` : ''}
+                                </div>
+
+                                <!-- Interactive Pill Widgets Grid -->
+                                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                    ${stg.items.map((item, itemIdx) => `
+                                        <label class="tree-pill-widget" for="stg-${i}-item-${itemIdx}" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 18px; font-size: 0.85rem; font-weight: 600; color: #e2e8f0; cursor: pointer; transition: all 0.2s ease;">
+                                            <input type="checkbox" class="roadmap-topic-check" id="stg-${i}-item-${itemIdx}" style="accent-color: #8b5cf6; width: 16px; height: 16px; cursor: pointer;">
+                                            <span>${escapeHTML(item)}</span>
+                                        </label>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- Right Column: Sticky Botanical Growth Card (Grows as you scroll down!) -->
+                    <div style="position: sticky; top: 90px; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(20px); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; box-shadow: 0 16px 40px rgba(0,0,0,0.7), inset 0 0 20px rgba(16,185,129,0.08);">
+                        <!-- Card Header Badge (No Emojis) -->
+                        <div style="display: flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); padding: 6px 16px; border-radius: 20px; font-size: 0.78rem; font-weight: 800; color: #a7f3d0; letter-spacing: 0.03em;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.4 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+                            Realistic Botanical Growth
                         </div>
-                    `).join('')}
+
+                        <!-- Large Photorealistic Growing SVG Canvas -->
+                        <div style="position: relative; width: 220px; height: 220px; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(16,185,129,0.18) 0%, rgba(15,23,42,0) 72%); border-radius: 50%;">
+                            <!-- Ambient Floating Fireflies / Spores -->
+                            <svg width="220" height="220" style="position: absolute; inset: 0; pointer-events: none;">
+                                <circle class="firefly-spore-1" cx="40" cy="140" r="2.5" fill="#a7f3d0" opacity="0.8"/>
+                                <circle class="firefly-spore-2" cx="180" cy="120" r="3" fill="#6ee7b7" opacity="0.9"/>
+                                <circle class="firefly-spore-1" cx="150" cy="60" r="2" fill="#34d399" opacity="0.7"/>
+                            </svg>
+
+                            <svg id="scroll-tree-growth-svg" width="210" height="210" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <!-- Photorealistic Bark Gradient -->
+                                    <linearGradient id="barkGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#2d1a0e"/>
+                                        <stop offset="35%" stop-color="#4a2c11"/>
+                                        <stop offset="70%" stop-color="#7a4a21"/>
+                                        <stop offset="100%" stop-color="#3d210b"/>
+                                    </linearGradient>
+
+                                    <!-- Sap Energy Inner Glow Gradient -->
+                                    <linearGradient id="sapGlowGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                                        <stop offset="0%" stop-color="#059669"/>
+                                        <stop offset="50%" stop-color="#10b981"/>
+                                        <stop offset="100%" stop-color="#6ee7b7"/>
+                                    </linearGradient>
+
+                                    <!-- Leaf Cluster Multi-Shade Gradients -->
+                                    <radialGradient id="leafClusterGrad1" cx="40%" cy="30%" r="70%">
+                                        <stop offset="0%" stop-color="#a7f3d0"/>
+                                        <stop offset="50%" stop-color="#10b981"/>
+                                        <stop offset="100%" stop-color="#047857"/>
+                                    </radialGradient>
+
+                                    <radialGradient id="leafClusterGrad2" cx="30%" cy="30%" r="70%">
+                                        <stop offset="0%" stop-color="#6ee7b7"/>
+                                        <stop offset="60%" stop-color="#059669"/>
+                                        <stop offset="100%" stop-color="#064e3b"/>
+                                    </radialGradient>
+
+                                    <!-- Bioluminescent Soft Glow Filter -->
+                                    <filter id="realTreeGlow" x="-30%" y="-30%" width="160%" height="160%">
+                                        <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#10b981" flood-opacity="0.75"/>
+                                    </filter>
+                                </defs>
+
+                                <!-- Deep Underground Soil Mound -->
+                                <path d="M8 86 Q50 91 92 86 Q50 83 8 86 Z" fill="#1e293b" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                                <path d="M12 86 Q50 89 88 86" stroke="rgba(16,185,129,0.3)" stroke-width="2" stroke-linecap="round"/>
+
+                                <!-- Subterranean Glowing Roots (Phase 1) -->
+                                <g id="scroll-stage-roots" filter="url(#realTreeGlow)">
+                                    <path d="M50 86 Q40 92 32 96" stroke="#059669" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M50 86 Q60 92 68 96" stroke="#059669" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M50 86 Q50 94 50 98" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+                                    <!-- Seed Pod -->
+                                    <ellipse cx="50" cy="85" rx="7" ry="5" fill="#f59e0b"/>
+                                    <ellipse cx="50" cy="85" rx="4" ry="3" fill="#fbbf24"/>
+                                </g>
+
+                                <!-- Organic Curving Wood Trunk -->
+                                <path id="tree-dynamic-trunk" d="M50 86 C48 68 52 50 50 25" stroke="url(#barkGrad)" stroke-width="7" stroke-linecap="round" stroke-dasharray="85" stroke-dashoffset="85" style="transition: stroke-dashoffset 0.15s ease-out;" />
+
+                                <!-- Inner Sap Energy Glow Path -->
+                                <path id="tree-dynamic-sap" d="M50 86 C48 68 52 50 50 25" stroke="url(#sapGlowGrad)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="85" stroke-dashoffset="85" style="transition: stroke-dashoffset 0.15s ease-out;" filter="url(#realTreeGlow)" />
+
+                                <!-- Left Primary Branch & Twig -->
+                                <path id="tree-dynamic-branch-left" d="M50 62 C40 54 32 50 22 45" stroke="url(#barkGrad)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="45" stroke-dashoffset="45" style="transition: stroke-dashoffset 0.15s ease-out;" />
+                                <path id="tree-dynamic-twig-left" d="M30 52 C26 44 20 40 14 36" stroke="url(#barkGrad)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="30" stroke-dashoffset="30" style="transition: stroke-dashoffset 0.15s ease-out;" />
+
+                                <!-- Right Primary Branch & Twig -->
+                                <path id="tree-dynamic-branch-right" d="M50 52 C60 44 68 40 78 35" stroke="url(#barkGrad)" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="45" stroke-dashoffset="45" style="transition: stroke-dashoffset 0.15s ease-out;" />
+                                <path id="tree-dynamic-twig-right" d="M68 40 C74 32 80 28 86 24" stroke="url(#barkGrad)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="30" stroke-dashoffset="30" style="transition: stroke-dashoffset 0.15s ease-out;" />
+
+                                <!-- Realistic Foliage Canopy (Gently Swaying in Wind) -->
+                                <g id="tree-dynamic-foliage" class="realistic-foliage-sway" opacity="0" transform="scale(0.15)" transform-origin="50 30" style="transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);" filter="url(#realTreeGlow)">
+                                    <!-- Main Canopy Clusters -->
+                                    <circle cx="50" cy="26" r="22" fill="url(#leafClusterGrad1)"/>
+                                    <circle cx="30" cy="38" r="17" fill="url(#leafClusterGrad2)"/>
+                                    <circle cx="70" cy="38" r="17" fill="url(#leafClusterGrad1)"/>
+                                    <circle cx="50" cy="12" r="16" fill="url(#leafClusterGrad2)"/>
+                                    <circle cx="16" cy="42" r="11" fill="url(#leafClusterGrad1)"/>
+                                    <circle cx="84" cy="32" r="11" fill="url(#leafClusterGrad2)"/>
+
+                                    <!-- Leaf Vein Highlights -->
+                                    <path d="M50 16 Q45 26 40 30" stroke="#a7f3d0" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+                                    <path d="M50 16 Q55 26 60 30" stroke="#a7f3d0" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+
+                                    <!-- Glowing Bioluminescent Energy Fruits -->
+                                    <circle cx="36" cy="26" r="4.5" fill="#f43f5e"/>
+                                    <circle cx="36" cy="26" r="2" fill="#ffe4e6"/>
+                                    <circle cx="64" cy="30" r="4.5" fill="#fbbf24"/>
+                                    <circle cx="64" cy="30" r="2" fill="#fef3c7"/>
+                                    <circle cx="50" cy="14" r="5" fill="#a855f7"/>
+                                    <circle cx="50" cy="14" r="2.5" fill="#f3e8ff"/>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <!-- Phase Indicator Text (NO EMOJIS) -->
+                        <div style="display: flex; flex-direction: column; gap: 4px; width: 100%;">
+                            <span id="scroll-tree-phase-badge" style="font-size: 0.85rem; font-weight: 800; color: #f59e0b; text-transform: uppercase; letter-spacing: 0.06em;">
+                                Phase 1: Seedling Stage
+                            </span>
+                            <span id="scroll-tree-phase-desc" style="font-size: 0.78rem; color: #94a3b8; line-height: 1.4;">
+                                Subterranean seed forming root system in soil
+                            </span>
+                        </div>
+
+                        <!-- Growth Fill Progress Bar -->
+                        <div style="position: relative; width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; margin-top: 2px;">
+                            <div id="scroll-tree-progress-bar" style="height: 100%; width: 5%; background: linear-gradient(to right, #10b981, #3b82f6, #a855f7); border-radius: 4px; transition: width 0.15s ease-out; box-shadow: 0 0 12px rgba(16,185,129,0.9);"></div>
+                        </div>
+                    </div>
                 </div>
             `;
 
             // Attach checkbox change handlers
             stagesContainer.querySelectorAll('.roadmap-topic-check').forEach(cb => {
-                cb.addEventListener('change', updateRoadmapProgressStats);
+                cb.addEventListener('change', () => {
+                    const label = cb.closest('label');
+                    if (cb.checked) {
+                        label.style.background = 'rgba(139, 92, 246, 0.2)';
+                        label.style.borderColor = 'rgba(139, 92, 246, 0.6)';
+                        label.style.color = '#ffffff';
+                    } else {
+                        label.style.background = 'rgba(255,255,255,0.04)';
+                        label.style.borderColor = 'rgba(255,255,255,0.1)';
+                        label.style.color = '#e2e8f0';
+                    }
+                    updateRoadmapProgressStats();
+                });
             });
+
+            // Scroll observer to illuminate timeline line & grow tree visualizer continuously as you scroll down
+            const handleTimelineScroll = () => {
+                const treeEl = stagesContainer.querySelector('.roadmap-timeline-tree');
+                const laserLine = document.getElementById('timeline-laser-spine');
+                if (!treeEl) return;
+
+                const rect = treeEl.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+
+                const startPos = windowHeight * 0.75;
+                const totalDist = rect.height || 1;
+                const currentDist = startPos - rect.top;
+                let progress = Math.max(0.05, Math.min(1, currentDist / totalDist));
+
+                if (laserLine) laserLine.style.height = `${progress * 100}%`;
+
+                // Update Sticky Right Side Photorealistic Botanical Tree Growth SVG
+                const trunk = document.getElementById('tree-dynamic-trunk');
+                const sap = document.getElementById('tree-dynamic-sap');
+                const branchL = document.getElementById('tree-dynamic-branch-left');
+                const twigL = document.getElementById('tree-dynamic-twig-left');
+                const branchR = document.getElementById('tree-dynamic-branch-right');
+                const twigR = document.getElementById('tree-dynamic-twig-right');
+                const foliage = document.getElementById('tree-dynamic-foliage');
+                const roots = document.getElementById('scroll-stage-roots');
+                const phaseBadge = document.getElementById('scroll-tree-phase-badge');
+                const phaseDesc = document.getElementById('scroll-tree-phase-desc');
+                const progressBar = document.getElementById('scroll-tree-progress-bar');
+
+                if (progressBar) progressBar.style.width = `${Math.round(progress * 100)}%`;
+
+                // Trunk & Inner Sap Core growth (offset 85 down to 0)
+                if (trunk) {
+                    const trunkOffset = Math.max(0, 85 - (progress * 85));
+                    trunk.style.strokeDashoffset = trunkOffset;
+                }
+                if (sap) {
+                    const sapOffset = Math.max(0, 85 - (progress * 85));
+                    sap.style.strokeDashoffset = sapOffset;
+                }
+
+                // Primary Branches growth
+                if (branchL) {
+                    const lOffset = progress >= 0.2 ? Math.max(0, 45 - ((progress - 0.2) * 90)) : 45;
+                    branchL.style.strokeDashoffset = lOffset;
+                }
+                if (twigL) {
+                    const twLOffset = progress >= 0.35 ? Math.max(0, 30 - ((progress - 0.35) * 80)) : 30;
+                    twigL.style.strokeDashoffset = twLOffset;
+                }
+                if (branchR) {
+                    const rOffset = progress >= 0.3 ? Math.max(0, 45 - ((progress - 0.3) * 90)) : 45;
+                    branchR.style.strokeDashoffset = rOffset;
+                }
+                if (twigR) {
+                    const twROffset = progress >= 0.45 ? Math.max(0, 30 - ((progress - 0.45) * 80)) : 30;
+                    twigR.style.strokeDashoffset = twROffset;
+                }
+
+                // Foliage Canopy Bloom & Sway (scale & fade in at progress >= 0.5)
+                if (foliage) {
+                    if (progress >= 0.5) {
+                        const folScale = 0.2 + ((progress - 0.5) * 1.6); // 0.2 -> 1.0
+                        const folOpacity = Math.min(1, (progress - 0.5) * 2.2);
+                        foliage.style.opacity = folOpacity;
+                        foliage.style.transform = `scale(${folScale})`;
+                    } else {
+                        foliage.style.opacity = 0;
+                        foliage.style.transform = 'scale(0.15)';
+                    }
+                }
+
+                // Underground Seed Roots glow intensity
+                if (roots) {
+                    roots.style.opacity = progress > 0.4 ? Math.max(0.4, 1 - (progress - 0.4) * 1.2) : 1;
+                }
+
+                // Update Phase Text (No emojis)
+                if (phaseBadge && phaseDesc) {
+                    if (progress < 0.25) {
+                        phaseBadge.textContent = 'Phase 1: Seedling Stage';
+                        phaseBadge.style.color = '#f59e0b';
+                        phaseDesc.textContent = 'Subterranean seed forming root system in soil';
+                    } else if (progress < 0.50) {
+                        phaseBadge.textContent = 'Phase 2: Sprouting Stage';
+                        phaseBadge.style.color = '#34d399';
+                        phaseDesc.textContent = 'Stem breaking through soil with fresh green shoots';
+                    } else if (progress < 0.75) {
+                        phaseBadge.textContent = 'Phase 3: Branching Stage';
+                        phaseBadge.style.color = '#38bdf8';
+                        phaseDesc.textContent = 'Expanding sturdy wood branches & leaf canopy';
+                    } else {
+                        phaseBadge.textContent = 'Phase 4: Full Bloom Tree';
+                        phaseBadge.style.color = '#a7f3d0';
+                        phaseDesc.textContent = 'Majestic career tree fully bloomed with glowing fruits';
+                    }
+                }
+
+                // Activate bullet markers on scroll
+                const nodes = treeEl.querySelectorAll('.timeline-tree-node');
+                nodes.forEach(node => {
+                    const nodeRect = node.getBoundingClientRect();
+                    const bullet = node.querySelector('.timeline-bullet-marker');
+                    if (bullet) {
+                        if (nodeRect.top <= windowHeight * 0.75) {
+                            bullet.classList.add('active-node');
+                        } else {
+                            bullet.classList.remove('active-node');
+                        }
+                    }
+                });
+            };
+
+            window.addEventListener('scroll', handleTimelineScroll);
+            setTimeout(handleTimelineScroll, 100);
         }
 
         // Initialize progress and stats to 0
