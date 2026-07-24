@@ -3114,8 +3114,12 @@ def send_welcome_email():
 def index():
     return redirect("/login-page")
 
-@app.route("/dashboard")
-def dashboard():
+@app.route("/login-page", endpoint="login_page_route")
+def serve_login_page():
+    return app.send_static_file("login.html")
+
+@app.route("/dashboard", endpoint="dashboard_route")
+def serve_dashboard():
     return app.send_static_file("index.html")
 
 @app.after_request

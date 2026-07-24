@@ -3715,8 +3715,8 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (targetViewId === 'view-analytics') {
             renderAnalyticsCharts();
             initProfileMilestones();
-        } else if (targetViewId === 'view-projects') {
-            loadProjects();
+        } else if (targetViewId === 'view-roadmaps') {
+            renderDashboardRoadmap();
         } else if (targetViewId === 'view-settings') {
             initProfileMilestones();
             loadCodingProfiles();
@@ -3737,7 +3737,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Dashboard Buttons Action Link
+    // Dashboard & Roadmaps View Actions
     const btnDashboardResume = document.getElementById('dashboard-improve-resume-btn');
     if (btnDashboardResume) {
         btnDashboardResume.addEventListener('click', () => {
