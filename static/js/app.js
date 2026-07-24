@@ -3783,10 +3783,10 @@ document.addEventListener('DOMContentLoaded', () => {
             openingsText: '125,000+ Active Roles',
             salaryText: '₹8 – 24 LPA',
             stages: [
-                { title: '🌱 Stage 1: Foundations', items: ['HTML5 & Semantic Markup', 'CSS3, Flexbox & Responsive Layouts', 'Modern JavaScript (ES6+) & DOM Manipulation', 'Git & GitHub Version Control'] },
-                { title: '🔥 Stage 2: Core Tools', items: ['React.js / Next.js Framework & State Management', 'Node.js & Express RESTful API Development', 'PostgreSQL / Supabase Database Architecture', 'Tailwind CSS Component Systems'] },
-                { title: '🚀 Stage 3: Advanced', items: ['System Design & Scalable Microservices', 'Redis In-Memory Caching', 'CI/CD Automated Deployment Pipelines', 'Docker & Cloud Containerization'] },
-                { title: '🛠️ Stage 4: Portfolio Projects', items: ['SaaS Analytics Dashboard Application', 'Real-Time Collaboration Platform', 'E-Commerce Platform with Payment Gateway'] }
+                { title: 'Stage 1: Foundations', items: ['HTML5 & Semantic Markup', 'CSS3, Flexbox & Responsive Layouts', 'Modern JavaScript (ES6+) & DOM Manipulation', 'Git & GitHub Version Control'] },
+                { title: 'Stage 2: Core Tools', items: ['React.js / Next.js Framework & State Management', 'Node.js & Express RESTful API Development', 'PostgreSQL / Supabase Database Architecture', 'Tailwind CSS Component Systems'] },
+                { title: 'Stage 3: Advanced', items: ['System Design & Scalable Microservices', 'Redis In-Memory Caching', 'CI/CD Automated Deployment Pipelines', 'Docker & Cloud Containerization'] },
+                { title: 'Stage 4: Portfolio Projects', items: ['SaaS Analytics Dashboard Application', 'Real-Time Collaboration Platform', 'E-Commerce Platform with Payment Gateway'] }
             ]
         },
         'aiml': {
@@ -3803,10 +3803,10 @@ document.addEventListener('DOMContentLoaded', () => {
             openingsText: '85,000+ Active Roles',
             salaryText: '₹12 – 35 LPA',
             stages: [
-                { title: '🌱 Stage 1: Foundations', items: ['Python Syntax, Data Structures & OOP', 'Linear Algebra, Probability & Calculus', 'Pandas & NumPy for Data Engineering', 'Data Visualization with Matplotlib & Seaborn'] },
-                { title: '🔥 Stage 2: Core Tools', items: ['Scikit-Learn Machine Learning Algorithms', 'Deep Learning Architectures with PyTorch', 'Computer Vision Fundamentals using OpenCV', 'NLP & HuggingFace Transformer Models'] },
-                { title: '🚀 Stage 3: Advanced', items: ['Large Language Models (LLMs) & Prompting', 'RAG Architecture (Retrieval-Augmented)', 'Vector Databases (Pinecone, ChromaDB)', 'MLOps & FastAPI Model Deployment'] },
-                { title: '🛠️ Stage 4: Portfolio Projects', items: ['AI Document Summarizer & Q&A Assistant', 'Fine-Tuned Code Generation Bot', 'Real-Time Vision Tracking System'] }
+                { title: 'Stage 1: Foundations', items: ['Python Syntax, Data Structures & OOP', 'Linear Algebra, Probability & Calculus', 'Pandas & NumPy for Data Engineering', 'Data Visualization with Matplotlib & Seaborn'] },
+                { title: 'Stage 2: Core Tools', items: ['Scikit-Learn Machine Learning Algorithms', 'Deep Learning Architectures with PyTorch', 'Computer Vision Fundamentals using OpenCV', 'NLP & HuggingFace Transformer Models'] },
+                { title: 'Stage 3: Advanced', items: ['Large Language Models (LLMs) & Prompting', 'RAG Architecture (Retrieval-Augmented)', 'Vector Databases (Pinecone, ChromaDB)', 'MLOps & FastAPI Model Deployment'] },
+                { title: 'Stage 4: Portfolio Projects', items: ['AI Document Summarizer & Q&A Assistant', 'Fine-Tuned Code Generation Bot', 'Real-Time Vision Tracking System'] }
             ]
         },
         'data-analyst': {
@@ -3823,10 +3823,10 @@ document.addEventListener('DOMContentLoaded', () => {
             openingsText: '95,000+ Active Roles',
             salaryText: '₹6 – 18 LPA',
             stages: [
-                { title: '🌱 Stage 1: Foundations', items: ['Excel Advanced Formulas & Pivot Tables', 'SQL Core Queries, Aggregations & Joins', 'Data Cleaning & Preprocessing Best Practices'] },
-                { title: '🔥 Stage 2: Core Tools', items: ['Python for Data Analysis (Pandas & NumPy)', 'Exploratory Data Analysis (EDA)', 'Interactive Dashboards in Power BI & Tableau', 'Descriptive & Inferential Statistics'] },
-                { title: '🚀 Stage 3: Advanced', items: ['Hypothesis Testing & Statistical Inference', 'A/B Testing Analysis & Growth Metrics', 'Automated ETL Data Extraction Pipelines'] },
-                { title: '🛠️ Stage 4: Portfolio Projects', items: ['Company Revenue & Growth Dashboard', 'User Churn & Cohort Analysis', 'E-Commerce A/B Test Impact Study'] }
+                { title: 'Stage 1: Foundations', items: ['Excel Advanced Formulas & Pivot Tables', 'SQL Core Queries, Aggregations & Joins', 'Data Cleaning & Preprocessing Best Practices'] },
+                { title: 'Stage 2: Core Tools', items: ['Python for Data Analysis (Pandas & NumPy)', 'Exploratory Data Analysis (EDA)', 'Interactive Dashboards in Power BI & Tableau', 'Descriptive & Inferential Statistics'] },
+                { title: 'Stage 3: Advanced', items: ['Hypothesis Testing & Statistical Inference', 'A/B Testing Analysis & Growth Metrics', 'Automated ETL Data Extraction Pipelines'] },
+                { title: 'Stage 4: Portfolio Projects', items: ['Company Revenue & Growth Dashboard', 'User Churn & Cohort Analysis', 'E-Commerce A/B Test Impact Study'] }
             ]
         },
         'data-scientist': {
@@ -3843,10 +3843,10 @@ document.addEventListener('DOMContentLoaded', () => {
             openingsText: '70,000+ Active Roles',
             salaryText: '₹10 – 30 LPA',
             stages: [
-                { title: '🌱 Stage 1: Foundations', items: ['Python Scientific Computing', 'Multivariable Calculus & Linear Algebra', 'Probability Distributions & Foundations', 'Advanced SQL Window Functions'] },
-                { title: '🔥 Stage 2: Core Tools', items: ['Feature Engineering & Selection', 'Supervised & Unsupervised Machine Learning', 'Ensemble Methods (XGBoost / RandomForest)', 'Cross-Validation & Metric Tuning'] },
-                { title: '🚀 Stage 3: Advanced', items: ['Deep Learning (CNNs, Transformers)', 'Time Series Forecasting & Anomaly Detection', 'Big Data Processing with Apache Spark', 'Model Interpretability (SHAP & LIME)'] },
-                { title: '🛠️ Stage 4: Portfolio Projects', items: ['Predictive Maintenance ML Pipeline', 'Credit Risk & Default Classifier', 'Customer Lifetime Value Engine'] }
+                { title: 'Stage 1: Foundations', items: ['Python Scientific Computing', 'Multivariable Calculus & Linear Algebra', 'Probability Distributions & Foundations', 'Advanced SQL Window Functions'] },
+                { title: 'Stage 2: Core Tools', items: ['Feature Engineering & Selection', 'Supervised & Unsupervised Machine Learning', 'Ensemble Methods (XGBoost / RandomForest)', 'Cross-Validation & Metric Tuning'] },
+                { title: 'Stage 3: Advanced', items: ['Deep Learning (CNNs, Transformers)', 'Time Series Forecasting & Anomaly Detection', 'Big Data Processing with Apache Spark', 'Model Interpretability (SHAP & LIME)'] },
+                { title: 'Stage 4: Portfolio Projects', items: ['Predictive Maintenance ML Pipeline', 'Credit Risk & Default Classifier', 'Customer Lifetime Value Engine'] }
             ]
         },
         'devops': {
@@ -3863,10 +3863,10 @@ document.addEventListener('DOMContentLoaded', () => {
             openingsText: '80,000+ Active Roles',
             salaryText: '₹9 – 28 LPA',
             stages: [
-                { title: '🌱 Stage 1: Foundations', items: ['Linux Administration & Shell Scripting', 'Git Version Control & Branching', 'Networking Protocols (TCP/IP, DNS, SSL)'] },
-                { title: '🔥 Stage 2: Core Tools', items: ['Docker Containerization & Multi-Stage Builds', 'CI/CD Pipelines (GitHub Actions)', 'Cloud Infrastructure (AWS / GCP)', 'Infrastructure as Code with Terraform'] },
-                { title: '🚀 Stage 3: Advanced', items: ['Kubernetes Orchestration & Helm Charts', 'Service Mesh Architecture (Istio)', 'Prometheus & Grafana Observability', 'Cloud Security & IAM Automation'] },
-                { title: '🛠️ Stage 4: Portfolio Projects', items: ['Automated Multi-Stage CI/CD Pipeline', 'Production Kubernetes Microservices Cluster', 'Terraform AWS Infrastructure'] }
+                { title: 'Stage 1: Foundations', items: ['Linux Administration & Shell Scripting', 'Git Version Control & Branching', 'Networking Protocols (TCP/IP, DNS, SSL)'] },
+                { title: 'Stage 2: Core Tools', items: ['Docker Containerization & Multi-Stage Builds', 'CI/CD Pipelines (GitHub Actions)', 'Cloud Infrastructure (AWS / GCP)', 'Infrastructure as Code with Terraform'] },
+                { title: 'Stage 3: Advanced', items: ['Kubernetes Orchestration & Helm Charts', 'Service Mesh Architecture (Istio)', 'Prometheus & Grafana Observability', 'Cloud Security & IAM Automation'] },
+                { title: 'Stage 4: Portfolio Projects', items: ['Automated Multi-Stage CI/CD Pipeline', 'Production Kubernetes Microservices Cluster', 'Terraform AWS Infrastructure'] }
             ]
         },
         'cybersecurity': {
@@ -3883,10 +3883,10 @@ document.addEventListener('DOMContentLoaded', () => {
             openingsText: '65,000+ Active Roles',
             salaryText: '₹10 – 32 LPA',
             stages: [
-                { title: '🌱 Stage 1: Foundations', items: ['Network Packet Analysis (Wireshark)', 'Linux & Windows System Hardening', 'Cryptography Concepts & Hashing', 'Python for Security Automation'] },
-                { title: '🔥 Stage 2: Core Tools', items: ['Ethical Hacking & Penetration Testing', 'OWASP Top 10 Web Vulnerabilities', 'SIEM Log Monitoring & Analysis', 'Firewalls & Network Segmentation'] },
-                { title: '🚀 Stage 3: Advanced', items: ['Incident Response & Digital Forensics', 'Cloud Security Architecture (AWS)', 'Malware Analysis & Reverse Engineering', 'Zero Trust Architecture & IAM'] },
-                { title: '🛠️ Stage 4: Portfolio Projects', items: ['Web Application Vulnerability Audit', 'Automated Security Scanner Tool', 'SOC SIEM Log Detection Pipeline'] }
+                { title: 'Stage 1: Foundations', items: ['Network Packet Analysis (Wireshark)', 'Linux & Windows System Hardening', 'Cryptography Concepts & Hashing', 'Python for Security Automation'] },
+                { title: 'Stage 2: Core Tools', items: ['Ethical Hacking & Penetration Testing', 'OWASP Top 10 Web Vulnerabilities', 'SIEM Log Monitoring & Analysis', 'Firewalls & Network Segmentation'] },
+                { title: 'Stage 3: Advanced', items: ['Incident Response & Digital Forensics', 'Cloud Security Architecture (AWS)', 'Malware Analysis & Reverse Engineering', 'Zero Trust Architecture & IAM'] },
+                { title: 'Stage 4: Portfolio Projects', items: ['Web Application Vulnerability Audit', 'Automated Security Scanner Tool', 'SOC SIEM Log Detection Pipeline'] }
             ]
         }
     };
