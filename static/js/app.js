@@ -701,6 +701,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateCommandCenter();
             };
         }
+
+        // Start automatic watch progress and auto-completion timers immediately
+        startWatchTimers();
     };
 
     const onYTPlayerReady = (event) => {
@@ -773,17 +776,22 @@ document.addEventListener('DOMContentLoaded', () => {
         stopWatchTimers();
 
         antiCheatTimer = setInterval(() => {
-            if (!ytPlayer || typeof ytPlayer.getCurrentTime !== 'function') return;
-            const curr = ytPlayer.getCurrentTime() || 0;
-            const dur = (typeof ytPlayer.getDuration === 'function') ? (ytPlayer.getDuration() || 0) : 0;
+            if (!currentPlaylist || !currentPlaylist.videos[currentVideoIndex]) return;
 
-            if (lastPlayerTime > 0) {
-                const delta = curr - lastPlayerTime;
-                if (delta > 0 && delta <= 2.5) {
-                    watchedSecondsCounter += delta;
-                }
+            let curr = 0;
+            let dur = 300; // default 5 minutes estimate
+
+            if (ytPlayer && typeof ytPlayer.getCurrentTime === 'function') {
+                try {
+                    curr = ytPlayer.getCurrentTime() || 0;
+                    dur = ytPlayer.getDuration() || 300;
+                } catch(e){}
             }
-            lastPlayerTime = curr;
+
+            watchedSecondsCounter += 1;
+            if (curr === 0) {
+                curr = watchedSecondsCounter;
+            }
 
             updateLiveProgressUI(curr, dur);
             checkAutoCompletion(curr, dur);
