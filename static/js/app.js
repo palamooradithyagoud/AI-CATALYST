@@ -619,10 +619,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const resumeOverlay = document.getElementById('player-resume-overlay');
         if (resumeOverlay) resumeOverlay.style.display = 'none';
 
-        const vidTitle = document.getElementById('player-current-video-title');
-        const vidDesc = document.getElementById('player-current-video-desc');
+        const vidTitle = document.getElementById('player-video-title') || document.getElementById('player-current-video-title');
+        const vidChannel = document.getElementById('player-channel-name') || document.getElementById('player-current-video-desc');
         if (vidTitle) vidTitle.textContent = `${video.displayNum || (currentVideoIndex + 1)}. ${video.title}`;
-        if (vidDesc) vidDesc.textContent = `Part of ${currentPlaylist.title} by ${currentPlaylist.channel}`;
+        if (vidChannel) vidChannel.textContent = `${currentPlaylist.channel || 'YouTube'} • ${currentPlaylist.skill || 'Course'}`;
 
         renderPlayerHeader();
         renderPlayerSidebar();

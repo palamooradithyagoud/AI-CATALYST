@@ -784,6 +784,16 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Right Column: Course Playlist Video Sidebar (Playlist Queue) -->
+                    <div class="player-sidebar-column" style="background:var(--bg-card); border:1px solid var(--border); border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:16px; max-height:750px; overflow-y:auto;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:14px;">
+                            <h3 style="font-family:'Outfit',sans-serif; font-size:1.05rem; font-weight:700; margin:0; color:var(--text-main);">Course Content</h3>
+                            <span id="player-sidebar-count-badge" style="background:var(--primary-light); color:var(--primary); font-size:0.75rem; font-weight:700; padding:4px 10px; border-radius:99px;">0 Videos</span>
+                        </div>
+                        <div id="player-sidebar-video-list" style="display:flex; flex-direction:column; gap:10px;"></div>
+                    </div>
+                </div>
             </section>
 
             <!-- VIEW: Practice (LeetCode Command Center) -->
