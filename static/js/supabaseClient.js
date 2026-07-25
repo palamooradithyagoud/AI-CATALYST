@@ -30,9 +30,17 @@ function getStoredAccessToken() {
             if (raw) {
                 const parsed = JSON.parse(raw);
                 const token = parsed.access_token || parsed?.currentSession?.access_token;
+                const expiresAt = parsed.expires_at || parsed?.currentSession?.expires_at || (nowSec + 3600);
+                
+                // If expired, return null to trigger auto-refresh
+                if (nowSec >= (expiresAt - 60)) {
+                    cachedAccessToken = null;
+                    cachedTokenExpiry = 0;
+                    return null;
+                }
                 if (token) {
                     cachedAccessToken = token;
-                    cachedTokenExpiry = parsed.expires_at || (nowSec + 3600);
+                    cachedTokenExpiry = expiresAt;
                     return token;
                 }
             }
@@ -41,36 +49,44 @@ function getStoredAccessToken() {
     return null;
 }
 
-// Intercept all fetch requests to inject Supabase JWT
+// Intercept all fetch requests to inject valid Supabase JWT
 const originalFetch = window.fetch;
 window.fetch = async function (url, options = {}) {
-    // Only attempt to attach auth headers if request is for our app backend and not config/login
-    if (!url.includes('/config') && !url.includes('/login-page')) {
-        const token = getStoredAccessToken();
-        
-        // Fast path: use valid token immediately
+    const urlStr = typeof url === 'string' ? url : (url?.url || '');
+    const isAppEndpoint = (urlStr.startsWith('/') || urlStr.includes(window.location.origin)) && !urlStr.includes('/config') && !urlStr.includes('/login-page');
+    
+    if (isAppEndpoint) {
+        let token = getStoredAccessToken();
+        if (!token && window.supabaseClient) {
+            try {
+                const { data } = await window.supabaseClient.auth.getSession();
+                if (data?.session) {
+                    updateTokenCache(data.session);
+                    token = cachedAccessToken;
+                }
+            } catch (e) {}
+        }
         if (token) {
             options.headers = {
                 ...options.headers,
                 'Authorization': `Bearer ${token}`
             };
-        } else if (window.supabaseClient) {
-            // Token expired or not cached yet: fetch session and update cache
-            try {
-                const { data } = await window.supabaseClient.auth.getSession();
-                updateTokenCache(data?.session);
-                if (cachedAccessToken) {
-                    options.headers = {
-                        ...options.headers,
-                        'Authorization': `Bearer ${cachedAccessToken}`
-                    };
-                }
-            } catch (e) {
-                console.error("[AUTH] Failed to attach auth headers:", e);
-            }
         }
     }
-    return originalFetch(url, options);
+    
+    const response = await originalFetch(url, options);
+    
+    // Auto-refresh token if 401 returned from Supabase
+    if (response.status === 401 && window.supabaseClient) {
+        try {
+            const { data } = await window.supabaseClient.auth.refreshSession();
+            if (data?.session) {
+                updateTokenCache(data.session);
+            }
+        } catch (e) {}
+    }
+    
+    return response;
 };
 
 class DatabaseService {

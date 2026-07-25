@@ -628,93 +628,36 @@ document.addEventListener('DOMContentLoaded', () => {
         renderPlayerSidebar();
 
         let ytId = video.videoId || extractYouTubeVideoId(video.url || '');
-        let playlistId = extractYouTubePlaylistId(currentPlaylist.url || video.url || '');
+        if (!ytId) {
+            ytId = extractYouTubeVideoId(currentPlaylist.url || '');
+        }
         const fallbackId = getFallbackVideoId(currentPlaylist.skill || currentSkill || currentPlaylist.title, video.title);
+        const finalYtId = ytId || fallbackId;
 
-        if (!ytId && !playlistId) {
-            ytId = fallbackId;
+        // Update External Watch link button if present
+        const externalLinkBtn = document.getElementById('player-youtube-external-link');
+        if (externalLinkBtn) {
+            externalLinkBtn.href = video.url || `https://www.youtube.com/watch?v=${finalYtId}`;
         }
 
-        if (ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
-            try {
-                if (ytId) {
-                    ytPlayer.loadVideoById({ videoId: ytId });
-                } else if (playlistId && typeof ytPlayer.loadPlaylist === 'function') {
-                    ytPlayer.loadPlaylist({
-                        listType: 'playlist',
-                        list: playlistId,
-                        index: currentVideoIndex
-                    });
-                } else {
-                    ytPlayer.loadVideoById({ videoId: fallbackId });
-                }
-            } catch(e) {
-                console.error("YT Player load failed:", e);
-            }
-        } else if (window.YT && window.YT.Player) {
-            try {
-                const playerVars = {
-                    autoplay: 1,
-                    modestbranding: 1,
-                    rel: 0
-                };
-                
-                let initConfig = {
-                    height: '100%',
-                    width: '100%',
-                    playerVars: playerVars,
-                    events: {
-                        onReady: onYTPlayerReady,
-                        onStateChange: onYTPlayerStateChange
-                    }
-                };
+        const playerAnchor = document.getElementById('yt-player-anchor');
 
-                if (ytId) {
-                    initConfig.videoId = ytId;
-                } else if (playlistId) {
-                    playerVars.listType = 'playlist';
-                    playerVars.list = playlistId;
-                    playerVars.index = currentVideoIndex;
-                } else {
-                    initConfig.videoId = fallbackId;
-                }
+        if (playerAnchor) {
+            const embedSrc = `https://www.youtube.com/embed/${finalYtId}?rel=0&modestbranding=1`;
 
-                ytPlayer = new YT.Player('yt-player-anchor', initConfig);
-            } catch(e) {
-                console.error("YT.Player init failed:", e);
-            }
-        } else {
-            window.onYouTubeIframeAPIReady = () => {
-                try {
-                    const playerVars = {
-                        autoplay: 1,
-                        modestbranding: 1,
-                        rel: 0
-                    };
-                    
-                    let initConfig = {
-                        height: '100%',
-                        width: '100%',
-                        playerVars: playerVars,
-                        events: {
-                            onReady: onYTPlayerReady,
-                            onStateChange: onYTPlayerStateChange
-                        }
-                    };
-
-                    if (ytId) {
-                        initConfig.videoId = ytId;
-                    } else if (playlistId) {
-                        playerVars.listType = 'playlist';
-                        playerVars.list = playlistId;
-                        playerVars.index = currentVideoIndex;
-                    } else {
-                        initConfig.videoId = fallbackId;
-                    }
-
-                    ytPlayer = new YT.Player('yt-player-anchor', initConfig);
-                } catch(e) {}
-            };
+            playerAnchor.innerHTML = `
+                <iframe 
+                    width="100%" 
+                    height="480" 
+                    src="${embedSrc}" 
+                    title="${escapeHTML(video.title)}" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" 
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen 
+                    style="border:0; width:100%; height:100%; min-height:480px; display:block; border-radius:16px;"
+                ></iframe>
+            `;
         }
     };
 
