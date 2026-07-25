@@ -91,6 +91,37 @@
             50% { transform: scale(1.25); filter: drop-shadow(0 0 12px rgba(255,255,255,1)); }
         }
 
+        /* Photorealistic Python Snake Growth Animations */
+        @keyframes tongueFlicker {
+            0%, 100% { transform: scaleX(1); opacity: 1; }
+            50% { transform: scaleX(1.4) translateY(-1px); opacity: 0.85; }
+        }
+
+        @keyframes snakeSlitherBreathe {
+            0%, 100% { transform: scale(1) rotate(0deg); filter: drop-shadow(0 4px 15px rgba(245, 158, 11, 0.6)); }
+            50% { transform: scale(1.04) rotate(1.5deg); filter: drop-shadow(0 6px 24px rgba(16, 185, 129, 0.8)); }
+        }
+
+        @keyframes eggPulseGlow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(245,158,11,0.6)); }
+            50% { transform: scale(1.03); filter: drop-shadow(0 0 25px rgba(245,158,11,0.95)) drop-shadow(0 0 40px rgba(16,185,129,0.7)); }
+        }
+
+        .python-tongue-flicker {
+            transform-origin: left center;
+            animation: tongueFlicker 0.75s ease-in-out infinite;
+        }
+
+        .python-slither-breathe {
+            transform-origin: center center;
+            animation: snakeSlitherBreathe 3.5s ease-in-out infinite;
+        }
+
+        .python-egg-pulse {
+            transform-origin: center center;
+            animation: eggPulseGlow 2.5s ease-in-out infinite;
+        }
+
         .botanical-card-aura {
             animation: cardAuraGlow 6s ease-in-out infinite;
         }
@@ -1357,6 +1388,106 @@
                             <div style="display: flex; flex-direction: column; gap: 4px;">
                                 <strong style="font-family:'Outfit',sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text-main);">6. Cybersecurity</strong>
                                 <span style="font-size: 0.8rem; color: var(--text-sub); line-height: 1.4;">Ethical Hacking, Network Security, SIEM & Audit</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Skill Roadmaps Section -->
+                    <div style="margin-top: 44px; margin-bottom: 24px;">
+                        <div>
+                            <h2 style="font-family:'Outfit',sans-serif; font-weight:800; font-size:1.6rem; display:flex; align-items:center; gap:10px;">
+                                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="var(--primary)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Skill Roadmaps
+                            </h2>
+                            <p class="welcome-subtitle">Select a core technical skill below to open its dedicated learning path.</p>
+                        </div>
+                    </div>
+
+                    <div class="roadmap-roles-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                        <!-- 1. Frontend Development -->
+                        <button class="card roadmap-role-btn" data-role="frontend" style="padding: 20px; text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); cursor: pointer; transition: all 0.25s var(--smooth); display: flex; align-items: flex-start; gap: 14px;">
+                            <div style="background: rgba(59, 130, 246, 0.12); border: 1px solid rgba(59, 130, 246, 0.3); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <strong style="font-family:'Outfit',sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text-main);">1. Frontend Development</strong>
+                                <span style="font-size: 0.8rem; color: var(--text-sub); line-height: 1.4;">HTML, CSS, Modern JS, React, Next.js & Performance</span>
+                            </div>
+                        </button>
+
+                        <!-- 2. Backend Development -->
+                        <button class="card roadmap-role-btn" data-role="backend" style="padding: 20px; text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); cursor: pointer; transition: all 0.25s var(--smooth); display: flex; align-items: flex-start; gap: 14px;">
+                            <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <strong style="font-family:'Outfit',sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text-main);">2. Backend Development</strong>
+                                <span style="font-size: 0.8rem; color: var(--text-sub); line-height: 1.4;">Node.js, Express, Databases, APIs & Security</span>
+                            </div>
+                        </button>
+
+                        <!-- 3. Python Mastery -->
+                        <button class="card roadmap-role-btn" data-role="python-dev" style="padding: 20px; text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); cursor: pointer; transition: all 0.25s var(--smooth); display: flex; align-items: flex-start; gap: 14px;">
+                            <div style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <strong style="font-family:'Outfit',sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text-main);">3. Python Mastery</strong>
+                                <span style="font-size: 0.8rem; color: var(--text-sub); line-height: 1.4;">Syntax, OOP, FastAPI, Django, AsyncIO & PyTest</span>
+                            </div>
+                        </button>
+
+                        <!-- 4. Java & Spring Boot -->
+                        <button class="card roadmap-role-btn" data-role="java-dev" style="padding: 20px; text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); cursor: pointer; transition: all 0.25s var(--smooth); display: flex; align-items: flex-start; gap: 14px;">
+                            <div style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <strong style="font-family:'Outfit',sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text-main);">4. Java & Spring Boot</strong>
+                                <span style="font-size: 0.8rem; color: var(--text-sub); line-height: 1.4;">OOP Core, Spring Framework, Microservices & Hibernate</span>
+                            </div>
+                        </button>
+
+                        <!-- 5. React & Next.js -->
+                        <button class="card roadmap-role-btn" data-role="react-dev" style="padding: 20px; text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); cursor: pointer; transition: all 0.25s var(--smooth); display: flex; align-items: flex-start; gap: 14px;">
+                            <div style="background: rgba(6, 182, 212, 0.12); border: 1px solid rgba(6, 182, 212, 0.3); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/></svg>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <strong style="font-family:'Outfit',sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text-main);">5. React & Next.js</strong>
+                                <span style="font-size: 0.8rem; color: var(--text-sub); line-height: 1.4;">Hooks, Context, Redux Toolkit, SSR & Next.js App Router</span>
+                            </div>
+                        </button>
+
+                        <!-- 6. System Design & Architecture -->
+                        <button class="card roadmap-role-btn" data-role="system-design" style="padding: 20px; text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); cursor: pointer; transition: all 0.25s var(--smooth); display: flex; align-items: flex-start; gap: 14px;">
+                            <div style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M10 6h4"/><path d="M6 10v4"/><path d="M14 17.5h-4"/><path d="M18 10v4"/></svg>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <strong style="font-family:'Outfit',sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text-main);">6. System Design & Architecture</strong>
+                                <span style="font-size: 0.8rem; color: var(--text-sub); line-height: 1.4;">Scalability, Caching, Load Balancers, Kafka & Microservices</span>
+                            </div>
+                        </button>
+
+                        <!-- 7. Data Engineering -->
+                        <button class="card roadmap-role-btn" data-role="data-engineering" style="padding: 20px; text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); cursor: pointer; transition: all 0.25s var(--smooth); display: flex; align-items: flex-start; gap: 14px;">
+                            <div style="background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.3); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <strong style="font-family:'Outfit',sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text-main);">7. Data Engineering</strong>
+                                <span style="font-size: 0.8rem; color: var(--text-sub); line-height: 1.4;">ETL Pipelines, PySpark, Airflow, Snowflake & Data Lakes</span>
+                            </div>
+                        </button>
+
+                        <!-- 8. Mobile App Development -->
+                        <button class="card roadmap-role-btn" data-role="mobile-dev" style="padding: 20px; text-align: left; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); cursor: pointer; transition: all 0.25s var(--smooth); display: flex; align-items: flex-start; gap: 14px;">
+                            <div style="background: rgba(236, 72, 153, 0.12); border: 1px solid rgba(236, 72, 153, 0.3); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <strong style="font-family:'Outfit',sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text-main);">8. Mobile App Development</strong>
+                                <span style="font-size: 0.8rem; color: var(--text-sub); line-height: 1.4;">React Native, Flutter, Kotlin, State & Store Publishing</span>
                             </div>
                         </button>
                     </div>

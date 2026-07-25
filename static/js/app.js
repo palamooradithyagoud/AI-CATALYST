@@ -4039,8 +4039,949 @@ document.addEventListener('DOMContentLoaded', () => {
                     items: ['Cloud Security (AWS/Azure)', 'Zero Trust Architecture', 'Compliance (ISO 27001, SOC 2)', 'Threat Intelligence', 'Container Security']
                 }
             ]
+        },
+        'frontend': {
+            title: 'Frontend Development',
+            subtitle: "Here's a timeline of the Frontend Development learning path.",
+            rating: '4.9 (14.2K)',
+            demandText: '+28.4% Growth',
+            openingsText: '110,000+ Active Roles',
+            salaryText: '₹6 – 20 LPA',
+            accent1: '#3b82f6',
+            accent2: '#06b6d4',
+            codeText: 'HTML',
+            stages: [
+                {
+                    title: 'Web Fundamentals',
+                    description: 'Master HTML5 semantic elements, modern CSS layout techniques, and responsive web design principles.',
+                    items: ['HTML5 Semantics', 'CSS3 & Flexbox', 'CSS Grid', 'Responsive Web Design', 'CSS Variables & Themes']
+                },
+                {
+                    title: 'Core JavaScript (ES6+)',
+                    description: 'Build interactive applications with modern JavaScript, DOM manipulation, and asynchronous programming.',
+                    items: ['ES6+ Syntax & Scope', 'DOM Manipulation', 'Event Handling', 'Promises & Async/Await', 'Fetch API & JSON']
+                },
+                {
+                    title: 'CSS Frameworks & Tooling',
+                    description: 'Speed up interface development using modern utility-first CSS frameworks and preprocessors.',
+                    items: ['Tailwind CSS', 'Sass/SCSS', 'CSS Modules', 'Styled Components', 'Vite & Build Tools']
+                },
+                {
+                    title: 'Frontend Framework (React)',
+                    description: 'Develop modular component architecture, handle application state, and manage navigation.',
+                    items: ['React JSX & Components', 'State & Props', 'React Hooks (useState, useEffect)', 'Context API', 'React Router v6']
+                },
+                {
+                    title: 'Advanced React & Next.js',
+                    description: 'Leverage Server-Side Rendering (SSR), Static Site Generation (SSG), and global state management.',
+                    items: ['Next.js App Router', 'React Server Components', 'SSR & SSG', 'Redux Toolkit / Zustand', 'TypeScript integration']
+                },
+                {
+                    title: 'Testing & Performance Optimization',
+                    description: 'Ensure application quality with unit testing, accessibility standards, and web performance audits.',
+                    items: ['Lighthouse Audits', 'Core Web Vitals', 'Jest & React Testing Library', 'Web Accessibility (WCAG)', 'Bundle Size Optimization']
+                }
+            ]
+        },
+        'backend': {
+            title: 'Backend Development',
+            subtitle: "Here's a timeline of the Backend Development learning path.",
+            rating: '4.9 (11.8K)',
+            demandText: '+26.8% Growth',
+            openingsText: '98,000+ Active Roles',
+            salaryText: '₹7 – 22 LPA',
+            accent1: '#10b981',
+            accent2: '#0284c7',
+            codeText: 'NODE',
+            stages: [
+                {
+                    title: 'Server Fundamentals & Runtimes',
+                    description: 'Understand server-side execution environments, HTTP protocols, asynchronous event loops, and streams.',
+                    items: ['Node.js Architecture', 'Event Loop & Non-Blocking I/O', 'HTTP / HTTPS Protocols', 'Node File System & Streams', 'Environment Configuration']
+                },
+                {
+                    title: 'Web Frameworks & REST APIs',
+                    description: 'Design and build modular RESTful web APIs with robust routing and middleware logic.',
+                    items: ['Express.js', 'RESTful API Standards', 'Custom Middleware', 'Request Validation & Sanitization', 'TypeScript for Backend']
+                },
+                {
+                    title: 'Databases & ORMs',
+                    description: 'Model relational and document-oriented databases, write efficient queries, and leverage ORMs.',
+                    items: ['PostgreSQL', 'MongoDB', 'Prisma ORM', 'Mongoose ODM', 'Database Indexing & Transactions']
+                },
+                {
+                    title: 'Authentication & Security',
+                    description: 'Implement enterprise authentication mechanisms, token authorization, and security best practices.',
+                    items: ['JWT Tokens', 'OAuth 2.0', 'Password Hashing (bcrypt)', 'CORS & Rate Limiting', 'OWASP API Security']
+                },
+                {
+                    title: 'Caching & Asynchronous Processing',
+                    description: 'Optimize API response times with in-memory caching and manage background job queues.',
+                    items: ['Redis Caching Strategies', 'Background Job Queues (BullMQ)', 'Message Queues (RabbitMQ)', 'WebSocket Live Connections', 'API Rate Limiting']
+                },
+                {
+                    title: 'Testing & Container Deployment',
+                    description: 'Write integration test suites, containerize applications, and automate deployment pipelines.',
+                    items: ['Jest & Supertest API Testing', 'Docker Containerization', 'CI/CD GitHub Actions', 'Cloud Deployment (Render/AWS)', 'Logging & Health Monitoring']
+                }
+            ]
+        },
+        'python-dev': {
+            title: 'Python Mastery',
+            subtitle: "Here's a timeline of the Python Developer learning path.",
+            rating: '4.9 (16.5K)',
+            demandText: '+42.1% Growth',
+            openingsText: '140,000+ Active Roles',
+            salaryText: '₹8 – 25 LPA',
+            accent1: '#f59e0b',
+            accent2: '#3b82f6',
+            codeText: 'PY',
+            stages: [
+                {
+                    title: 'Python Syntax & Foundations',
+                    description: 'Master core Python language syntax, built-in data types, and control structures.',
+                    items: ['Python Variables & Types', 'Lists, Dicts, Sets & Tuples', 'Control Flow & Loops', 'Functions & Lambda Expressions', 'File I/O & Exception Handling']
+                },
+                {
+                    title: 'Advanced Python Programming',
+                    description: 'Understand object-oriented principles, metaprogramming decorators, and generator streams.',
+                    items: ['OOP (Classes & Inheritance)', 'Python Decorators', 'Generators & Iterators', 'Context Managers', 'Package Management (Poetry/Pip)']
+                },
+                {
+                    title: 'Data Structures & Algorithms',
+                    description: 'Implement fundamental computer science algorithms and data structures using Python.',
+                    items: ['Time & Space Complexity (Big-O)', 'Sorting & Searching Algorithms', 'Recursion & Dynamic Programming', 'Trees & Graph Traversal', 'LeetCode Python Problem Solving']
+                },
+                {
+                    title: 'Backend Web Frameworks',
+                    description: 'Build modern high-performance microservices and web APIs using FastAPI and Django.',
+                    items: ['FastAPI Microservices', 'Pydantic Data Validation', 'Django Web Framework', 'Django REST Framework', 'SQLAlchemy ORM']
+                },
+                {
+                    title: 'Asynchronous & Concurrent Python',
+                    description: 'Handle high-concurrency workloads using async/await syntax and multi-process workers.',
+                    items: ['AsyncIO Core', 'Async HTTP (httpx)', 'WebSockets in Python', 'Multiprocessing & Threading', 'Celery Distributed Tasks']
+                },
+                {
+                    title: 'Code Quality & Production Ops',
+                    description: 'Maintain clean, type-checked Python codebases with automated testing and continuous integration.',
+                    items: ['PyTest Unit Testing', 'Type Hinting (mypy)', 'Code Formatting (Black/Flake8)', 'Dockerizing Python Apps', 'Production Deployment']
+                }
+            ]
+        },
+        'java-dev': {
+            title: 'Java & Spring Boot',
+            subtitle: "Here's a timeline of the Java & Spring Boot learning path.",
+            rating: '4.8 (10.4K)',
+            demandText: '+22.4% Growth',
+            openingsText: '115,000+ Active Roles',
+            salaryText: '₹7 – 24 LPA',
+            accent1: '#ef4444',
+            accent2: '#f59e0b',
+            codeText: 'JAVA',
+            stages: [
+                {
+                    title: 'Java Language Core',
+                    description: 'Master object-oriented programming concepts, Java memory management, and collection interfaces.',
+                    items: ['Java OOP Concepts', 'Collections Framework', 'Generics & Enums', 'Exception Handling', 'Streams & Lambda Expressions']
+                },
+                {
+                    title: 'JVM Internals & Multithreading',
+                    description: 'Understand how the Java Virtual Machine executes bytecode and write thread-safe concurrent applications.',
+                    items: ['JVM Memory & Garbage Collection', 'Multithreading Core', 'Java Concurrency Utilities', 'JVM Profiling & Tuning', 'File I/O & NIO']
+                },
+                {
+                    title: 'Data Persistence & Hibernate ORM',
+                    description: 'Interface Java applications with relational SQL databases using JPA and Hibernate.',
+                    items: ['JDBC Fundamentals', 'Hibernate ORM', 'JPA Specifications', 'Entity Relationships (1:N, N:M)', 'JPQL & Native Queries']
+                },
+                {
+                    title: 'Spring Framework Core',
+                    description: 'Leverage Dependency Injection and Inversion of Control to structure enterprise backend services.',
+                    items: ['Spring Core & IoC', 'Dependency Injection', 'Spring MVC Architecture', 'Spring Data JPA', 'Spring Beans & Configuration']
+                },
+                {
+                    title: 'Spring Boot Microservices',
+                    description: 'Develop cloud-native microservices with Spring Security, REST controllers, and messaging.',
+                    items: ['Spring Boot REST APIs', 'Spring Security & JWT', 'Actuator Health Metrics', 'Spring Cloud & Eureka', 'Apache Kafka Integration']
+                },
+                {
+                    title: 'Testing & Industrial DevOps',
+                    description: 'Ensure enterprise stability using JUnit test suites, Maven build automation, and Docker packaging.',
+                    items: ['JUnit 5 & Mockito', 'Maven & Gradle Builds', 'Docker Containerization', 'CI/CD Pipelines', 'SonarQube Quality Gate']
+                }
+            ]
+        },
+        'react-dev': {
+            title: 'React & Next.js',
+            subtitle: "Here's a timeline of the React & Next.js learning path.",
+            rating: '4.9 (18.1K)',
+            demandText: '+38.6% Growth',
+            openingsText: '135,000+ Active Roles',
+            salaryText: '₹7 – 24 LPA',
+            accent1: '#06b6d4',
+            accent2: '#3b82f6',
+            codeText: 'REACT',
+            stages: [
+                {
+                    title: 'React Core Architecture',
+                    description: 'Understand Virtual DOM reconciliation, JSX templating, component lifecycle, and unidirectional data flow.',
+                    items: ['JSX & Component Props', 'State vs Props', 'Event Handling', 'Conditional Rendering', 'Keys & List Rendering']
+                },
+                {
+                    title: 'React Hooks Deep Dive',
+                    description: 'Master built-in React hooks to manage side effects, DOM references, and performance memoization.',
+                    items: ['useState & useEffect', 'useRef & DOM Manipulation', 'useMemo & useCallback', 'useReducer Pattern', 'Custom React Hooks']
+                },
+                {
+                    title: 'Global State & Data Fetching',
+                    description: 'Handle complex application state and server caching across multi-page web applications.',
+                    items: ['React Context API', 'Redux Toolkit (RTK)', 'Zustand State Store', 'TanStack React Query', 'SWR Cache Management']
+                },
+                {
+                    title: 'Form Handling & Styling Systems',
+                    description: 'Build validated user forms and implement sleek component design systems.',
+                    items: ['React Hook Form', 'Zod Schema Validation', 'Tailwind CSS', 'Shadcn UI & Radix Primitives', 'Framer Motion Animations']
+                },
+                {
+                    title: 'Next.js 14 App Router',
+                    description: 'Master modern full-stack React with Next.js Server Components, Server Actions, and file-based routing.',
+                    items: ['Next.js App Router', 'React Server Components (RSC)', 'Server Actions', 'SSR & Static Generation', 'API Routes & Middleware']
+                },
+                {
+                    title: 'Testing & Production Optimization',
+                    description: 'Write robust component test suites and optimize web vitals for search engines and user speed.',
+                    items: ['React Testing Library', 'Jest Test Runner', 'Playwright E2E Testing', 'Code Splitting & Lazy Loading', 'SEO & OpenGraph Tags']
+                }
+            ]
+        },
+        'system-design': {
+            title: 'System Design & Architecture',
+            subtitle: "Here's a timeline of the System Design & Architecture learning path.",
+            rating: '4.9 (20.3K)',
+            demandText: '+52.4% Growth',
+            openingsText: '60,000+ Active Senior Roles',
+            salaryText: '₹18 – 45 LPA',
+            accent1: '#a855f7',
+            accent2: '#ec4899',
+            codeText: 'SYS',
+            stages: [
+                {
+                    title: 'Architectural Foundations',
+                    description: 'Understand client-server interaction models, network protocols, latency benchmarks, and the CAP theorem.',
+                    items: ['Client-Server Architecture', 'HTTP/HTTPS, WebSockets, gRPC', 'Latency vs Throughput', 'CAP Theorem & PACELC', 'SLA / SLO Metric Guarantees']
+                },
+                {
+                    title: 'Scalability & Load Balancing',
+                    description: 'Design stateless horizontal scaling architectures and configure high-performance load balancers.',
+                    items: ['Horizontal vs Vertical Scaling', 'Nginx & HAProxy Load Balancers', 'Round Robin & Least Connection Algorithms', 'Content Delivery Networks (CDNs)', 'DNS Routing & Anycast']
+                },
+                {
+                    title: 'Caching & Memory Optimization',
+                    description: 'Implement distributed multi-layer caching architectures to handle millions of queries per second.',
+                    items: ['Redis & Memcached', 'Cache Eviction (LRU/LFU)', 'Cache Strategies (Read-Through, Write-Back)', 'Cache Penetration & Stampede Protection', 'Distributed Cache Clusters']
+                },
+                {
+                    title: 'Database Partitioning & Sharding',
+                    description: 'Scale storage layers horizontally using relational read-replicas, sharding, and NoSQL databases.',
+                    items: ['Database Replication (Master-Slave)', 'Consistent Hashing Algorithms', 'Database Sharding Strategies', 'SQL vs NoSQL Tradeoffs', 'Distributed Transactions (Saga Pattern)']
+                },
+                {
+                    title: 'Asynchronous Messaging & Streams',
+                    description: 'Decouple microservices using distributed event streams and pub/sub message brokers.',
+                    items: ['Apache Kafka Event Streaming', 'RabbitMQ Message Queues', 'Event-Driven Microservices', 'Idempotent Consumer Logic', 'Dead Letter Queues']
+                },
+                {
+                    title: 'High Availability & Observability',
+                    description: 'Protect distributed systems from cascading failures with circuit breakers, rate limiters, and telemetry.',
+                    items: ['Token Bucket Rate Limiting', 'Circuit Breakers (Resilience4j)', 'Distributed Tracing (Jaeger)', 'Prometheus & Grafana Telemetry', 'Disaster Recovery & Failover']
+                }
+            ]
+        },
+        'data-engineering': {
+            title: 'Data Engineering',
+            subtitle: "Here's a timeline of the Data Engineering learning path.",
+            rating: '4.8 (8.7K)',
+            demandText: '+34.2% Growth',
+            openingsText: '75,000+ Active Roles',
+            salaryText: '₹9 – 28 LPA',
+            accent1: '#6366f1',
+            accent2: '#06b6d4',
+            codeText: 'ETL',
+            stages: [
+                {
+                    title: 'Data Engineering Foundations',
+                    description: 'Master core SQL query optimization, Python data processing scripts, and Linux shell automation.',
+                    items: ['Advanced SQL Queries', 'Python Data Processing', 'Bash Shell Scripting', 'Git Version Control', 'Data Warehousing Concepts']
+                },
+                {
+                    title: 'Data Modeling & Warehousing',
+                    description: 'Design enterprise data warehouse schemas, star schemas, and columnar database tables.',
+                    items: ['Star & Snowflake Schemas', 'Snowflake Data Cloud', 'Google BigQuery', 'Columnar File Formats (Parquet, ORC)', 'Data Vault Modeling']
+                },
+                {
+                    title: 'Distributed Big Data Computing',
+                    description: 'Process massive datasets across multi-node clusters using Apache Spark and PySpark.',
+                    items: ['Apache Spark Core', 'PySpark DataFrames', 'Spark SQL & Optimizations', 'Distributed Storage (S3/HDFS)', 'Delta Lake Format']
+                },
+                {
+                    title: 'Data Pipeline Orchestration',
+                    description: 'Build, schedule, and monitor automated ETL/ELT data pipelines using Apache Airflow.',
+                    items: ['Apache Airflow DAG Design', 'Airflow Operators & Sensors', 'Task Dependency Graphs', 'Data Build Tool (dbt)', 'Error Handling & Retries']
+                },
+                {
+                    title: 'Real-Time Data Streaming',
+                    description: 'Ingest and analyze continuous real-time data streams using Kafka and Spark Streaming.',
+                    items: ['Apache Kafka Ingestion', 'Kafka Connect Framework', 'Spark Structured Streaming', 'Event Stream Schema Registry', 'Real-Time Analytics']
+                },
+                {
+                    title: 'Data Governance & MLOps Infrastructure',
+                    description: 'Enforce data quality standards, cataloging, lineage tracking, and CI/CD for data teams.',
+                    items: ['Great Expectations (Data Quality)', 'Data Lineage & Cataloging', 'CI/CD for Data Pipelines', 'Data Mesh Principles', 'Data Security & Access Controls']
+                }
+            ]
+        },
+        'mobile-dev': {
+            title: 'Mobile App Development',
+            subtitle: "Here's a timeline of the Mobile App Development learning path.",
+            rating: '4.8 (9.1K)',
+            demandText: '+24.1% Growth',
+            openingsText: '82,000+ Active Roles',
+            salaryText: '₹6 – 22 LPA',
+            accent1: '#ec4899',
+            accent2: '#a855f7',
+            codeText: 'APP',
+            stages: [
+                {
+                    title: 'Mobile Programming Languages',
+                    description: 'Master core mobile programming languages for cross-platform and native app development.',
+                    items: ['TypeScript / JavaScript (React Native)', 'Dart (Flutter Framework)', 'Kotlin (Android Native)', 'Swift (iOS Native Basics)']
+                },
+                {
+                    title: 'Mobile UI Layouts & Navigation',
+                    description: 'Design intuitive, responsive mobile interfaces with touch interactions and smooth page transitions.',
+                    items: ['Mobile Flexbox & Layouts', 'Stack & Tab Navigators', 'Custom Mobile Animations', 'Dark Mode & Theme Systems', 'Responsive Screen Scaling']
+                },
+                {
+                    title: 'Native Device Features & APIs',
+                    description: 'Interface with mobile hardware including camera, GPS, biometric sensors, and local storage.',
+                    items: ['Camera & Image Picker', 'Geolocation & Maps API', 'Push Notifications (FCM)', 'Local Storage (AsyncStorage/SQLite)', 'Biometric Auth (FaceID/Fingerprint)']
+                },
+                {
+                    title: 'State Management & Networking',
+                    description: 'Handle app state, network caching, offline data synchronization, and REST/GraphQL APIs.',
+                    items: ['Redux Toolkit / Zustand Store', 'TanStack Query (React Query)', 'REST & GraphQL API Consumption', 'Offline Data Synchronization', 'Network State Listeners']
+                },
+                {
+                    title: 'Mobile Security & Testing',
+                    description: 'Secure sensitive user credentials, prevent app reverse engineering, and write automated tests.',
+                    items: ['Secure Storage (Keychain/Keystore)', 'App Pinning & SSL Security', 'Unit & Integration Testing', 'Detox / Appium E2E Testing', 'Crash Analytics (Crashlytics)']
+                },
+                {
+                    title: 'App Store Build & Publishing',
+                    description: 'Build, sign, and publish production applications to Google Play Store and Apple App Store.',
+                    items: ['Android Release Bundles (AAB)', 'iOS Xcode Signing & Provisioning', 'Google Play Console Release', 'Apple App Store Connect', 'Fastlane Automation & OTA Updates']
+                }
+            ]
         }
     };
+
+    /* ==========================================================================
+       AAA CINEMATIC EXPERIENCE: HTML5 CANVAS 2D PYTHON GROWTH ENGINE
+       ========================================================================== */
+    class AAAPythonCanvasEngine {
+        constructor(canvasId) {
+            this.canvas = document.getElementById(canvasId);
+            if (!this.canvas) return;
+            this.ctx = this.canvas.getContext('2d');
+            this.dpr = window.devicePixelRatio || 1;
+            this.width = 230;
+            this.height = 230;
+            this.canvas.width = this.width * this.dpr;
+            this.canvas.height = this.height * this.dpr;
+            this.ctx.scale(this.dpr, this.dpr);
+
+            this.currentProgress = 0.05;
+            this.targetProgress = 0.05;
+            this.time = 0;
+            this.lastTime = performance.now();
+            this.fps = 60;
+            this.frameCount = 0;
+
+            // Interaction Mouse state
+            this.mouse = { x: 115, y: 115, targetX: 115, targetY: 115, isHovered: false };
+
+            // Bioluminescent Spore Particles (36 active particles)
+            this.particles = Array.from({ length: 36 }, () => ({
+                x: Math.random() * this.width,
+                y: Math.random() * this.height,
+                vx: (Math.random() - 0.5) * 0.4,
+                vy: -0.2 - Math.random() * 0.5,
+                size: 1.2 + Math.random() * 2.4,
+                hue: Math.random() > 0.5 ? 42 : 155, // Gold vs Emerald
+                alpha: 0.2 + Math.random() * 0.7,
+                pulseSpeed: 1 + Math.random() * 2
+            }));
+
+            // Volumetric Fog Clouds (5 procedural fog paths)
+            this.fogClouds = Array.from({ length: 5 }, (_, i) => ({
+                x: i * 50,
+                y: 40 + i * 35,
+                r: 60 + Math.random() * 40,
+                speed: 0.15 + Math.random() * 0.2,
+                alpha: 0.12 + Math.random() * 0.1
+            }));
+
+            // Audio hooks state flag tracker
+            this.audioState = { eggCracked: false, hatched: false, juvenileGrow: false, adultAchieved: false };
+
+            this.bindEvents();
+            this.start();
+        }
+
+        bindEvents() {
+            if (!this.canvas) return;
+            this.canvas.addEventListener('mousemove', (e) => {
+                const rect = this.canvas.getBoundingClientRect();
+                this.mouse.targetX = e.clientX - rect.left;
+                this.mouse.targetY = e.clientY - rect.top;
+                this.mouse.isHovered = true;
+            });
+            this.canvas.addEventListener('mouseleave', () => {
+                this.mouse.targetX = 115;
+                this.mouse.targetY = 115;
+                this.mouse.isHovered = false;
+            });
+        }
+
+        setTargetProgress(p) {
+            this.targetProgress = Math.max(0.02, Math.min(1, p));
+        }
+
+        triggerAudioHook(eventName) {
+            if (typeof window.playPythonSound === 'function') {
+                try { window.playPythonSound(eventName); } catch(e) {}
+            }
+        }
+
+        update() {
+            const now = performance.now();
+            const dt = (now - this.lastTime) / 1000;
+            this.lastTime = now;
+            this.time += dt;
+
+            // Ultra-smooth progress lerp (0.06 for buttery inertia)
+            this.currentProgress += (this.targetProgress - this.currentProgress) * 0.06;
+
+            // Mouse smooth lerp
+            this.mouse.x += (this.mouse.targetX - this.mouse.x) * 0.1;
+            this.mouse.y += (this.mouse.targetY - this.mouse.y) * 0.1;
+
+            // Sound triggers based on progress milestones
+            if (this.currentProgress >= 0.18 && !this.audioState.eggCracked) {
+                this.audioState.eggCracked = true;
+                this.triggerAudioHook('eggCrack');
+            }
+            if (this.currentProgress >= 0.28 && !this.audioState.hatched) {
+                this.audioState.hatched = true;
+                this.triggerAudioHook('hatch');
+            }
+            if (this.currentProgress >= 0.55 && !this.audioState.juvenileGrow) {
+                this.audioState.juvenileGrow = true;
+                this.triggerAudioHook('hiss');
+            }
+            if (this.currentProgress >= 0.80 && !this.audioState.adultAchieved) {
+                this.audioState.adultAchieved = true;
+                this.triggerAudioHook('pulse');
+            }
+
+            // Particle physics
+            this.particles.forEach(p => {
+                p.x += p.vx + Math.sin(this.time * p.pulseSpeed) * 0.2;
+                p.y += p.vy;
+                if (p.y < -10) {
+                    p.y = this.height + 10;
+                    p.x = Math.random() * this.width;
+                }
+                if (this.mouse.isHovered) {
+                    const dx = p.x - this.mouse.x;
+                    const dy = p.y - this.mouse.y;
+                    const dist = Math.hypot(dx, dy);
+                    if (dist < 45) {
+                        p.x += (dx / dist) * 1.5;
+                        p.y += (dy / dist) * 1.5;
+                    }
+                }
+            });
+
+            // Fog Cloud Movement
+            this.fogClouds.forEach(c => {
+                c.x += c.speed;
+                if (c.x - c.r > this.width) c.x = -c.r;
+            });
+        }
+
+        render() {
+            const ctx = this.ctx;
+            const w = this.width;
+            const h = this.height;
+            const p = this.currentProgress;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // Parallax shift calculation from mouse
+            const shiftX = (this.mouse.x - 115) * 0.08;
+            const shiftY = (this.mouse.y - 115) * 0.08;
+
+            // 1. Deep Volumetric Background
+            const bgGrad = ctx.createRadialGradient(115 + shiftX, 115 + shiftY, 10, 115, 115, 140);
+            bgGrad.addColorStop(0, 'rgba(26, 38, 64, 0.95)');
+            bgGrad.addColorStop(0.5, 'rgba(15, 23, 42, 0.98)');
+            bgGrad.addColorStop(1, 'rgba(9, 14, 26, 1)');
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, w, h);
+
+            // Volumetric Fog Clouds
+            ctx.save();
+            ctx.globalCompositeOperation = 'screen';
+            this.fogClouds.forEach(c => {
+                const fogG = ctx.createRadialGradient(c.x + shiftX * 0.5, c.y + shiftY * 0.5, 0, c.x, c.y, c.r);
+                fogG.addColorStop(0, `rgba(${p > 0.5 ? '16,185,129' : '245,158,11'}, ${c.alpha})`);
+                fogG.addColorStop(1, 'rgba(15,23,42,0)');
+                ctx.fillStyle = fogG;
+                ctx.beginPath();
+                ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.restore();
+
+            // 2. Ambient Bioluminescent Spores
+            this.particles.forEach(pt => {
+                const alpha = pt.alpha * (0.6 + Math.sin(this.time * pt.pulseSpeed) * 0.4);
+                ctx.fillStyle = `hsla(${pt.hue}, 90%, 65%, ${alpha})`;
+                ctx.beginPath();
+                ctx.arc(pt.x + shiftX * 0.3, pt.y + shiftY * 0.3, pt.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Nest Base (Always present at bottom)
+            this.drawNestBase(ctx, shiftX, shiftY, p);
+
+            // 3. Seamless Cross-Fade & Scale Morphing Between Stages
+            const w1 = Math.max(0, Math.min(1, 1 - (p - 0.16) / 0.16));
+            
+            const w2In = Math.max(0, Math.min(1, (p - 0.16) / 0.12));
+            const w2Out = Math.max(0, Math.min(1, 1 - (p - 0.42) / 0.16));
+            const w2 = w2In * w2Out;
+
+            const w3In = Math.max(0, Math.min(1, (p - 0.42) / 0.14));
+            const w3Out = Math.max(0, Math.min(1, 1 - (p - 0.68) / 0.16));
+            const w3 = w3In * w3Out;
+
+            const w4 = Math.max(0, Math.min(1, (p - 0.68) / 0.15));
+
+            if (w1 > 0.001) {
+                ctx.save();
+                ctx.globalAlpha = w1;
+                this.drawStage1Egg(ctx, shiftX, shiftY, p);
+                ctx.restore();
+            }
+
+            if (w2 > 0.001) {
+                ctx.save();
+                ctx.globalAlpha = w2;
+                const scale2 = 0.65 + w2In * 0.35;
+                ctx.translate(115, 115);
+                ctx.scale(scale2, scale2);
+                ctx.translate(-115, -115);
+                this.drawStage2Hatchling(ctx, shiftX, shiftY, p);
+                ctx.restore();
+            }
+
+            if (w3 > 0.001) {
+                ctx.save();
+                ctx.globalAlpha = w3;
+                const scale3 = 0.75 + w3In * 0.25;
+                ctx.translate(115, 115);
+                ctx.scale(scale3, scale3);
+                ctx.translate(-115, -115);
+                this.drawStage3Juvenile(ctx, shiftX, shiftY, p);
+                ctx.restore();
+            }
+
+            if (w4 > 0.001) {
+                ctx.save();
+                ctx.globalAlpha = w4;
+                const scale4 = 0.8 + w4 * 0.2;
+                ctx.translate(115, 115);
+                ctx.scale(scale4, scale4);
+                ctx.translate(-115, -115);
+                this.drawStage4Adult(ctx, shiftX, shiftY, p);
+                ctx.restore();
+            }
+        }
+
+        drawNestBase(ctx, sx, sy, p) {
+            ctx.save();
+            ctx.translate(115 + sx * 0.4, 185 + sy * 0.4);
+            
+            const nestGrad = ctx.createRadialGradient(0, 0, 5, 0, 0, 45);
+            nestGrad.addColorStop(0, '#331e11');
+            nestGrad.addColorStop(0.7, '#1f130b');
+            nestGrad.addColorStop(1, 'rgba(15,23,42,0)');
+            ctx.fillStyle = nestGrad;
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 45, 14, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = '#4a2c18';
+            ctx.lineWidth = 2.2;
+            ctx.beginPath();
+            ctx.ellipse(0, 2, 40, 10, 0.1, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.strokeStyle = '#6e3f20';
+            ctx.lineWidth = 1.4;
+            ctx.beginPath();
+            ctx.ellipse(-4, -1, 35, 8, -0.1, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        drawStage1Egg(ctx, sx, sy, p) {
+            ctx.save();
+            const pulse = 1 + Math.sin(this.time * 6) * 0.03;
+            ctx.translate(115 + sx, 155 + sy);
+            ctx.scale(pulse, pulse);
+
+            // Egg Shadow
+            ctx.fillStyle = 'rgba(0,0,0,0.6)';
+            ctx.beginPath();
+            ctx.ellipse(0, 20, 22, 7, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Outer Aura Glow
+            const auraGlow = ctx.createRadialGradient(0, -10, 5, 0, -10, 35);
+            auraGlow.addColorStop(0, 'rgba(254, 240, 138, 0.8)');
+            auraGlow.addColorStop(0.5, `rgba(245, 158, 11, ${0.4 + p * 1.5})`);
+            auraGlow.addColorStop(1, 'rgba(15, 23, 42, 0)');
+            ctx.fillStyle = auraGlow;
+            ctx.beginPath();
+            ctx.arc(0, -10, 35, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 3D Egg Body
+            const eggGrad = ctx.createRadialGradient(-6, -20, 2, 0, -10, 24);
+            eggGrad.addColorStop(0, '#fffbeb');
+            eggGrad.addColorStop(0.3, '#fde047');
+            eggGrad.addColorStop(0.75, '#d97706');
+            eggGrad.addColorStop(1, '#78350f');
+
+            ctx.fillStyle = eggGrad;
+            ctx.beginPath();
+            ctx.ellipse(0, -10, 19, 25, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = '#b45309';
+            ctx.lineWidth = 1.2;
+            ctx.stroke();
+
+            // Speckle Spots
+            ctx.fillStyle = '#b45309';
+            ctx.globalAlpha = 0.5;
+            [[-6, -18, 3], [8, -8, 2.5], [-5, -2, 2], [6, -22, 2]].forEach(([cx, cy, r]) => {
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.globalAlpha = 1.0;
+
+            // Glowing Cracks
+            if (p > 0.08) {
+                const crackAlpha = Math.min(1, (p - 0.08) * 6);
+                ctx.strokeStyle = `rgba(255, 255, 255, ${crackAlpha})`;
+                ctx.shadowColor = '#fbbf24';
+                ctx.shadowBlur = 10;
+                ctx.lineWidth = 2.0;
+
+                ctx.beginPath();
+                ctx.moveTo(-4, -20);
+                ctx.lineTo(0, -12);
+                ctx.lineTo(-6, -4);
+                ctx.lineTo(2, 4);
+                ctx.stroke();
+
+                ctx.shadowBlur = 0;
+            }
+
+            ctx.restore();
+        }
+
+        drawStage2Hatchling(ctx, sx, sy, p) {
+            ctx.save();
+            ctx.translate(115 + sx, 150 + sy);
+
+            ctx.fillStyle = '#d97706';
+            ctx.beginPath();
+            ctx.arc(-18, 18, 6, 0, Math.PI * 2);
+            ctx.fill();
+
+            const breathe = Math.sin(this.time * 4) * 2;
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 10;
+            ctx.lineCap = 'round';
+            ctx.shadowColor = '#34d399';
+            ctx.shadowBlur = 12;
+
+            ctx.beginPath();
+            ctx.moveTo(0, 20);
+            ctx.bezierCurveTo(-15 + breathe, 5, 15 - breathe, -15, 2, -35 + breathe * 0.5);
+            ctx.stroke();
+
+            ctx.strokeStyle = '#6ee7b7';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+
+            const headX = 2;
+            const headY = -35 + breathe * 0.5;
+
+            ctx.fillStyle = '#059669';
+            ctx.beginPath();
+            ctx.arc(headX, headY, 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            const dx = this.mouse.x - (115 + headX);
+            const dy = this.mouse.y - (150 + headY);
+            const eyeAngle = Math.atan2(dy, dx);
+            const eyeOffsetX = Math.cos(eyeAngle) * 2.5;
+            const eyeOffsetY = Math.sin(eyeAngle) * 2.5;
+
+            ctx.fillStyle = '#fbbf24';
+            ctx.beginPath();
+            ctx.arc(headX - 3 + eyeOffsetX * 0.5, headY - 2 + eyeOffsetY * 0.5, 2.2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(headX - 3 + eyeOffsetX * 0.5, headY - 2 + eyeOffsetY * 0.5, 1.0, 0, Math.PI * 2);
+            ctx.fill();
+
+            if (Math.sin(this.time * 8) > 0.4) {
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 1.4;
+                ctx.beginPath();
+                ctx.moveTo(headX, headY - 8);
+                ctx.lineTo(headX, headY - 16);
+                ctx.lineTo(headX - 3, headY - 20);
+                ctx.moveTo(headX, headY - 16);
+                ctx.lineTo(headX + 3, headY - 20);
+                ctx.stroke();
+            }
+
+            ctx.restore();
+        }
+
+        drawStage3Juvenile(ctx, sx, sy, p) {
+            ctx.save();
+            ctx.translate(115 + sx, 115 + sy);
+
+            const rockGrad = ctx.createRadialGradient(0, 0, 5, 0, 0, 28);
+            rockGrad.addColorStop(0, '#38bdf8');
+            rockGrad.addColorStop(0.6, '#0369a1');
+            rockGrad.addColorStop(1, '#0f172a');
+            ctx.fillStyle = rockGrad;
+            ctx.shadowColor = '#38bdf8';
+            ctx.shadowBlur = 18;
+            ctx.beginPath();
+            ctx.arc(0, 10, 22, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            const slither = Math.sin(this.time * 3.5);
+            const pts = [
+                { x: -55, y: 55 },
+                { x: -30 + slither * 4, y: 35 },
+                { x: -10, y: 15 },
+                { x: 25 - slither * 4, y: 10 },
+                { x: 35, y: -20 },
+                { x: 10 + slither * 3, y: -45 },
+                { x: -15, y: -50 }
+            ];
+
+            ctx.strokeStyle = '#d97706';
+            ctx.lineWidth = 15;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.shadowColor = '#f59e0b';
+            ctx.shadowBlur = 10;
+
+            ctx.beginPath();
+            ctx.moveTo(pts[0].x, pts[0].y);
+            for (let i = 1; i < pts.length; i++) {
+                ctx.lineTo(pts[i].x, pts[i].y);
+            }
+            ctx.stroke();
+
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 8;
+            ctx.stroke();
+
+            ctx.strokeStyle = '#6ee7b7';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([4, 6]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            const head = pts[pts.length - 1];
+            ctx.fillStyle = '#f59e0b';
+            ctx.beginPath();
+            ctx.arc(head.x, head.y, 9, 0, Math.PI * 2);
+            ctx.fill();
+
+            const dx = this.mouse.x - (115 + head.x);
+            const dy = this.mouse.y - (115 + head.y);
+            const angle = Math.atan2(dy, dx);
+            const ex = Math.cos(angle) * 3;
+            const ey = Math.sin(angle) * 3;
+
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(head.x - 3 + ex, head.y - 2 + ey, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.arc(head.x - 3 + ex, head.y - 2 + ey, 1.2, 0, Math.PI * 2);
+            ctx.fill();
+
+            if (Math.sin(this.time * 7) > 0.3) {
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(head.x - 9, head.y);
+                ctx.lineTo(head.x - 17, head.y);
+                ctx.lineTo(head.x - 21, head.y - 3);
+                ctx.moveTo(head.x - 17, head.y);
+                ctx.lineTo(head.x - 21, head.y + 3);
+                ctx.stroke();
+            }
+
+            ctx.restore();
+        }
+
+        drawStage4Adult(ctx, sx, sy, p) {
+            ctx.save();
+            ctx.translate(115 + sx, 115 + sy);
+
+            ctx.save();
+            ctx.rotate(this.time * 0.4);
+            ctx.strokeStyle = 'rgba(251, 191, 36, 0.7)';
+            ctx.lineWidth = 1.8;
+            ctx.setLineDash([10, 8]);
+            ctx.shadowColor = '#fbbf24';
+            ctx.shadowBlur = 14;
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 72, 64, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+
+            ctx.save();
+            ctx.rotate(-this.time * 0.3);
+            ctx.strokeStyle = 'rgba(16, 185, 129, 0.5)';
+            ctx.lineWidth = 1.2;
+            ctx.setLineDash([6, 6]);
+            ctx.beginPath();
+            ctx.ellipse(0, 0, 64, 56, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+
+            const breathe = Math.sin(this.time * 2.5) * 2;
+            ctx.shadowColor = '#fbbf24';
+            ctx.shadowBlur = 20;
+
+            const outerGrad = ctx.createLinearGradient(-60, -60, 60, 60);
+            outerGrad.addColorStop(0, '#fbbf24');
+            outerGrad.addColorStop(0.5, '#10b981');
+            outerGrad.addColorStop(1, '#047857');
+
+            ctx.strokeStyle = outerGrad;
+            ctx.lineWidth = 20 + breathe * 0.5;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            ctx.beginPath();
+            ctx.arc(-22, 0, 36, 0.5, Math.PI * 2.2);
+            ctx.arc(22, 0, 36, Math.PI * 0.8, Math.PI * 2.8);
+            ctx.stroke();
+
+            ctx.strokeStyle = '#a7f3d0';
+            ctx.lineWidth = 6;
+            ctx.setLineDash([5, 5]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.save();
+            ctx.translate(32 + breathe * 0.5, -28 + breathe * 0.5);
+            ctx.rotate(-0.4);
+
+            ctx.fillStyle = '#059669';
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 2;
+
+            ctx.beginPath();
+            ctx.moveTo(0, -10);
+            ctx.lineTo(16, 0);
+            ctx.lineTo(0, 10);
+            ctx.lineTo(-8, 0);
+            ctx.closePath();
+            ctx.fill();
+            ctx.stroke();
+
+            const dx = this.mouse.x - (115 + 32);
+            const dy = this.mouse.y - (115 - 28);
+            const angle = Math.atan2(dy, dx);
+            const ex = Math.cos(angle) * 1.5;
+            const ey = Math.sin(angle) * 1.5;
+
+            ctx.fillStyle = '#fbbf24';
+            ctx.beginPath();
+            ctx.arc(4 + ex, -3 + ey, 3, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.ellipse(4 + ex, -3 + ey, 0.9, 2.5, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            if (Math.sin(this.time * 6) > 0.2) {
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 1.8;
+                ctx.beginPath();
+                ctx.moveTo(16, 0);
+                ctx.lineTo(24, 0);
+                ctx.lineTo(28, -4);
+                ctx.moveTo(24, 0);
+                ctx.lineTo(28, 4);
+                ctx.stroke();
+            }
+
+            ctx.restore();
+            ctx.restore();
+        }
+
+        start() {
+            const loop = () => {
+                this.update();
+                this.render();
+                this.animFrameId = requestAnimationFrame(loop);
+            };
+            loop();
+        }
+
+        destroy() {
+            if (this.animFrameId) cancelAnimationFrame(this.animFrameId);
+        }
+    }
+    window.AAAPythonCanvasEngine = AAAPythonCanvasEngine;
 
     const openRoleDetailPage = (roleKey) => {
         const info = roleHeroDetails[roleKey];
@@ -4201,7 +5142,36 @@ document.addEventListener('DOMContentLoaded', () => {
                         `).join('')}
                     </div>
 
-                    <!-- Right Column: Sticky Botanical Growth Card (Grows as you scroll down!) -->
+                    <!-- Right Column: Sticky Growth Card (AAA Canvas 2D Engine for python-dev, Botanical Tree for others) -->
+                    ${roleKey === 'python-dev' ? `
+                    <div class="botanical-card-aura" style="position: sticky; top: 90px; background: rgba(11, 17, 32, 0.96); backdrop-filter: blur(28px); border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 24px; padding: 22px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; transition: all 0.3s ease; box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(245,158,11,0.15); overflow: hidden;">
+                        <!-- Card Header Badge -->
+                        <div style="display: flex; align-items: center; gap: 8px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.4); padding: 6px 16px; border-radius: 20px; font-size: 0.78rem; font-weight: 800; color: #fbbf24; letter-spacing: 0.03em;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                            Realistic Python Growth
+                        </div>
+
+                        <!-- Interactive HiDPI 60fps AAA Canvas Container -->
+                        <div id="python-canvas-wrapper" style="position: relative; width: 230px; height: 230px; border-radius: 20px; overflow: hidden; background: radial-gradient(circle, rgba(30,41,59,0.8) 0%, rgba(11,17,32,0.98) 80%); border: 1px solid rgba(255,255,255,0.08); cursor: crosshair;" title="Hover & Move cursor to interact with environment & Python eyes">
+                            <canvas id="python-aaa-canvas" width="230" height="230" style="display: block; width: 100%; height: 100%;"></canvas>
+                        </div>
+
+                        <!-- Dynamic Phase Indicator & Typed Description -->
+                        <div style="display: flex; flex-direction: column; gap: 4px; width: 100%;">
+                            <span id="scroll-tree-phase-badge" style="font-size: 0.85rem; font-weight: 800; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.06em; text-shadow: 0 0 10px rgba(245,158,11,0.5);">
+                                Phase 1: Ancient Egg
+                            </span>
+                            <span id="scroll-tree-phase-desc" style="font-size: 0.78rem; color: #94a3b8; line-height: 1.4; min-height: 36px;">
+                                Incubating in nest with bio-luminescent particles & pulsing heartbeat
+                            </span>
+                        </div>
+
+                        <!-- Liquid Motion Progress Bar -->
+                        <div style="position: relative; width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; margin-top: 2px;">
+                            <div id="scroll-tree-progress-bar" style="height: 100%; width: 5%; background: linear-gradient(90deg, #fbbf24, #10b981, #38bdf8, #a855f7); border-radius: 4px; transition: width 0.15s ease-out; box-shadow: 0 0 14px rgba(245,158,11,0.9);"></div>
+                        </div>
+                    </div>
+                    ` : `
                     <div class="botanical-card-aura" style="position: sticky; top: 90px; background: rgba(15, 23, 42, 0.92); backdrop-filter: blur(24px); border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; transition: all 0.3s ease;">
                         <!-- Card Header Badge (No Emojis) -->
                         <div style="display: flex; align-items: center; gap: 8px; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); padding: 6px 16px; border-radius: 20px; font-size: 0.78rem; font-weight: 800; color: #a7f3d0; letter-spacing: 0.03em;">
@@ -4324,8 +5294,24 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div id="scroll-tree-progress-bar" style="height: 100%; width: 5%; background: linear-gradient(to right, #10b981, #3b82f6, #a855f7); border-radius: 4px; transition: width 0.15s ease-out; box-shadow: 0 0 12px rgba(16,185,129,0.9);"></div>
                         </div>
                     </div>
+                    `}
                 </div>
             `;
+
+            // Destroy previous AAA Python Canvas instance if present
+            if (window.activePythonCanvasEngine) {
+                window.activePythonCanvasEngine.destroy();
+                window.activePythonCanvasEngine = null;
+            }
+
+            // Spawn new AAA Canvas Engine for python-dev
+            if (roleKey === 'python-dev') {
+                setTimeout(() => {
+                    if (document.getElementById('python-aaa-canvas')) {
+                        window.activePythonCanvasEngine = new AAAPythonCanvasEngine('python-aaa-canvas');
+                    }
+                }, 50);
+            }
 
             // Attach skill pill click handlers to open right-side half-page drawer
             stagesContainer.querySelectorAll('.skill-item-pill').forEach(pill => {
@@ -4337,7 +5323,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
 
-            // Scroll observer to illuminate timeline line & grow tree visualizer continuously as you scroll down
+            // Scroll observer to illuminate timeline line & grow visualizer continuously as you scroll down
             const handleTimelineScroll = () => {
                 const treeEl = stagesContainer.querySelector('.roadmap-timeline-tree');
                 const laserLine = document.getElementById('timeline-laser-spine');
@@ -4353,7 +5339,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (laserLine) laserLine.style.height = `${progress * 100}%`;
 
-                // Update Sticky Right Side Photorealistic Botanical Tree Growth SVG
+                // Update Sticky Right Side Visualizer
                 const trunk = document.getElementById('tree-dynamic-trunk');
                 const sap = document.getElementById('tree-dynamic-sap');
                 const branchL = document.getElementById('tree-dynamic-branch-left');
@@ -4368,70 +5354,96 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (progressBar) progressBar.style.width = `${Math.round(progress * 100)}%`;
 
-                // Trunk & Inner Sap Core growth (offset 85 down to 0)
-                if (trunk) {
-                    const trunkOffset = Math.max(0, 85 - (progress * 85));
-                    trunk.style.strokeDashoffset = trunkOffset;
-                }
-                if (sap) {
-                    const sapOffset = Math.max(0, 85 - (progress * 85));
-                    sap.style.strokeDashoffset = sapOffset;
-                }
-
-                // Primary Branches growth
-                if (branchL) {
-                    const lOffset = progress >= 0.2 ? Math.max(0, 45 - ((progress - 0.2) * 90)) : 45;
-                    branchL.style.strokeDashoffset = lOffset;
-                }
-                if (twigL) {
-                    const twLOffset = progress >= 0.35 ? Math.max(0, 30 - ((progress - 0.35) * 80)) : 30;
-                    twigL.style.strokeDashoffset = twLOffset;
-                }
-                if (branchR) {
-                    const rOffset = progress >= 0.3 ? Math.max(0, 45 - ((progress - 0.3) * 90)) : 45;
-                    branchR.style.strokeDashoffset = rOffset;
-                }
-                if (twigR) {
-                    const twROffset = progress >= 0.45 ? Math.max(0, 30 - ((progress - 0.45) * 80)) : 30;
-                    twigR.style.strokeDashoffset = twROffset;
-                }
-
-                // Foliage Canopy Bloom & Sway (scale & fade in at progress >= 0.5)
-                if (foliage) {
-                    if (progress >= 0.5) {
-                        const folScale = 0.2 + ((progress - 0.5) * 1.6); // 0.2 -> 1.0
-                        const folOpacity = Math.min(1, (progress - 0.5) * 2.2);
-                        foliage.style.opacity = folOpacity;
-                        foliage.style.transform = `scale(${folScale})`;
-                    } else {
-                        foliage.style.opacity = 0;
-                        foliage.style.transform = 'scale(0.15)';
+                if (roleKey === 'python-dev') {
+                    if (window.activePythonCanvasEngine) {
+                        window.activePythonCanvasEngine.setTargetProgress(progress);
                     }
-                }
 
-                // Underground Seed Roots glow intensity
-                if (roots) {
-                    roots.style.opacity = progress > 0.4 ? Math.max(0.4, 1 - (progress - 0.4) * 1.2) : 1;
-                }
+                    if (phaseBadge && phaseDesc) {
+                        if (progress < 0.25) {
+                            phaseBadge.textContent = 'Phase 1: Ancient Egg';
+                            phaseBadge.style.color = '#fbbf24';
+                            phaseDesc.textContent = 'Incubating in nest with bio-luminescent particles & pulsing heartbeat';
+                        } else if (progress < 0.50) {
+                            phaseBadge.textContent = 'Phase 2: Hatchling Serpent';
+                            phaseBadge.style.color = '#34d399';
+                            phaseDesc.textContent = 'Baby Python hatching & emerging with slithering motion & eye tracking';
+                        } else if (progress < 0.75) {
+                            phaseBadge.textContent = 'Phase 3: Juvenile Mastery';
+                            phaseBadge.style.color = '#38bdf8';
+                            phaseDesc.textContent = 'Winding juvenile Python with 3D overlapping emerald scales';
+                        } else {
+                            phaseBadge.textContent = 'Phase 4: Legendary Adult Python';
+                            phaseBadge.style.color = '#a855f7';
+                            phaseDesc.textContent = 'Majestic full-grown Python with 3D rotating gold aura & orbital motes';
+                        }
+                    }
+                } else {
+                    // Trunk & Inner Sap Core growth (offset 85 down to 0)
+                    if (trunk) {
+                        const trunkOffset = Math.max(0, 85 - (progress * 85));
+                        trunk.style.strokeDashoffset = trunkOffset;
+                    }
+                    if (sap) {
+                        const sapOffset = Math.max(0, 85 - (progress * 85));
+                        sap.style.strokeDashoffset = sapOffset;
+                    }
 
-                // Update Phase Text (No emojis)
-                if (phaseBadge && phaseDesc) {
-                    if (progress < 0.25) {
-                        phaseBadge.textContent = 'Phase 1: Seedling Stage';
-                        phaseBadge.style.color = '#f59e0b';
-                        phaseDesc.textContent = 'Subterranean seed forming root system in soil';
-                    } else if (progress < 0.50) {
-                        phaseBadge.textContent = 'Phase 2: Sprouting Stage';
-                        phaseBadge.style.color = '#34d399';
-                        phaseDesc.textContent = 'Stem breaking through soil with fresh green shoots';
-                    } else if (progress < 0.75) {
-                        phaseBadge.textContent = 'Phase 3: Branching Stage';
-                        phaseBadge.style.color = '#38bdf8';
-                        phaseDesc.textContent = 'Expanding sturdy wood branches & leaf canopy';
-                    } else {
-                        phaseBadge.textContent = 'Phase 4: Full Bloom Tree';
-                        phaseBadge.style.color = '#a7f3d0';
-                        phaseDesc.textContent = 'Majestic career tree fully bloomed with glowing fruits';
+                    // Primary Branches growth
+                    if (branchL) {
+                        const lOffset = progress >= 0.2 ? Math.max(0, 45 - ((progress - 0.2) * 90)) : 45;
+                        branchL.style.strokeDashoffset = lOffset;
+                    }
+                    if (twigL) {
+                        const twLOffset = progress >= 0.35 ? Math.max(0, 30 - ((progress - 0.35) * 80)) : 30;
+                        twigL.style.strokeDashoffset = twLOffset;
+                    }
+                    if (branchR) {
+                        const rOffset = progress >= 0.3 ? Math.max(0, 45 - ((progress - 0.3) * 90)) : 45;
+                        branchR.style.strokeDashoffset = rOffset;
+                    }
+                    if (twigR) {
+                        const twROffset = progress >= 0.45 ? Math.max(0, 30 - ((progress - 0.45) * 80)) : 30;
+                        twigR.style.strokeDashoffset = twROffset;
+                    }
+
+                    // Foliage Canopy Bloom & Sway (scale & fade in at progress >= 0.5)
+                    if (foliage) {
+                        if (progress >= 0.5) {
+                            const folScale = 0.2 + ((progress - 0.5) * 1.6); // 0.2 -> 1.0
+                            const folOpacity = Math.min(1, (progress - 0.5) * 2.2);
+                            foliage.style.opacity = folOpacity;
+                            foliage.style.transform = `scale(${folScale})`;
+                        } else {
+                            foliage.style.opacity = 0;
+                            foliage.style.transform = 'scale(0.15)';
+                        }
+                    }
+
+                    // Underground Seed Roots glow intensity
+                    if (roots) {
+                        roots.style.opacity = progress > 0.4 ? Math.max(0.4, 1 - (progress - 0.4) * 1.2) : 1;
+                    }
+
+                    // Update Phase Text (No emojis)
+                    if (phaseBadge && phaseDesc) {
+                        if (progress < 0.25) {
+                            phaseBadge.textContent = 'Phase 1: Seedling Stage';
+                            phaseBadge.style.color = '#f59e0b';
+                            phaseDesc.textContent = 'Subterranean seed forming root system in soil';
+                        } else if (progress < 0.50) {
+                            phaseBadge.textContent = 'Phase 2: Sprouting Stage';
+                            phaseBadge.style.color = '#34d399';
+                            phaseDesc.textContent = 'Stem breaking through soil with fresh green shoots';
+                        } else if (progress < 0.75) {
+                            phaseBadge.textContent = 'Phase 3: Branching Stage';
+                            phaseBadge.style.color = '#38bdf8';
+                            phaseDesc.textContent = 'Expanding sturdy wood branches & leaf canopy';
+                        } else {
+                            phaseBadge.textContent = 'Phase 4: Full Bloom Tree';
+                            phaseBadge.style.color = '#a7f3d0';
+                            phaseDesc.textContent = 'Majestic career tree fully bloomed with glowing fruits';
+                        }
                     }
                 }
 
