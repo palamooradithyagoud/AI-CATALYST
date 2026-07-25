@@ -2,6 +2,15 @@
  * SkillRecommender — Premium SaaS Frontend Logic
  * Strictly Vanilla JS (no frameworks)
  */
+window.escapeHTML = function escapeHTML(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+};
 
 document.addEventListener('DOMContentLoaded', () => {
     // Selectors
@@ -2708,30 +2717,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const data = latestResumeAnalysis;
+        const scoreEl = document.getElementById('dashboard-resume-score');
+        const verdictEl = document.getElementById('dashboard-resume-verdict');
+        const impactEl = document.getElementById('dashboard-resume-impact');
+        const skillsEl = document.getElementById('dashboard-resume-skills');
+        const atsEl = document.getElementById('dashboard-resume-ats');
+
         if (data) {
-            document.getElementById('dashboard-resume-score').textContent = `${data.score}/100`;
-            const verdictEl = document.getElementById('dashboard-resume-verdict');
-            verdictEl.textContent = data.verdict;
-            verdictEl.className = 'score-verdict';
-            if (data.verdict.toLowerCase().includes('reject') || data.verdict.toLowerCase().includes('no')) {
-                verdictEl.classList.add('text-danger');
-            } else if (data.verdict.toLowerCase().includes('borderline')) {
-                verdictEl.classList.add('text-warning');
-            } else {
-                verdictEl.classList.add('text-success');
+            if (scoreEl) scoreEl.textContent = `${data.score}/100`;
+            if (verdictEl) {
+                verdictEl.textContent = data.verdict;
+                verdictEl.className = 'score-verdict';
+                if (data.verdict.toLowerCase().includes('reject') || data.verdict.toLowerCase().includes('no')) {
+                    verdictEl.classList.add('text-danger');
+                } else if (data.verdict.toLowerCase().includes('borderline')) {
+                    verdictEl.classList.add('text-warning');
+                } else {
+                    verdictEl.classList.add('text-success');
+                }
             }
-            document.getElementById('dashboard-resume-impact').textContent = data.impact;
-            document.getElementById('dashboard-resume-skills').textContent = data.match;
-            document.getElementById('dashboard-resume-ats').textContent = typeof data.ats === 'number' ? `${data.ats}%` : data.ats;
+            if (impactEl) impactEl.textContent = data.impact;
+            if (skillsEl) skillsEl.textContent = data.match;
+            if (atsEl) atsEl.textContent = typeof data.ats === 'number' ? `${data.ats}%` : data.ats;
         } else {
             // No resume uploaded yet — show empty state
-            document.getElementById('dashboard-resume-score').textContent = '—/100';
-            const verdictEl = document.getElementById('dashboard-resume-verdict');
-            verdictEl.textContent = 'Not analyzed yet';
-            verdictEl.className = 'score-verdict';
-            document.getElementById('dashboard-resume-impact').textContent = '—';
-            document.getElementById('dashboard-resume-skills').textContent = '—';
-            document.getElementById('dashboard-resume-ats').textContent = '—';
+            if (scoreEl) scoreEl.textContent = '—/100';
+            if (verdictEl) {
+                verdictEl.textContent = 'Not analyzed yet';
+                verdictEl.className = 'score-verdict';
+            }
+            if (impactEl) impactEl.textContent = '—';
+            if (skillsEl) skillsEl.textContent = '—';
+            if (atsEl) atsEl.textContent = '—';
         }
     };
 
@@ -4035,6 +4052,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectionView) selectionView.style.display = 'none';
         if (detailPageView) detailPageView.style.display = 'block';
 
+        if (typeof loadRoadmapProgressFromSupabase === 'function') {
+            loadRoadmapProgressFromSupabase(roleKey);
+        }
+
         // Update Hero Banner
         const titleEl = document.getElementById('roadmap-hero-title');
         const subtitleEl = document.getElementById('roadmap-hero-subtitle');
@@ -4062,12 +4083,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (openingsEl && info.openingsText) openingsEl.textContent = info.openingsText;
         if (salaryEl && info.salaryText) salaryEl.textContent = info.salaryText;
 
-        // Reset progress and stats to 0 initially
+        // Reset progress and stats based on completed/in-progress skills
         const updateRoadmapProgressStats = () => {
-            const checkboxes = document.querySelectorAll('.roadmap-topic-check');
-            const total = checkboxes.length || 1;
-            const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
-            const pct = Math.round((checked / total) * 100);
+            const skillPills = document.querySelectorAll('.skill-item-pill');
+            const total = skillPills.length || 1;
+            let completedCount = 0;
+            let inProgressCount = 0;
+
+            skillPills.forEach(pill => {
+                const name = pill.getAttribute('data-skill');
+                if (name) {
+                    const st = getSkillStatus(name);
+                    if (st === 'completed') completedCount++;
+                    else if (st === 'in_progress') inProgressCount++;
+                }
+            });
+
+            const pct = Math.round((completedCount / total) * 100);
 
             const pctEl = document.getElementById('roadmap-page-progress-pct');
             const subEl = document.getElementById('roadmap-progress-subtitle');
@@ -4078,16 +4110,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const badgesEl = document.getElementById('stat-badges');
 
             if (pctEl) pctEl.textContent = `${pct}%`;
-            if (subEl) subEl.textContent = `${pct}% Completed`;
+            if (subEl) subEl.textContent = `${completedCount} of ${total} Skills Completed`;
             if (arcCircle) {
                 const offset = 201 - Math.round(201 * (pct / 100));
                 arcCircle.setAttribute('stroke-dashoffset', offset);
             }
 
-            if (streakEl) streakEl.textContent = checked > 0 ? '1' : '0';
-            if (xpEl) xpEl.textContent = (checked * 100).toLocaleString();
-            if (lessonsEl) lessonsEl.textContent = checked;
-            if (badgesEl) badgesEl.textContent = Math.floor(checked / 2);
+            if (streakEl) streakEl.textContent = completedCount > 0 ? '1' : '0';
+            if (xpEl) xpEl.textContent = (completedCount * 150 + inProgressCount * 50).toLocaleString();
+            if (lessonsEl) lessonsEl.textContent = completedCount;
+            if (badgesEl) badgesEl.textContent = Math.floor(completedCount / 2);
 
             // Update Plant Growth Tree SVG Widget Stage
             const seedGroup = document.getElementById('stage-seed');
@@ -4102,24 +4134,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (plantGroup) plantGroup.style.display = 'none';
             if (treeGroup) treeGroup.style.display = 'none';
 
-            if (pct < 25) {
-                if (seedGroup) seedGroup.style.display = 'block';
-                if (treeTitle) treeTitle.textContent = '🌱 Seedling Stage';
-                if (treeDesc) treeDesc.textContent = 'Start topics to grow your tree!';
-            } else if (pct < 50) {
-                if (sproutGroup) sproutGroup.style.display = 'block';
-                if (treeTitle) treeTitle.textContent = '🌿 Sprout Stage';
-                if (treeDesc) treeDesc.textContent = 'Your knowledge is sprouting!';
-            } else if (pct < 75) {
-                if (plantGroup) plantGroup.style.display = 'block';
-                if (treeTitle) treeTitle.textContent = '🪴 Flourishing Plant';
-                if (treeDesc) treeDesc.textContent = 'Growing strong branches!';
-            } else {
-                if (treeGroup) treeGroup.style.display = 'block';
-                if (treeTitle) treeTitle.textContent = '🌳 Career Mastery Tree';
-                if (treeDesc) treeDesc.textContent = 'Full tree bloomed!';
-            }
+            if (treeGroup) treeGroup.style.display = 'block';
+            if (treeTitle) treeTitle.textContent = '🌳 Career Mastery Tree';
+            if (treeDesc) treeDesc.textContent = `${completedCount} completed · ${inProgressCount} in progress`;
         };
+
+        window.updateRoadmapProgressStatsGlobal = updateRoadmapProgressStats;
 
         // Render Vertical Timeline Tree Structure
         const stagesContainer = document.getElementById('roadmap-page-stages-container');
@@ -4163,13 +4183,18 @@ document.addEventListener('DOMContentLoaded', () => {
                                     ${stg.description ? `<p style="font-size: 0.85rem; color: #94a3b8; margin: 0 0 14px 0; line-height: 1.5;">${escapeHTML(stg.description)}</p>` : ''}
                                 </div>
 
-                                <!-- Interactive Pill Widgets Grid -->
+                                <!-- Interactive Pill Widgets Grid (Icons Only - Click to open right-side half page drawer) -->
                                 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
                                     ${stg.items.map((item, itemIdx) => `
-                                        <label class="tree-pill-widget" for="stg-${i}-item-${itemIdx}" style="display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 18px; font-size: 0.85rem; font-weight: 600; color: #e2e8f0; cursor: pointer; transition: all 0.2s ease;">
-                                            <input type="checkbox" class="roadmap-topic-check" id="stg-${i}-item-${itemIdx}" style="accent-color: #8b5cf6; width: 16px; height: 16px; cursor: pointer;">
+                                        <div class="skill-item-pill" data-skill="${escapeHTML(item)}" title="Click to view About, Resources & Interview Questions">
+                                            <div class="skill-pill-icon-box">
+                                                ${getSkillIconSvg(item)}
+                                            </div>
                                             <span>${escapeHTML(item)}</span>
-                                        </label>
+                                            <div class="skill-status-container" data-skill-status-container="${escapeHTML(item)}">
+                                                ${getSkillStatusBadgeHtml(item)}
+                                            </div>
+                                        </div>
                                     `).join('')}
                                 </div>
                             </div>
@@ -4302,22 +4327,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
 
-            // Attach checkbox change handlers
-            stagesContainer.querySelectorAll('.roadmap-topic-check').forEach(cb => {
-                cb.addEventListener('change', () => {
-                    const label = cb.closest('label');
-                    if (label) {
-                        if (cb.checked) {
-                            label.style.background = 'rgba(139, 92, 246, 0.2)';
-                            label.style.borderColor = 'rgba(139, 92, 246, 0.6)';
-                            label.style.color = '#ffffff';
-                        } else {
-                            label.style.background = 'rgba(255,255,255,0.04)';
-                            label.style.borderColor = 'rgba(255,255,255,0.1)';
-                            label.style.color = '#e2e8f0';
-                        }
+            // Attach skill pill click handlers to open right-side half-page drawer
+            stagesContainer.querySelectorAll('.skill-item-pill').forEach(pill => {
+                pill.addEventListener('click', () => {
+                    const skillName = pill.getAttribute('data-skill');
+                    if (skillName) {
+                        openSkillDetailDrawer(skillName);
                     }
-                    updateRoadmapProgressStats();
                 });
             });
 
@@ -5697,3 +5713,575 @@ document.addEventListener('DOMContentLoaded', () => {
     // Expose trackClick globally for inline onclick handlers
     window.trackClickGlobal = (url, title) => trackClick(url, title, 'click');
 });
+
+// ── SKILL DETAIL DRAWER & ICON UTILITIES ─────────────────────────
+const SKILL_DATABASE = {
+    "HTML5": {
+        category: "Frontend Core",
+        iconSvg: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e34f26" stroke-width="2.2"><path d="M12 2L2 7l1.8 13.5L12 22l8.2-1.5L22 7L12 2z"/><path d="M7 8h10M7.5 12h9M8 16h8"/></svg>`,
+        about: {
+            overview: "HTML5 is the backbone of modern web application development. It provides semantic page structures, native multimedia audio/video streaming, Web Canvas graphics, accessibility standards, and modern Web APIs.",
+            keyConcepts: [
+                "Semantic elements (<header>, <article>, <section>, <nav>, <footer>)",
+                "Form Validation API & Accessibility ARIA Roles",
+                "Client Storage: localStorage vs. sessionStorage vs. IndexedDB",
+                "HTML5 Canvas API, SVG & WebSockets",
+                "SEO Optimization & Open Graph Metadata"
+            ],
+            importance: "Foundational prerequisite for every web software engineer. Semantic markup ensures accessibility compliance and search engine discoverability."
+        },
+        resources: [
+            { title: "MDN Web Docs — HTML5 Standard Specifications", url: "https://developer.mozilla.org/en-US/docs/Web/HTML", type: "Official Docs" },
+            { title: "W3C Semantic HTML5 & Accessibility Best Practices", url: "https://www.w3schools.com/html/", type: "Tutorial Hub" },
+            { title: "HTML5 Semantic Elements Deep-Dive (CSS-Tricks)", url: "https://css-tricks.com/semantic-html5-elements/", type: "Guide" }
+        ],
+        questions: [
+            {
+                q: "What is the difference between HTML5 semantic tags and non-semantic tags?",
+                a: "Semantic tags like <article>, <section>, and <nav> communicate structural meaning to browsers, search engines, and accessibility tools. Non-semantic tags like <div> and <span> carry no structural meaning."
+            },
+            {
+                q: "What is the difference between localStorage, sessionStorage, and Cookies?",
+                a: "localStorage stores data with no expiration until cleared (5-10MB). sessionStorage stores data only for the current tab session. Cookies store small values (4KB) sent with every HTTP request."
+            },
+            {
+                q: "What are data-* attributes in HTML5?",
+                a: "data-* attributes allow custom data to be stored directly on HTML tags without using non-standard attributes. Access them in JS using element.dataset.attrName."
+            }
+        ]
+    },
+    "CSS3": {
+        category: "Styling & Layout",
+        iconSvg: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1572b6" stroke-width="2.2"><path d="M12 2L2 7l1.8 13.5L12 22l8.2-1.5L22 7L12 2z"/><path d="M7 8h10M7 12h9M7 16h5"/></svg>`,
+        about: {
+            overview: "CSS3 is the visual design engine of the web. It enables complex 1D Flexbox, 2D Grid layouts, custom CSS variables, responsive media queries, glassmorphism, and GPU-accelerated keyframe animations.",
+            keyConcepts: [
+                "CSS Box Model (content, padding, border, margin, box-sizing)",
+                "Flexbox vs. CSS Grid multi-dimensional layout systems",
+                "CSS Custom Properties (--var) & Dynamic Themes",
+                "Responsive Mobile-First Architecture & Media Queries",
+                "GPU-Accelerated CSS Transitions & @keyframes"
+            ],
+            importance: "Crucial for building responsive, pixel-perfect user interfaces with 60fps animations and modern aesthetic themes."
+        },
+        resources: [
+            { title: "MDN CSS Layout & Flexbox Masterclass", url: "https://developer.mozilla.org/en-US/docs/Web/CSS", type: "Official Docs" },
+            { title: "Complete Guide to CSS Grid Layouts (CSS-Tricks)", url: "https://css-tricks.com/snippets/css/a-guide-to-grid/", type: "Interactive Guide" },
+            { title: "Flexbox Froggy — Interactive Practice Game", url: "https://flexboxfroggy.com/", type: "Practice Sandbox" }
+        ],
+        questions: [
+            {
+                q: "Explain the CSS Box Model and box-sizing: border-box.",
+                a: "The box model includes content, padding, border, and margin. Setting box-sizing: border-box includes padding and border in width/height calculations, eliminating unexpected layout breaks."
+            },
+            {
+                q: "When should you use Flexbox vs. CSS Grid?",
+                a: "Use Flexbox for 1-dimensional layouts (a single row or column, such as navbars). Use CSS Grid for 2-dimensional layouts (rows and columns simultaneously, like dashboard grids)."
+            },
+            {
+                q: "How does CSS Specificity work?",
+                a: "Specificity ranks rules by score: Inline styles (1000) > IDs (100) > Classes/Attributes/Pseudo-classes (10) > Elements (1). Higher scores override lower ones."
+            }
+        ]
+    },
+    "JavaScript": {
+        category: "Scripting Engine",
+        iconSvg: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f7df1e" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M16 16v-4a2 2 0 0 0-2-2"/><path d="M10 16v-2a1 1 0 0 0-1-1H7"/></svg>`,
+        about: {
+            overview: "JavaScript ES6+ is the primary programming language of web application development. It powers asynchronous API requests, DOM tree manipulation, event loops, closures, and single-page app frameworks.",
+            keyConcepts: [
+                "ES6+ Syntax (Arrow Functions, Promises, Async/Await, Destructuring)",
+                "Lexical Scope, Closures & Execution Contexts",
+                "The JavaScript Event Loop, Call Stack & Microtask Queue",
+                "Prototypal Inheritance & Object-Oriented JS",
+                "DOM Manipulation, Event Bubbling & Delegation"
+            ],
+            importance: "The mandatory language powering modern full-stack web engineering across client-side frameworks (React, Vue) and server runtimes (Node.js)."
+        },
+        resources: [
+            { title: "JavaScript.info — The Modern JavaScript Tutorial", url: "https://javascript.info/", type: "Comprehensive Guide" },
+            { title: "MDN JavaScript Reference", url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript", type: "Official Docs" },
+            { title: "You Don't Know JS Yet (Book Series)", url: "https://github.com/getify/You-Dont-Know-JS", type: "Advanced Book" }
+        ],
+        questions: [
+            {
+                q: "What is a closure in JavaScript?",
+                a: "A closure is a function bundled together with references to its surrounding lexical state. It allows an inner function to access outer scope variables even after the outer function has returned."
+            },
+            {
+                q: "How does the Event Loop work in JavaScript?",
+                a: "JS runs synchronously on a single Call Stack. Async operations (fetch, timers) run via Web APIs. Resolved Promise microtasks and timer macrotasks wait in queues until the Event Loop pushes them to an empty stack."
+            },
+            {
+                q: "What is the difference between == and ===?",
+                a: "== checks equality with automatic type coercion (converts types first). === checks strict equality without type coercion (both type and value must match)."
+            }
+        ]
+    },
+    "React": {
+        category: "Frontend UI Library",
+        iconSvg: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#61dafb" stroke-width="2.2"><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/><circle cx="12" cy="12" r="2" fill="#61dafb"/></svg>`,
+        about: {
+            overview: "React is a declarative component-based UI library. It utilizes Virtual DOM diffing, JSX, state hooks, and unidirectional data flow to build fast, scalable single-page web applications.",
+            keyConcepts: [
+                "JSX Syntax & Virtual DOM Reconciliation (React Fiber Engine)",
+                "Hooks Architecture (useState, useEffect, useMemo, useCallback)",
+                "Component Lifecycle & Custom Hooks patterns",
+                "State Management (Context API, Redux Toolkit, Zustand)",
+                "SSR, SSG & Server Components (Next.js Paradigm)"
+            ],
+            importance: "The leading enterprise frontend library requested by top tech companies, enabling reusable UI component architectures and declarative state management."
+        },
+        resources: [
+            { title: "React Official Documentation (react.dev)", url: "https://react.dev/", type: "Official Docs" },
+            { title: "React Developer Roadmap & Best Practices", url: "https://react.dev/learn", type: "Interactive Guide" },
+            { title: "Redux Toolkit Official State Management Guide", url: "https://redux-toolkit.js.org/", type: "State Management" }
+        ],
+        questions: [
+            {
+                q: "What is the Virtual DOM and how does React reconciliation work?",
+                a: "The Virtual DOM is an in-memory light copy of the real DOM. When state changes, React creates a new Virtual DOM tree, diffs it against the old one using the Fiber reconciliation algorithm, and updates only modified real DOM nodes."
+            },
+            {
+                q: "What is the difference between useMemo and useCallback?",
+                a: "useMemo memoizes the *computed result* of a function. useCallback memoizes the *function instance* itself to avoid unnecessary child component re-renders."
+            },
+            {
+                q: "Why shouldn't you mutate state directly in React?",
+                a: "Directly mutating state bypasses React's state tracking, preventing the component from re-rendering. Always use setter functions or immutable updates."
+            }
+        ]
+    },
+    "Tailwind CSS": {
+        category: "Utility CSS Framework",
+        iconSvg: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2"><path d="M12 4.5C7 4.5 3.5 8 3.5 8S6.5 7 9 7c3.5 0 5.5 3.5 7.5 3.5 3 0 4-1.5 4-1.5S18 10.5 16 10.5c-3.5 0-5.5-3.5-7.5-3.5-2.5 0-4.5 1.5-6.5 1.5"/></svg>`,
+        about: {
+            overview: "Tailwind CSS is a utility-first CSS framework providing low-level styling classes (flex, pt-4, bg-slate-900) to compose custom UI designs directly in HTML without writing custom CSS files.",
+            keyConcepts: [
+                "Utility-First Atomic CSS Architecture",
+                "Responsive Design Modifiers (sm:, md:, lg:, xl:)",
+                "JIT (Just-In-Time) On-Demand Class Compilation",
+                "Dark Mode Strategies (dark: modifier)",
+                "Theme Customization & Tailwind Config Tokens"
+            ],
+            importance: "Speeds up UI design cycles, enforces cohesive design tokens, and produces extremely small CSS bundle sizes for high-performance web apps."
+        },
+        resources: [
+            { title: "Tailwind CSS Official Documentation", url: "https://tailwindcss.com/docs", type: "Official Docs" },
+            { title: "Tailwind Play Online Sandbox Environment", url: "https://play.tailwindcss.com/", type: "Online Sandbox" }
+        ],
+        questions: [
+            {
+                q: "What are the benefits of Utility-First CSS over traditional BEM CSS?",
+                a: "Utility-first CSS avoids naming fatigue, keeps CSS bundle size fixed regardless of app scale, and keeps styles localized to markup so edits don't cause unintended side effects."
+            },
+            {
+                q: "How does the Tailwind CSS JIT (Just-In-Time) engine work?",
+                a: "The JIT engine scans your files and generates CSS classes on-demand at build time rather than compiling a static library, resulting in sub-10KB production CSS files."
+            }
+        ]
+    }
+};
+
+function getSkillIconSvg(skillName) {
+    if (!skillName) return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2.2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`;
+    const s = skillName.trim();
+    if (SKILL_DATABASE[s] && SKILL_DATABASE[s].iconSvg) {
+        return SKILL_DATABASE[s].iconSvg;
+    }
+    const lower = s.toLowerCase();
+    if (lower.includes('git')) {
+        return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f05032" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><circle cx="6" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><path d="M6 8v8"/><path d="M8.5 7.5L10 10.5"/></svg>`;
+    } else if (lower.includes('python')) {
+        return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3776ab" stroke-width="2.2"><path d="M12 2C6.5 2 6 4 6 6v3h6v1H5C3 10 2 11.5 2 14s1 4 4 4h2v-3a3 3 0 0 1 3-3h5c1.5 0 3-1.5 3-3V6c0-2-.5-4-7-4z"/><circle cx="9" cy="4.5" r="1" fill="#3776ab"/></svg>`;
+    } else if (lower.includes('node') || lower.includes('express')) {
+        return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#68a063" stroke-width="2.2"><path d="M12 2l9 5.2v10.4L12 22.8 3 17.6V7.2L12 2z"/><path d="M12 12l9-5.2M12 12v10.8M12 12L3 6.8"/></svg>`;
+    } else if (lower.includes('sql') || lower.includes('db') || lower.includes('data')) {
+        return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>`;
+    } else if (lower.includes('cloud') || lower.includes('aws') || lower.includes('docker')) {
+        return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2.2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9z"/></svg>`;
+    }
+    return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2.2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`;
+}
+
+function getSkillDetails(skillName) {
+    const s = (skillName || "").trim();
+    if (SKILL_DATABASE[s]) return SKILL_DATABASE[s];
+
+    const category = s.toLowerCase().includes('git') ? 'Version Control' : s.toLowerCase().includes('css') || s.toLowerCase().includes('html') || s.toLowerCase().includes('react') ? 'Frontend Development' : 'Software Engineering Core';
+
+    return {
+        category: category,
+        iconSvg: getSkillIconSvg(s),
+        about: {
+            overview: `${s} is a fundamental skill in modern software engineering. Mastering ${s} empowers developers to build scalable, maintainable, and robust enterprise applications following industry best practices.`,
+            keyConcepts: [
+                `Core syntax & architectural paradigms of ${s}`,
+                `Design patterns & modular component practices`,
+                `Performance optimization, debugging & error handling`,
+                `Integration with cloud infrastructure & APIs`,
+                `Production security & code quality standards`
+            ],
+            importance: `Essential for technical interview rounds, domain expertise, and engineering high-throughput production applications.`
+        },
+        resources: [
+            { title: `${s} Official Documentation & Guides`, url: "https://developer.mozilla.org/", type: "Official Docs" },
+            { title: `${s} Video Masterclass & Tutorials`, url: "https://www.freecodecamp.org/", type: "Video Masterclass" },
+            { title: `${s} Interactive Coding Lab & Exercises`, url: "https://github.com/", type: "Interactive Lab" }
+        ],
+        questions: [
+            {
+                q: `What are the core concepts of ${s}?`,
+                a: `${s} focuses on structured design patterns, clean code principles, performance efficiency, and robust integration with software architectures.`
+            },
+            {
+                q: `How do you debug performance or runtime issues in ${s}?`,
+                a: `Use execution profiling, inspect system logs, analyze memory allocation, eliminate redundant operations, and implement caching layers.`
+            },
+            {
+                q: `What are essential best practices when using ${s} in production?`,
+                a: `Maintain modularity, write thorough unit tests, follow security guidelines, handle edge cases, and keep code documented for team collaboration.`
+            }
+        ]
+    };
+}
+
+let currentActiveSkillName = '';
+let currentActiveRoadmapKey = 'fullstack';
+
+const syncRoadmapProgressToSupabase = async () => {
+    try {
+        const stored = localStorage.getItem('skillpath_skill_statuses');
+        const statuses = stored ? JSON.parse(stored) : {};
+
+        let userId = 'anonymous';
+        if (window.supabaseClient) {
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+            if (session?.user?.id) {
+                userId = session.user.id;
+            }
+        }
+
+        const skillPills = document.querySelectorAll('.skill-item-pill');
+        const total = skillPills.length || Object.keys(statuses).length || 1;
+        const completedCount = Object.values(statuses).filter(s => s === 'completed').length;
+        const inProgressCount = Object.values(statuses).filter(s => s === 'in_progress').length;
+
+        if (window.supabaseClient) {
+            const { error } = await window.supabaseClient
+                .from('roadmap_progress')
+                .upsert({
+                    user_id: userId,
+                    roadmap_key: currentActiveRoadmapKey || 'fullstack',
+                    skill_statuses: statuses,
+                    completed_count: completedCount,
+                    in_progress_count: inProgressCount,
+                    total_skills: total,
+                    updated_at: new Date().toISOString()
+                }, { onConflict: 'user_id,roadmap_key' });
+
+            if (error) {
+                console.warn("[SUPABASE] Roadmap progress sync info:", error.message);
+            } else {
+                console.log("[SUPABASE] Roadmap progress synced to database.");
+            }
+        }
+    } catch (e) {
+        console.error("Failed to sync roadmap progress to Supabase:", e);
+    }
+};
+
+const loadRoadmapProgressFromSupabase = async (roadmapKey = 'fullstack') => {
+    currentActiveRoadmapKey = roadmapKey;
+    try {
+        let userId = 'anonymous';
+        if (window.supabaseClient) {
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
+            if (session?.user?.id) {
+                userId = session.user.id;
+            }
+
+            const { data, error } = await window.supabaseClient
+                .from('roadmap_progress')
+                .select('skill_statuses')
+                .eq('user_id', userId)
+                .eq('roadmap_key', roadmapKey)
+                .maybeSingle();
+
+            if (data && data.skill_statuses) {
+                localStorage.setItem('skillpath_skill_statuses', JSON.stringify(data.skill_statuses));
+                document.querySelectorAll('.skill-item-pill').forEach(pill => {
+                    const name = pill.getAttribute('data-skill');
+                    if (name) {
+                        const container = pill.querySelector('.skill-status-container');
+                        if (container) {
+                            container.innerHTML = getSkillStatusBadgeHtml(name);
+                        }
+                    }
+                });
+                if (typeof window.updateRoadmapProgressStatsGlobal === 'function') {
+                    window.updateRoadmapProgressStatsGlobal();
+                }
+            }
+        }
+    } catch (e) {
+        console.warn("Could not load roadmap progress from Supabase:", e);
+    }
+};
+
+function getSkillStatus(skillName) {
+    try {
+        const stored = localStorage.getItem('skillpath_skill_statuses');
+        const map = stored ? JSON.parse(stored) : {};
+        return map[skillName] || 'pending';
+    } catch (e) {
+        return 'pending';
+    }
+}
+
+function setSkillStatus(skillName, newStatus) {
+    try {
+        const stored = localStorage.getItem('skillpath_skill_statuses');
+        const map = stored ? JSON.parse(stored) : {};
+        map[skillName] = newStatus;
+        localStorage.setItem('skillpath_skill_statuses', JSON.stringify(map));
+    } catch (e) {
+        console.error(e);
+    }
+
+    const badgeHtml = getSkillStatusBadgeHtml(skillName);
+    document.querySelectorAll(`.skill-status-container`).forEach(el => {
+        if (el.getAttribute('data-skill-status-container') === skillName) {
+            el.innerHTML = badgeHtml;
+        }
+    });
+
+    const drawer = document.getElementById('skill-detail-drawer');
+    if (drawer) {
+        drawer.querySelectorAll('.status-select-btn').forEach(btn => {
+            if (btn.getAttribute('data-status') === newStatus) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    if (typeof window.updateRoadmapProgressStatsGlobal === 'function') {
+        window.updateRoadmapProgressStatsGlobal();
+    }
+
+    // Fire & forget sync to Supabase database
+    syncRoadmapProgressToSupabase();
+}
+
+function getSkillStatusBadgeHtml(skillName) {
+    const st = getSkillStatus(skillName);
+    if (st === 'completed') {
+        return `<span class="skill-status-badge completed" title="Status: Completed"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Completed</span>`;
+    } else if (st === 'in_progress') {
+        return `<span class="skill-status-badge in_progress" title="Status: In Progress"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> In Progress</span>`;
+    } else {
+        return `<span class="skill-status-badge pending" title="Status: Pending"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2.5"><circle cx="12" cy="12" r="9"/></svg> Pending</span>`;
+    }
+}
+
+function redirectToYouTubeStudying(skillName) {
+    closeSkillDetailDrawer();
+    const targetSkill = skillName || currentActiveSkillName || 'HTML5';
+    const learningTabBtn = document.getElementById('btn-sidebar-learning');
+    const skillInput = document.getElementById('skill-input');
+    if (learningTabBtn) {
+        learningTabBtn.click();
+        if (skillInput) {
+            skillInput.value = targetSkill;
+        }
+        const ctaBtn = document.getElementById('cta-button');
+        if (ctaBtn) {
+            ctaBtn.click();
+        } else if (typeof handleSearch === 'function') {
+            handleSearch();
+        }
+    }
+}
+
+function openSkillDetailDrawer(skillName) {
+    const drawer = document.getElementById('skill-detail-drawer');
+    const backdrop = document.getElementById('skill-drawer-backdrop');
+    if (!drawer || !backdrop) return;
+
+    currentActiveSkillName = skillName;
+    const data = getSkillDetails(skillName);
+    const curStatus = getSkillStatus(skillName);
+
+    const titleEl = document.getElementById('skill-drawer-title');
+    const catEl = document.getElementById('skill-drawer-category');
+    const iconBox = document.getElementById('skill-drawer-icon-box');
+
+    if (titleEl) titleEl.textContent = skillName;
+    if (catEl) {
+        catEl.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; width:100%; flex-wrap:wrap; gap:8px;">
+                <span>${escapeHTML(data.category || 'Core Skill')}</span>
+                <div class="skill-drawer-status-bar" style="display: inline-flex; align-items: center; gap: 6px;">
+                    <button class="status-select-btn ${curStatus==='pending'?'active':''}" data-status="pending" onclick="setSkillStatus('${escapeHTML(skillName)}', 'pending')">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/></svg>
+                        Pending
+                    </button>
+                    <button class="status-select-btn ${curStatus==='in_progress'?'active':''}" data-status="in_progress" onclick="setSkillStatus('${escapeHTML(skillName)}', 'in_progress')">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        In Progress
+                    </button>
+                    <button class="status-select-btn ${curStatus==='completed'?'active':''}" data-status="completed" onclick="setSkillStatus('${escapeHTML(skillName)}', 'completed')">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        Completed
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+    if (iconBox) iconBox.innerHTML = data.iconSvg || getSkillIconSvg(skillName);
+
+    const aboutPane = document.getElementById('skill-tab-content-about');
+    if (aboutPane) {
+        aboutPane.innerHTML = `
+            <div style="margin-bottom: 24px;">
+                <div style="font-size: 0.8rem; font-weight: 800; color: #a855f7; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">Overview</div>
+                <p style="font-size: 0.95rem; color: #e2e8f0; line-height: 1.65; margin: 0;">
+                    ${escapeHTML(data.about.overview)}
+                </p>
+            </div>
+
+            <div style="margin-bottom: 24px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 20px;">
+                <div style="font-size: 0.8rem; font-weight: 800; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Key Concepts to Master
+                </div>
+                <ul style="margin: 0; padding-left: 20px; color: #cbd5e1; font-size: 0.9rem; line-height: 1.7;">
+                    ${data.about.keyConcepts.map(kc => `<li>${escapeHTML(kc)}</li>`).join('')}
+                </ul>
+            </div>
+
+            <div style="background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.25); border-radius: 14px; padding: 18px 20px;">
+                <div style="font-size: 0.8rem; font-weight: 800; color: #c084fc; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px;">Why It Matters for Your Career</div>
+                <p style="font-size: 0.88rem; color: #e2e8f0; line-height: 1.6; margin: 0;">
+                    ${escapeHTML(data.about.importance)}
+                </p>
+            </div>
+        `;
+    }
+
+    const resPane = document.getElementById('skill-tab-content-resources');
+    if (resPane) {
+        resPane.innerHTML = `
+            <!-- Redirection Banner to YouTube Studying Section -->
+            <div class="yt-study-redirect-banner" onclick="redirectToYouTubeStudying('${escapeHTML(skillName)}')">
+                <div style="display: flex; align-items: center; gap: 14px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: #ff0000; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 18px rgba(255,0,0,0.5); flex-shrink: 0;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="#ffffff"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    </div>
+                    <div>
+                        <div style="font-size: 1rem; font-weight: 800; color: #ffffff;">YouTube Studying Masterclass</div>
+                        <div style="font-size: 0.8rem; color: #fca5a5;">Open interactive video courses & playlists for ${escapeHTML(skillName)}</div>
+                    </div>
+                </div>
+                <span style="font-size: 0.85rem; font-weight: 800; color: #ffffff; background: rgba(255,255,255,0.18); padding: 8px 16px; border-radius: 8px; white-space: nowrap;">
+                    Study Now ➔
+                </span>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <div style="font-size: 0.8rem; font-weight: 800; color: #a855f7; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px;">Documentation & Practice Guides</div>
+                ${data.resources.map(r => `
+                    <a href="${escapeHTML(r.url)}" target="_blank" rel="noopener noreferrer" class="skill-resource-card">
+                        <div style="display: flex; align-items: center; gap: 14px;">
+                            <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.3); display: flex; align-items: center; justify-content: center; color: #60a5fa;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.92rem; font-weight: 700; color: #ffffff; margin-bottom: 2px;">${escapeHTML(r.title)}</div>
+                                <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600; text-transform: uppercase; background: rgba(255,255,255,0.06); padding: 2px 8px; border-radius: 4px;">${escapeHTML(r.type)}</span>
+                            </div>
+                        </div>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                    </a>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    const qPane = document.getElementById('skill-tab-content-questions');
+    if (qPane) {
+        qPane.innerHTML = `
+            <div style="margin-bottom: 20px;">
+                <div style="font-size: 0.8rem; font-weight: 800; color: #a855f7; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 14px;">High-Frequency Technical Interview Questions</div>
+                ${data.questions.map((item, idx) => `
+                    <div class="skill-faq-card">
+                        <div style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px;">
+                            <span style="font-size: 0.8rem; font-weight: 900; color: #a855f7; background: rgba(168, 85, 247, 0.15); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 6px; padding: 2px 8px; flex-shrink: 0; margin-top: 2px;">Q${idx + 1}</span>
+                            <h4 style="font-size: 0.96rem; font-weight: 700; color: #ffffff; margin: 0; line-height: 1.45;">${escapeHTML(item.q)}</h4>
+                        </div>
+                        <div style="background: rgba(0, 0, 0, 0.3); border-left: 3px solid #10b981; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-left: 34px;">
+                            <p style="font-size: 0.88rem; color: #cbd5e1; margin: 0; line-height: 1.6;">${escapeHTML(item.a)}</p>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    const tabs = drawer.querySelectorAll('.skill-tab-btn');
+    tabs.forEach(t => t.classList.remove('active'));
+    const aboutTab = drawer.querySelector('.skill-tab-btn[data-tab="about"]');
+    if (aboutTab) aboutTab.classList.add('active');
+
+    if (aboutPane) aboutPane.style.display = 'block';
+    if (resPane) resPane.style.display = 'none';
+    if (qPane) qPane.style.display = 'none';
+
+    drawer.classList.add('open');
+    backdrop.classList.add('open');
+}
+
+function closeSkillDetailDrawer() {
+    const drawer = document.getElementById('skill-detail-drawer');
+    const backdrop = document.getElementById('skill-drawer-backdrop');
+    if (drawer) drawer.classList.remove('open');
+    if (backdrop) backdrop.classList.remove('open');
+}
+
+// Bind Skill Detail Drawer global handlers
+document.addEventListener('DOMContentLoaded', () => {
+    const closeBtn = document.getElementById('close-skill-drawer-btn');
+    const backdrop = document.getElementById('skill-drawer-backdrop');
+    if (closeBtn) closeBtn.addEventListener('click', closeSkillDetailDrawer);
+    if (backdrop) backdrop.addEventListener('click', closeSkillDetailDrawer);
+
+    const drawer = document.getElementById('skill-detail-drawer');
+    if (drawer) {
+        const tabBtns = drawer.querySelectorAll('.skill-tab-btn');
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetTab = btn.getAttribute('data-tab');
+                if (targetTab === 'resources') {
+                    // Redirect directly into YouTube studying section when user presses Resources
+                    redirectToYouTubeStudying(currentActiveSkillName);
+                    return;
+                }
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const panes = drawer.querySelectorAll('.skill-tab-pane');
+                panes.forEach(p => p.style.display = 'none');
+
+                const activePane = document.getElementById(`skill-tab-content-${targetTab}`);
+                if (activePane) activePane.style.display = 'block';
+            });
+        });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeSkillDetailDrawer();
+    });
+});
+

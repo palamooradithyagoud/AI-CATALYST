@@ -290,3 +290,26 @@ CREATE INDEX IF NOT EXISTS idx_skills_cache_lookup ON skills_cache(skill_name, l
 CREATE INDEX IF NOT EXISTS idx_recent_searches_user_created ON recent_searches(user_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_interview_progress_user ON interview_progress(user_id, created_at DESC);
 
+-- ──────────────────────────────────────────────
+-- 5. Roadmap Progress Table Setup
+-- ──────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS roadmap_progress (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id TEXT NOT NULL DEFAULT 'anonymous',
+    roadmap_key TEXT NOT NULL DEFAULT 'fullstack',
+    skill_statuses JSONB NOT NULL DEFAULT '{}'::jsonb,
+    completed_count INTEGER DEFAULT 0,
+    in_progress_count INTEGER DEFAULT 0,
+    total_skills INTEGER DEFAULT 0,
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(user_id, roadmap_key)
+);
+
+CREATE INDEX IF NOT EXISTS idx_roadmap_progress_user ON roadmap_progress(user_id, roadmap_key);
+
+ALTER TABLE roadmap_progress ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Public access roadmap_progress" ON roadmap_progress;
+CREATE POLICY "Public access roadmap_progress" ON roadmap_progress FOR ALL USING (true) WITH CHECK (true);
+
+
