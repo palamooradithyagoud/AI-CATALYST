@@ -586,7 +586,7 @@
     </div>
 
     <div class="brand-badge">
-      <span>✨ Enterprise AI Career Accelerator</span>
+      <span>Enterprise AI Career Accelerator</span>
     </div>
 
     <h1 class="brand-headline">
@@ -617,7 +617,7 @@
     <!-- 3 Main Features -->
     <div class="feature-cards">
       <div class="feature-card">
-        <div class="feature-icon">⚡</div>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
         <div class="feature-text">
           <h4>Roadmap & Resources</h4>
           <p>Personalized 5-tier learning pathways, YouTube playlists & certifications for any skill.</p>
@@ -625,7 +625,7 @@
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon">📊</div>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
         <div class="feature-text">
           <h4>Topic-wise & Company-wise DSA Questions</h4>
           <p>500+ frequency-ranked LeetCode problems for Google, Meta, Amazon, Microsoft & Apple.</p>
@@ -633,7 +633,7 @@
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon">🎯</div>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
         <div class="feature-text">
           <h4>Interview Prep + Resume Review</h4>
           <p>Multi-stage ATS resume scoring, recruiter simulation & real-time AI mock interviews.</p>
@@ -848,7 +848,7 @@
 
       <!-- ── View 5: Verification Pending Panel ── -->
       <div class="verification-pending-panel" id="verification-pending-panel">
-        <h2 class="auth-panel-title">Verify Your Email ✉️</h2>
+        <h2 class="auth-panel-title">Verify Your Email</h2>
         <p class="auth-panel-subtitle">A verification link was sent to your inbox. Please click it to activate your candidate dashboard.</p>
         <div class="email-box" id="verification-email-display">you@example.com</div>
         <button onclick="handleResendVerification()" class="btn-primary" id="resend-verification-btn">
@@ -883,13 +883,13 @@
         <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
       </svg>
     </div>
-    <h2 class="success-title" id="success-title">Account Created! 🎉</h2>
+    <h2 class="success-title" id="success-title">Account Created!</h2>
     <p class="success-sub" id="success-sub">Setting up your AI Career Command Center...</p>
     
     <div class="launch-progress-container">
       <div class="launch-progress-bar" id="launch-progress-bar"></div>
     </div>
-    <div class="launch-step-text" id="launch-step-text">⚡ Provisioning AI candidate profile...</div>
+    <div class="launch-step-text" id="launch-step-text">Provisioning AI candidate profile...</div>
   </div>
 </div>
 
@@ -1057,21 +1057,21 @@
     
     overlay.classList.add('active');
     barEl.style.width = '0%';
-    stepEl.textContent = '⚡ Provisioning AI candidate profile...';
+    stepEl.textContent = 'Provisioning AI candidate profile...';
 
     setTimeout(() => {
       barEl.style.width = '38%';
-      stepEl.textContent = '📊 Indexing 500+ company DSA problem sets...';
+      stepEl.textContent = 'Indexing 500+ company DSA problem sets...';
     }, 450);
 
     setTimeout(() => {
       barEl.style.width = '78%';
-      stepEl.textContent = '✴️ Tuning Groq Llama-3.3 AI inference engine...';
+      stepEl.textContent = 'Tuning Groq Llama-3.3 AI inference engine...';
     }, 950);
 
     setTimeout(() => {
       barEl.style.width = '100%';
-      stepEl.textContent = '🚀 Opening SkillPath Dashboard...';
+      stepEl.textContent = 'Opening SkillPath Dashboard...';
     }, 1450);
 
     setTimeout(() => {
@@ -1156,7 +1156,7 @@
         return;
       }
 
-      triggerLaunchSequence('Welcome Back! 🚀', email.split('@')[0], () => {
+      triggerLaunchSequence('Welcome Back!', email.split('@')[0], () => {
         window.location.replace('/dashboard');
       });
 
@@ -1209,11 +1209,11 @@
       const user = data.user;
 
       if (user && !user.email_confirmed_at && user.identities && user.identities.length > 0) {
-        triggerLaunchSequence('Account Registered! ✉️', name || email.split('@')[0], () => {
+        triggerLaunchSequence('Account Registered!', name || email.split('@')[0], () => {
           showPanel('verification-pending', email);
         });
       } else {
-        triggerLaunchSequence('Account Created! 🎉', name || email.split('@')[0], () => {
+        triggerLaunchSequence('Account Created!', name || email.split('@')[0], () => {
           window.location.replace('/dashboard');
         });
       }
@@ -1243,7 +1243,7 @@
         return;
       }
 
-      showToast('✉️ Reset link sent! Check your inbox.');
+      showToast('Reset link sent! Check your inbox.');
       setTimeout(() => showPanel('login'), 1500);
     } catch (err) {
       showError('Connection error. Please try again.');
@@ -1282,7 +1282,7 @@
         return;
       }
 
-      showToast('✅ Password reset successful! Logging in...');
+      showToast('Password reset successful! Logging in...');
       setTimeout(() => showPanel('login'), 1500);
     } catch (err) {
       showError('Connection error. Please try again.');
@@ -1316,7 +1316,7 @@
         return;
       }
 
-      showToast('✉️ Verification email resent!');
+      showToast('Verification email resent!');
       let timer = 60;
       const interval = setInterval(() => {
         timer--;

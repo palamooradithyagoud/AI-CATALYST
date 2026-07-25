@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Remove it
             savedPlaylists.splice(index, 1);
             if (btnEl) {
-                btnEl.textContent = '💾 Save';
+                btnEl.textContent = 'Save';
                 btnEl.classList.remove('saved');
             }
             showToast('Removed from saved playlists');
@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
             playlist.completed = false;
 
             if (btnEl) {
-                btnEl.textContent = '⏳ Loading...';
+                btnEl.textContent = 'Loading...';
                 btnEl.disabled = true;
             }
 
@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             savedPlaylists.push(playlist);
             if (btnEl) {
-                btnEl.textContent = '✅ Saved';
+                btnEl.textContent = 'Saved';
                 btnEl.classList.add('saved');
                 btnEl.disabled = false;
             }
@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (mainCheck) mainCheck.checked = playlist.completed;
 
                 const mainCheckLabel = cardEl.querySelector('.saved-playlist-check span');
-                if (mainCheckLabel) mainCheckLabel.textContent = playlist.completed ? '✅ Done' : 'Mark Done';
+                if (mainCheckLabel) mainCheckLabel.textContent = playlist.completed ? 'Done' : 'Mark Done';
 
                 const videoCb = cardEl.querySelector(`.video-checkbox[data-video-id="${CSS.escape(String(videoId))}"]`);
                 const videoItem = videoCb ? videoCb.closest('.playlist-video-item') : null;
@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Also update any visible buttons on screen
         document.querySelectorAll(`.btn-save-playlist[data-url="${url}"]`).forEach(btn => {
-            btn.textContent = '💾 Save';
+            btn.textContent = 'Save';
             btn.classList.remove('saved');
         });
     };
@@ -338,10 +338,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const completedCount = p.videos ? p.videos.filter(v => v.completed).length : 0;
             const progressPct = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
             const statusBadgeHTML = p.completed
-                ? `<span class="pill-badge status-verified-badge" style="background:rgba(16, 185, 129, 0.15); color:var(--success); font-size:0.75rem; font-weight:700; padding:5px 12px; border-radius:99px; display:inline-flex; align-items:center; gap:4px;">✅ Completed</span>`
+                ? `<span class="pill-badge status-verified-badge" style="background:rgba(16, 185, 129, 0.15); color:var(--success); font-size:0.75rem; font-weight:700; padding:5px 12px; border-radius:99px; display:inline-flex; align-items:center; gap:4px;"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#10b981" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Completed</span>`
                 : (completedCount > 0
-                    ? `<span class="pill-badge status-progress-badge" style="background:rgba(56, 189, 248, 0.15); color:#38bdf8; font-size:0.75rem; font-weight:700; padding:5px 12px; border-radius:99px; display:inline-flex; align-items:center; gap:4px;">🛡️ ${progressPct}% Verified</span>`
-                    : `<span class="pill-badge status-pending-badge" style="background:var(--bg-main); color:var(--text-muted); border:1px solid var(--border); font-size:0.75rem; font-weight:600; padding:5px 12px; border-radius:99px; display:inline-flex; align-items:center; gap:4px;">⏳ Not Started</span>`);
+                    ? `<span class="pill-badge status-progress-badge" style="background:rgba(56, 189, 248, 0.15); color:#38bdf8; font-size:0.75rem; font-weight:700; padding:5px 12px; border-radius:99px; display:inline-flex; align-items:center; gap:4px;"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#38bdf8" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> ${progressPct}% Verified</span>`
+                    : `<span class="pill-badge status-pending-badge" style="background:var(--bg-main); color:var(--text-muted); border:1px solid var(--border); font-size:0.75rem; font-weight:600; padding:5px 12px; border-radius:99px; display:inline-flex; align-items:center; gap:4px;">Not Started</span>`);
 
             card.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
@@ -353,7 +353,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="saved-playlist-actions" style="margin-left: auto; display:flex; align-items:center; gap:12px;">
                         ${statusBadgeHTML}
-                        <button class="btn-watch btn-open-player" data-url="${escapeHTML(p.url)}" style="padding: 6px 14px; font-size: 0.75rem; border-radius: var(--radius-sm); border:none; cursor:pointer; font-weight:700; background:var(--primary); color:#fff;">▶ Watch</button>
+                        <button class="btn-watch btn-open-player" data-url="${escapeHTML(p.url)}" style="padding: 6px 14px; font-size: 0.75rem; border-radius: var(--radius-sm); border:none; cursor:pointer; font-weight:700; background:var(--primary); color:#fff;">Watch</button>
                         <button class="btn-remove-saved" data-url="${escapeHTML(p.url)}">Delete</button>
                     </div>
                 </div>
@@ -368,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             ${completedCount} of ${totalCount} videos verified (${progressPct}%)
                         </span>
                         <button class="saved-playlist-videos-toggle" data-expanded="false" style="font-size:0.75rem; color:var(--primary); background:none; border:none; cursor:pointer; font-weight:700;">
-                            ▼ Show Videos (${totalCount})
+                            Show Videos (${totalCount})
                         </button>
                     </div>
                 </div>
@@ -381,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 ${v.completed ? '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>' : '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>'}
                             </span>
                             <span class="btn-play-video-item" style="cursor:pointer; flex:1; font-weight:${v.completed ? '500' : '600'};">${v.displayNum || (vIdx + 1)}. ${escapeHTML(v.title)}</span>
-                            <button class="btn-play-video-item btn-watch" style="padding:4px 10px; font-size:0.7rem; border-radius:4px; font-weight:700;">▶ Play</button>
+                            <button class="btn-play-video-item btn-watch" style="padding:4px 10px; font-size:0.7rem; border-radius:4px; font-weight:700;">Play</button>
                         </div>
                     `).join('')}
                 </div>
@@ -395,11 +395,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (isExpanded) {
                     videosList.style.display = 'none';
                     toggleBtn.setAttribute('data-expanded', 'false');
-                    toggleBtn.textContent = `▼ Show Videos (${totalCount})`;
+                    toggleBtn.textContent = `Show Videos (${totalCount})`;
                 } else {
                     videosList.style.display = 'flex';
                     toggleBtn.setAttribute('data-expanded', 'true');
-                    toggleBtn.textContent = `▲ Hide Videos`;
+                    toggleBtn.textContent = `Hide Videos`;
                 }
             });
 
@@ -591,9 +591,9 @@ document.addEventListener('DOMContentLoaded', () => {
             item.className = `player-sidebar-item ${idx === currentVideoIndex ? 'active' : ''} ${v.completed ? 'completed' : ''}`;
             
             item.innerHTML = `
-                <span class="item-index">${idx === currentVideoIndex ? '▶' : `#${idx + 1}`}</span>
+                <span class="item-index">${idx === currentVideoIndex ? '' : `#${idx + 1}`}</span>
                 <span class="item-title">${escapeHTML(v.title)}</span>
-                <span class="item-status">${v.completed ? '✅' : '⏳'}</span>
+                <span class="item-status">${v.completed ? '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#10b981" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>' : ''}</span>
             `;
 
             item.addEventListener('click', () => {
@@ -737,7 +737,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const btnResume = document.getElementById('player-btn-resume');
 
             if (resumeText) resumeText.textContent = `You previously watched up to ${formatted}.`;
-            if (btnResume) btnResume.textContent = `▶ Continue watching from ${formatted}`;
+            if (btnResume) btnResume.textContent = `Continue watching from ${formatted}`;
             if (resumeOverlay) resumeOverlay.style.display = 'flex';
 
             if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
@@ -831,7 +831,7 @@ document.addEventListener('DOMContentLoaded', () => {
         video.completedAt = new Date().toISOString();
         activeVideoCompleted = true;
 
-        showToast(`🎉 Video #${video.id} Completed Automatically!`);
+        showToast(`Video #${video.id} Completed Automatically!`);
 
         renderPlayerHeader();
         renderPlayerSidebar();
@@ -1033,12 +1033,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (checklist) {
             checklist.innerHTML = '';
             const phases = [
-                { key: 'beginner', label: '🌱 Beginner Phase' },
-                { key: 'intermediate', label: '🔥 Intermediate Phase' },
-                { key: 'advanced', label: '🚀 Advanced Phase' },
-                { key: 'projects', label: '🛠️ Projects to Build' },
-                { key: 'certifications', label: '🏆 Recommended Certifications' },
-                { key: 'interview_prep', label: '💼 Interview Prep Focus' }
+                { key: 'beginner', label: 'Beginner Phase' },
+                { key: 'intermediate', label: 'Intermediate Phase' },
+                { key: 'advanced', label: 'Advanced Phase' },
+                { key: 'projects', label: 'Projects to Build' },
+                { key: 'certifications', label: 'Recommended Certifications' },
+                { key: 'interview_prep', label: 'Interview Prep Focus' }
             ];
 
             phases.forEach(phase => {
@@ -1187,7 +1187,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const html = list.length > 0 ? list.map(m => `
             <div style="background:var(--bg-main); border:1px solid var(--border); padding:14px 18px; border-radius:var(--radius-md); display:flex; align-items:center; gap:14px;">
-                <span style="font-size:1.6rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));">🏆</span>
+                <span style="display:flex; align-items:center; justify-content:center;"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg></span>
                 <div style="display:flex; flex-direction:column; gap:3px;">
                     <strong style="color:var(--text-main); font-size:0.925rem; line-height:1.3;">${escapeHTML(m.outcome_detail || m.skill_name)}</strong>
                      <span style="color:var(--text-muted); font-size:0.75rem;">Earned ${new Date(m.created_at).toLocaleDateString(undefined, {year: 'numeric', month: 'long', day: 'numeric'})}</span>
@@ -1203,7 +1203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const analyticsHtml = list.length > 0 ? list.map(m => `
             <div style="background:var(--bg-card); border:1px solid var(--border); padding:16px 20px; border-radius:var(--radius-lg); display:flex; align-items:center; gap:16px; box-shadow:var(--shadow-card); margin-bottom:12px;">
-                <div style="font-size:2rem; background:rgba(37,99,235,0.08); width:52px; height:52px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">🏆</div>
+                <div style="background:rgba(37,99,235,0.08); width:52px; height:52px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg></div>
                 <div style="display:flex; flex-direction:column; gap:4px; flex-grow:1;">
                     <strong style="color:var(--text-main); font-size:1rem; font-family:'Outfit',sans-serif;">${escapeHTML(m.outcome_detail || m.skill_name)}</strong>
                     <span style="color:var(--text-muted); font-size:0.8rem;">Career Milestone Achievement • Completed on ${new Date(m.created_at).toLocaleDateString(undefined, {year: 'numeric', month: 'long', day: 'numeric'})}</span>
@@ -1385,11 +1385,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (tierLabelBadge) tierLabelBadge.textContent = data.tier_label || '';
 
             if (data.tier === 0) {
-                tierIndicator.textContent = '⚡ Instant Result: Retrieved from AI Memory';
+                tierIndicator.textContent = 'Instant Result: Retrieved from AI Memory';
             } else if (data.tier === 1) {
-                tierIndicator.textContent = '🚀 Curated Result: Trusted CSV Dataset';
+                tierIndicator.textContent = 'Curated Result: Trusted CSV Dataset';
             } else if (data.tier >= 3) {
-                tierIndicator.textContent = '🧠 AI-Ranked Result: Groq Intelligence Engine';
+                tierIndicator.textContent = 'AI-Ranked Result: Groq Intelligence Engine';
             } else {
                 tierIndicator.textContent = 'The best free curated playlists to build your foundation.';
             }
@@ -1411,7 +1411,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             if (error.message.includes("No verified high-quality")) {
-                emptyState.innerHTML = `<p style="color: var(--danger); font-size: 1.1rem; font-weight: 500;">❌ ${escapeHTML(error.message)}</p>`;
+                emptyState.innerHTML = `<p style="color: var(--danger); font-size: 1.1rem; font-weight: 500;">${escapeHTML(error.message)}</p>`;
             } else {
                 showToast(error.message);
             }
@@ -1428,7 +1428,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const savedList = getSavedPlaylists();
         const isSaved = savedList.some(p => p.url === data.url);
-        const saveBtnLabel = isSaved ? '✅ Saved' : '💾 Save';
+        const saveBtnLabel = isSaved ? 'Saved' : 'Save';
         const saveBtnClass = isSaved ? 'btn-save-playlist saved' : 'btn-save-playlist';
 
         const isCert = !data.url.includes('youtube.com');
@@ -1455,8 +1455,8 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <h3 class="card-title">${escapeHTML(data.title)}</h3>
             <span class="channel-name">${escapeHTML(data.channel)}</span>
-            <p class="card-desc" style="margin-top: 10px;"><strong>💡 Why:</strong> ${escapeHTML(data.why_selected)}</p>
-            <p class="card-desc"><strong>⏱️ Time:</strong> ${escapeHTML(data.estimated_time)} | <strong>🎯 Outcome:</strong> ${escapeHTML(data.expected_outcome)}</p>
+            <p class="card-desc" style="margin-top: 10px;"><strong>Why:</strong> ${escapeHTML(data.why_selected)}</p>
+            <p class="card-desc"><strong>Time:</strong> ${escapeHTML(data.estimated_time)} | <strong>Outcome:</strong> ${escapeHTML(data.expected_outcome)}</p>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: auto;">
                 ${actionButtonsHtml}
             </div>
@@ -1561,7 +1561,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     trackingBtnContainer.innerHTML = `
                         <button id="btn-track-this-roadmap" class="btn-primary" style="width:100%; height:44px; display:flex; align-items:center; justify-content:center; font-weight:600; font-size:0.9rem; border-radius:var(--radius-md);">
-                            🗺️ Track this Learning Roadmap
+                            Track this Learning Roadmap
                         </button>
                     `;
                 }
@@ -1585,12 +1585,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 roadmapContent.appendChild(checklistContainer);
 
                 const phases = [
-                    { key: 'beginner', label: '🌱 Beginner Phase' },
-                    { key: 'intermediate', label: '🔥 Intermediate Phase' },
-                    { key: 'advanced', label: '🚀 Advanced Phase' },
-                    { key: 'projects', label: '🛠️ Projects to Build' },
-                    { key: 'certifications', label: '🏆 Recommended Certifications' },
-                    { key: 'interview_prep', label: '💼 Interview Prep Focus' }
+                    { key: 'beginner', label: 'Beginner Phase' },
+                    { key: 'intermediate', label: 'Intermediate Phase' },
+                    { key: 'advanced', label: 'Advanced Phase' },
+                    { key: 'projects', label: 'Projects to Build' },
+                    { key: 'certifications', label: 'Recommended Certifications' },
+                    { key: 'interview_prep', label: 'Interview Prep Focus' }
                 ];
 
                 phases.forEach(phase => {
@@ -1688,7 +1688,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const savedList = getSavedPlaylists();
         const isSaved = savedList.some(p => p.url === url);
-        const saveBtnLabel = isSaved ? '✅ Saved' : '💾 Save';
+        const saveBtnLabel = isSaved ? 'Saved' : 'Save';
         const saveBtnClass = isSaved ? 'btn-save-playlist saved' : 'btn-save-playlist';
 
         const actionButtonsHtml = isCert ? `
@@ -2423,7 +2423,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         data-diff="${difficulty}"
                         data-topic="${topic}"
                         ${isSolved ? 'checked' : ''}>
-                    <span class="solve-label">${isSolved ? '✅ Solved' : 'Mark as Solved'}</span>
+                    <span class="solve-label">${isSolved ? 'Solved' : 'Mark as Solved'}</span>
                 </div>
 
                 <h3 class="card-title">${escapeHTML(name)}</h3>
@@ -2462,7 +2462,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const checkbox = card.querySelector('.solve-checkbox');
             checkbox.addEventListener('change', (e) => {
                 toggleSolved({ link, name, difficulty, topic }, e.target.checked);
-                card.querySelector('.solve-label').textContent = e.target.checked ? '✅ Solved' : 'Mark as Solved';
+                card.querySelector('.solve-label').textContent = e.target.checked ? 'Solved' : 'Mark as Solved';
                 updateCommandCenter();
             });
 
@@ -3693,7 +3693,7 @@ document.addEventListener('DOMContentLoaded', () => {
             currentProjects.unshift({ title, category, desc });
             await syncProjects(currentProjects);
             renderProjectsList(currentProjects);
-            showToast('✅ Project added successfully!');
+            showToast('Project added successfully!');
             addProjectForm.reset();
         });
     }
@@ -4135,7 +4135,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (treeGroup) treeGroup.style.display = 'none';
 
             if (treeGroup) treeGroup.style.display = 'block';
-            if (treeTitle) treeTitle.textContent = '🌳 Career Mastery Tree';
+            if (treeTitle) treeTitle.textContent = 'Career Mastery Tree';
             if (treeDesc) treeDesc.textContent = `${completedCount} completed · ${inProgressCount} in progress`;
         };
 
@@ -4552,7 +4552,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             mentorSubmitPage.textContent = 'Consulting your mentor...';
             mentorSubmitPage.disabled = true;
-            mentorResultPage.innerHTML = '<div style="text-align:center; padding:20px;"><div class="spinner"></div><p style="color:var(--text-sub);">⚡ Analyzing your path...</p></div>';
+            mentorResultPage.innerHTML = '<div style="text-align:center; padding:20px;"><div class="spinner"></div><p style="color:var(--text-sub);">Analyzing your path...</p></div>';
 
             try {
                 const res = await fetch('/mentor-mode', {
@@ -4576,22 +4576,22 @@ document.addEventListener('DOMContentLoaded', () => {
                             "${escapeHTML(data.verdict)}"
                         </p>
                         ${ data.lagging_areas && data.lagging_areas.length ? `
-                        <p style="color:var(--text-sub); font-size:0.85rem; margin-bottom:6px; font-weight:600;">⚠️ Where you are lagging behind:</p>
+                        <p style="color:var(--text-sub); font-size:0.85rem; margin-bottom:6px; font-weight:600;">Where you are lagging behind:</p>
                         <ul style="padding-left:16px; color:var(--danger); font-size:0.85rem; margin-bottom:12px;">
                             ${data.lagging_areas.map(area => `<li>${escapeHTML(area)}</li>`).join('')}
                         </ul>` : ''}
                         ${ data.wasted_time && data.wasted_time.length ? `
-                        <p style="color:var(--text-sub); font-size:0.85rem; margin-bottom:4px; font-weight:600;">⛔ Stop wasting time on:</p>
+                        <p style="color:var(--text-sub); font-size:0.85rem; margin-bottom:4px; font-weight:600;">Stop wasting time on:</p>
                         <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
                             ${data.wasted_time.map(s => `<span class="pill-badge" style="background:#fee2e2;color:#ef4444;border-color:transparent;">${escapeHTML(s)}</span>`).join('')}
                         </div>` : ''}
                         ${ data.must_learn_now && data.must_learn_now.length ? `
-                        <p style="color:var(--text-sub); font-size:0.85rem; margin-bottom:6px; font-weight:600;">✅ Learn these NOW:</p>
+                        <p style="color:var(--text-sub); font-size:0.85rem; margin-bottom:6px; font-weight:600;">Learn these NOW:</p>
                         <ul style="padding-left:16px; color:var(--text-main); font-size:0.85rem; margin-bottom:12px;">
                             ${data.must_learn_now.map(i => `<li><strong>${escapeHTML(i.skill)}</strong> — ${escapeHTML(i.reason)}</li>`).join('')}
                         </ul>` : ''}
                         ${ data.improvement_suggestions && data.improvement_suggestions.length ? `
-                        <p style="color:var(--text-sub); font-size:0.85rem; margin-bottom:6px; font-weight:600;">💡 How to do it better:</p>
+                        <p style="color:var(--text-sub); font-size:0.85rem; margin-bottom:6px; font-weight:600;">How to do it better:</p>
                         <ul style="padding-left:16px; color:var(--text-main); font-size:0.85rem; margin-bottom:12px; line-height:1.5;">
                             ${data.improvement_suggestions.map(s => `<li><strong>${escapeHTML(s.action)}</strong> — ${escapeHTML(s.how_to_do_better)}</li>`).join('')}
                         </ul>` : ''}
@@ -4599,14 +4599,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             ${escapeHTML(data.brutal_truth)}
                         </p>
                         <div style="background:var(--primary-light); border-left:3px solid var(--primary); padding:12px 16px; border-radius:8px;">
-                            <p style="color:var(--primary); font-size:0.85rem; margin:0; font-weight:600;">🎯 This week: ${escapeHTML(data.action_this_week)}</p>
+                            <p style="color:var(--primary); font-size:0.85rem; margin:0; font-weight:600;">This week: ${escapeHTML(data.action_this_week)}</p>
                         </div>
                     </div>
                 `;
             } catch(e) {
                 mentorResultPage.innerHTML = `<p style="color:var(--danger);">Failed: ${escapeHTML(e.message)}</p>`;
             } finally {
-                mentorSubmitPage.textContent = 'Get Brutal Advice ⚡';
+                mentorSubmitPage.textContent = 'Get Brutal Advice';
                 mentorSubmitPage.disabled = false;
             }
         });
@@ -5122,22 +5122,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (dbSaved) {
-            showToast('✅ Profiles & live student stats synced successfully to Database!');
+            showToast('Profiles & live student stats synced successfully to Database!');
         } else {
-            showToast('✅ Coding profiles saved locally (Cloud sync failed or pending schema migration).');
+            showToast('Coding profiles saved locally (Cloud sync failed or pending schema migration).');
         }
 
         if (leetcode) {
             try {
-                showToast('🔄 Fetching live LeetCode stats...');
+                showToast('Fetching live LeetCode stats...');
                 const res = await fetch(`/get-leetcode-stats?profile=${encodeURIComponent(leetcode)}`);
                 if (res.ok) {
                     const data = await res.json();
                     if (data && data.status === 'success' && data.stats) {
                         leetcodeStats = data.stats;
-                        showToast(`📊 Loaded LeetCode solved count: ${leetcodeStats.All} questions!`);
+                        showToast(`Loaded LeetCode solved count: ${leetcodeStats.All} questions!`);
                     } else {
-                        showToast('⚠️ Could not load LeetCode solved count from profile.');
+                        showToast('Could not load LeetCode solved count from profile.');
                     }
                 }
             } catch (e) {
@@ -5204,9 +5204,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (dbSaved) {
-            showToast('✨ Academic profile updated & synced to Cloud successfully!');
+            showToast('Academic profile updated & synced to Cloud successfully!');
         } else {
-            showToast('✨ Academic profile updated locally!');
+            showToast('Academic profile updated locally!');
         }
     };
 
@@ -5474,7 +5474,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!leetcode && !github && !hackerrank && !codechef && !gfg && !codeforces) {
                 codingResultPage.innerHTML = `
                     <div style="background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); border-radius:8px; padding:12px; color:#ef4444; font-size:0.85rem; font-weight:600; margin-top:16px;">
-                        ⚠️ Please configure at least one coding profile in Settings to execute the analysis.
+                        Please configure at least one coding profile in Settings to execute the analysis.
                     </div>
                 `;
                 return;
@@ -5482,7 +5482,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             codingSubmitBtnPage.textContent = 'Auditing coding standing...';
             codingSubmitBtnPage.disabled = true;
-            codingResultPage.innerHTML = '<div style="text-align:center; padding:20px;"><div class="spinner"></div><p style="color:var(--text-sub);">⚡ Analyzing coding standings & DSA progress...</p></div>';
+            codingResultPage.innerHTML = '<div style="text-align:center; padding:20px;"><div class="spinner"></div><p style="color:var(--text-sub);">Analyzing coding standings & DSA progress...</p></div>';
 
             try {
                 const res = await fetch('/mentor-mode', {
@@ -5518,7 +5518,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <!-- Header Banner -->
                         <div style="background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 16px; padding: 28px; color: white; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);">
                             <h2 style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; gap: 10px;">
-                                🔥 Coding Growth Report
+                                Coding Growth Report
                             </h2>
                             <p style="margin: 0; font-size: 0.95rem; opacity: 0.9; font-weight: 500;">
                                 Premium Technical Alignment & Placement Readiness Audit
@@ -5528,7 +5528,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <!-- 1. Performance Snapshot -->
                         <div class="card" style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
                             <h3 style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
-                                📊 1. Performance Snapshot
+                                1. Performance Snapshot
                             </h3>
                             <p style="font-size: 0.925rem; line-height: 1.6; color: var(--text-sub); margin: 0; padding: 14px; background: rgba(99, 102, 241, 0.04); border-left: 4px solid #6366f1; border-radius: 0 8px 8px 0; font-style: italic;">
                                 "${escapeHTML(snapshot.summary)}"
@@ -5568,13 +5568,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         <!-- 2. Strength Analysis -->
                         <div class="card" style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
                             <h3 style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
-                                🌟 2. Strength Analysis
+                                2. Strength Analysis
                             </h3>
                             <div style="display: grid; grid-template-columns: 1fr; gap: 12px;">
                                 ${strengths.map(s => `
                                     <div style="background: var(--bg-main); border: 1px solid var(--border); padding: 16px; border-radius: 8px; display: flex; flex-direction: column; gap: 6px;">
                                         <strong style="color: var(--success); font-size: 0.95rem; display: flex; align-items: center; gap: 6px;">
-                                            <span>✔</span> ${escapeHTML(s.title)}
+                                            <span>✓</span> ${escapeHTML(s.title)}
                                         </strong>
                                         <p style="margin: 0; font-size: 0.875rem; color: var(--text-sub); line-height: 1.5;">${escapeHTML(s.why)}</p>
                                     </div>
@@ -5585,23 +5585,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         <!-- 3. Skill Gap Analysis -->
                         <div class="card" style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
                             <h3 style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
-                                🎯 3. High-Impact Areas for Growth
+                                3. High-Impact Areas for Growth
                             </h3>
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
                                 <div style="background: rgba(239, 68, 68, 0.03); border: 1px solid rgba(239, 68, 68, 0.1); padding: 16px; border-radius: 10px; display: flex; flex-direction: column; gap: 10px;">
-                                    <strong style="color: #ef4444; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.02em;">🔴 Critical</strong>
+                                    <strong style="color: #ef4444; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.02em;">Critical</strong>
                                     <div style="display: flex; flex-wrap: wrap; gap: 6px;">
                                         ${(growthAreas.critical || []).map(topic => `<span class="pill-badge" style="background:#fef2f2; color:#ef4444; border-color:transparent; font-size:0.75rem;">${escapeHTML(topic)}</span>`).join('')}
                                     </div>
                                 </div>
                                 <div style="background: rgba(245, 158, 11, 0.03); border: 1px solid rgba(245, 158, 11, 0.1); padding: 16px; border-radius: 10px; display: flex; flex-direction: column; gap: 10px;">
-                                    <strong style="color: #f59e0b; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.02em;">🟡 Important</strong>
+                                    <strong style="color: #f59e0b; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.02em;">Important</strong>
                                     <div style="display: flex; flex-wrap: wrap; gap: 6px;">
                                         ${(growthAreas.important || []).map(topic => `<span class="pill-badge" style="background:#fffbeb; color:#d97706; border-color:transparent; font-size:0.75rem;">${escapeHTML(topic)}</span>`).join('')}
                                     </div>
                                 </div>
                                 <div style="background: rgba(59, 130, 246, 0.03); border: 1px solid rgba(59, 130, 246, 0.1); padding: 16px; border-radius: 10px; display: flex; flex-direction: column; gap: 10px;">
-                                    <strong style="color: #3b82f6; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.02em;">🔵 Optional</strong>
+                                    <strong style="color: #3b82f6; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.02em;">Optional</strong>
                                     <div style="display: flex; flex-wrap: wrap; gap: 6px;">
                                         ${(growthAreas.optional || []).map(topic => `<span class="pill-badge" style="background:#eff6ff; color:#2563eb; border-color:transparent; font-size:0.75rem;">${escapeHTML(topic)}</span>`).join('')}
                                     </div>
@@ -5612,7 +5612,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <!-- 4. Interview Readiness Assessment -->
                         <div class="card" style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
                             <h3 style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
-                                💼 4. Interview Readiness Assessment
+                                4. Interview Readiness Assessment
                             </h3>
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; flex-wrap: wrap;">
                                 <div style="display: flex; flex-direction: column; gap: 14px;">
@@ -5643,7 +5643,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <!-- 5. Personalized Roadmap -->
                         <div class="card" style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
                             <h3 style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
-                                🗓 5. 30-Day Personalized Action Plan
+                                5. 30-Day Personalized Action Plan
                             </h3>
                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
                                 ${["week_1", "week_2", "week_3", "week_4"].map((wk, idx) => `
@@ -5661,7 +5661,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; flex-wrap: wrap;">
                             <div class="card" style="padding: 20px; display: flex; flex-direction: column; gap: 12px;">
                                 <h4 style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
-                                    💡 6. AI Insights
+                                    6. AI Insights
                                 </h4>
                                 <ul style="padding-left: 18px; margin: 0; font-size: 0.85rem; color: var(--text-sub); display: flex; flex-direction: column; gap: 8px; line-height: 1.5;">
                                     ${insights.map(item => `<li>${escapeHTML(item)}</li>`).join('')}
@@ -5669,7 +5669,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                             <div class="card" style="padding: 20px; display: flex; flex-direction: column; gap: 12px; background: linear-gradient(to bottom right, rgba(99, 102, 241, 0.02), rgba(168, 85, 247, 0.02)); justify-content: center; border: 1px dashed rgba(99,102,241,0.25);">
                                 <h4 style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
-                                    ✨ 7. Growth Motivation
+                                    7. Growth Motivation
                                 </h4>
                                 <p style="margin: 0; font-size: 0.875rem; color: var(--text-sub); line-height: 1.6; font-style: italic;">
                                     "${escapeHTML(motivation)}"
@@ -5680,16 +5680,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         <!-- 8. Visual Dashboard Suggestions -->
                         <div class="card" style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
                             <h3 style="margin: 0; font-family: 'Outfit', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px;">
-                                🎴 8. Visual Dashboard Cards Recommendations
+                                8. Visual Dashboard Cards Recommendations
                             </h3>
                             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;">
                                 ${[
-                                    { title: "Achievement Card", text: dbCards.achievement_card || "🏆 Setup achievements details" },
-                                    { title: "Growth Score Card", text: dbCards.growth_score_card || "📈 Track scores weekly" },
-                                    { title: "Interview Readiness Card", text: dbCards.interview_readiness_card || "🎯 Monitor placement status" },
-                                    { title: "Next Milestone Card", text: dbCards.next_milestone_card || "⚡ Reach next level goals" },
-                                    { title: "30-Day Roadmap Card", text: dbCards.roadmap_card || "🗓 Review action planning daily" },
-                                    { title: "Streak Card", text: dbCards.streak_card || "🔥 Keep coding consistency" }
+                                    { title: "Achievement Card", text: dbCards.achievement_card || "Setup achievements details" },
+                                    { title: "Growth Score Card", text: dbCards.growth_score_card || "Track scores weekly" },
+                                    { title: "Interview Readiness Card", text: dbCards.interview_readiness_card || "Monitor placement status" },
+                                    { title: "Next Milestone Card", text: dbCards.next_milestone_card || "Reach next level goals" },
+                                    { title: "30-Day Roadmap Card", text: dbCards.roadmap_card || "Review action planning daily" },
+                                    { title: "Streak Card", text: dbCards.streak_card || "Keep coding consistency" }
                                 ].map(card => `
                                     <div style="background: var(--bg-main); border: 1px solid var(--border); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; gap: 4px;">
                                         <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">${escapeHTML(card.title)}</span>
@@ -5704,7 +5704,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch(e) {
                 codingResultPage.innerHTML = `<p style="color:var(--danger); margin-top:16px;">Failed: ${escapeHTML(e.message)}</p>`;
             } finally {
-                codingSubmitBtnPage.textContent = 'Analyze Coding Profiles & DSA ⚡';
+                codingSubmitBtnPage.textContent = 'Analyze Coding Profiles & DSA';
                 codingSubmitBtnPage.disabled = false;
             }
         });
