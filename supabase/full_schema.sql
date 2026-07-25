@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS profiles (
     email TEXT,
     full_name TEXT,
     avatar_url TEXT,
-    current_role TEXT DEFAULT 'Learner',
-    target_role TEXT DEFAULT 'Full Stack Developer',
+    "current_role" TEXT DEFAULT 'Learner',
+    "target_role" TEXT DEFAULT 'Full Stack Developer',
     streak_days INTEGER DEFAULT 0,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS saved_playlists (
     UNIQUE(user_id, playlist_url)
 );
 
--- 7. Learning Progress Table (Video Watch Anti-Cheat Sessions)
+-- 7. Learning Progress Table (Video Watch Sessions)
 CREATE TABLE IF NOT EXISTS learning_progress (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
