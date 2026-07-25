@@ -575,6 +575,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const countEl = document.getElementById('player-completion-count-text');
         if (pctEl) pctEl.textContent = `${pct}% Completed`;
         if (countEl) countEl.textContent = `${completedCount} of ${total} videos`;
+
+        // Update Mark Completed toggle button text & style
+        const toggleCompleteBtn = document.getElementById('player-btn-toggle-complete');
+        const toggleCompleteText = document.getElementById('player-btn-toggle-complete-text');
+        const isComp = currentPlaylist.videos && currentPlaylist.videos[currentVideoIndex] && currentPlaylist.videos[currentVideoIndex].completed;
+        if (toggleCompleteText) toggleCompleteText.textContent = isComp ? 'Completed ✓' : 'Mark Completed';
+        if (toggleCompleteBtn) {
+            toggleCompleteBtn.style.background = isComp ? 'rgba(16,185,129,0.25)' : 'rgba(16,185,129,0.12)';
+            toggleCompleteBtn.style.borderColor = isComp ? 'rgba(16,185,129,0.6)' : 'rgba(16,185,129,0.35)';
+        }
     };
 
     const renderPlayerSidebar = () => {
@@ -643,10 +653,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const playerAnchor = document.getElementById('yt-player-anchor');
 
         if (playerAnchor) {
-            const embedSrc = `https://www.youtube.com/embed/${finalYtId}?rel=0&modestbranding=1`;
+            const embedSrc = `https://www.youtube.com/embed/${finalYtId}?enablejsapi=1&rel=0&modestbranding=1`;
 
             playerAnchor.innerHTML = `
                 <iframe 
+                    id="active-yt-player-iframe"
                     width="100%" 
                     height="480" 
                     src="${embedSrc}" 
@@ -658,6 +669,37 @@ document.addEventListener('DOMContentLoaded', () => {
                     style="border:0; width:100%; height:100%; min-height:480px; display:block; border-radius:16px;"
                 ></iframe>
             `;
+
+            // Try attaching YT.Player API instance if available
+            if (window.YT && window.YT.Player) {
+                try {
+                    ytPlayer = new window.YT.Player('active-yt-player-iframe', {
+                        events: {
+                            'onStateChange': onYTPlayerStateChange,
+                            'onReady': onYTPlayerReady
+                        }
+                    });
+                } catch(e){}
+            }
+        }
+
+        // Bind Mark Completed toggle button
+        const toggleCompleteBtn = document.getElementById('player-btn-toggle-complete');
+        if (toggleCompleteBtn) {
+            toggleCompleteBtn.onclick = () => {
+                if (!currentPlaylist || !currentPlaylist.videos[currentVideoIndex]) return;
+                const v = currentPlaylist.videos[currentVideoIndex];
+                v.completed = !v.completed;
+                if (v.completed) v.completedAt = new Date().toISOString();
+                else v.completedAt = null;
+                activeVideoCompleted = v.completed;
+                showToast(v.completed ? `✓ Video #${v.displayNum || (currentVideoIndex + 1)} Marked Completed!` : `Video #${v.displayNum || (currentVideoIndex + 1)} Marked Incomplete`);
+                renderPlayerHeader();
+                renderPlayerSidebar();
+                renderSavedPlaylists();
+                syncSavedPlaylists(savedPlaylists);
+                updateCommandCenter();
+            };
         }
     };
 
@@ -703,6 +745,29 @@ document.addEventListener('DOMContentLoaded', () => {
             checkAutoCompletion(dur, dur);
         }
     };
+
+    // Global postMessage handler for YouTube iframe API events
+    window.addEventListener('message', (event) => {
+        if (!event.origin || !event.origin.includes('youtube.com')) return;
+        try {
+            const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+            if (!data) return;
+            
+            if (data.event === 'onStateChange') {
+                if (data.info === 0) { // ENDED
+                    markCurrentVideoComplete();
+                } else if (data.info === 1) { // PLAYING
+                    startWatchTimers();
+                }
+            } else if (data.info && typeof data.info.currentTime === 'number' && typeof data.info.duration === 'number') {
+                const curr = data.info.currentTime;
+                const dur = data.info.duration;
+                if (dur > 0 && curr / dur >= 0.75) {
+                    markCurrentVideoComplete();
+                }
+            }
+        } catch(e){}
+    });
 
     const startWatchTimers = () => {
         stopWatchTimers();
