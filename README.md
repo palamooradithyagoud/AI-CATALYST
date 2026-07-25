@@ -1,6 +1,6 @@
 # 🛰️ SkillPath — Enterprise AI Career Accelerator
 
-SkillPath is a high-performance, SaaS-style career readiness platform designed to accelerate candidate readiness for FAANG and top-tier technology companies. By orchestrating multi-agent LLM systems, local curated learning pathways, and cloud-scale database operations, SkillPath offers hyper-personalized roadmap extraction, resume assessment, algorithmic practice metrics, mock interview targeting, and automated transactional email reporting.
+SkillPath is a high-performance, SaaS-style career readiness platform designed to accelerate candidate readiness for FAANG and top-tier technology companies. By orchestrating multi-agent LLM systems, local curated learning pathways, and cloud-scale database operations, SkillPath offers hyper-personalized roadmap extraction, video learning progress tracking with automatic completion, resume assessment, algorithmic practice metrics, mock interview targeting, and automated transactional email reporting.
 
 ---
 
@@ -20,10 +20,21 @@ SkillPath is a high-performance, SaaS-style career readiness platform designed t
   <a href="https://resend.com/">
     <img src="https://img.shields.io/badge/Email-Resend%20API-black.svg?style=flat-square" alt="Resend Integration" />
   </a>
+  <a href="https://vercel.com/">
+    <img src="https://img.shields.io/badge/Deployment-Vercel-black.svg?style=flat-square&logo=vercel" alt="Vercel Deployment" />
+  </a>
   <a href="https://opensource.org/licenses/MIT">
     <img src="https://img.shields.io/badge/License-MIT-green.svg?style=flat-square" alt="License" />
   </a>
 </p>
+
+---
+
+## 🌐 Live Production & Local Links
+
+- **Live Production App (Vercel)**: [https://skillpath-sandy.vercel.app/dashboard](https://skillpath-sandy.vercel.app/dashboard)
+- **Local Application Dashboard**: [http://localhost:3000/dashboard](http://localhost:3000/dashboard)
+- **Local Login Page**: [http://localhost:3000/login](http://localhost:3000/login)
 
 ---
 
@@ -44,20 +55,25 @@ graph TD
 
 1. **SPA Frontend**: Single-page application UI with a glassmorphic dashboard (Nebula Design System), using Chart.js for radar charts and progress history.
 2. **Flask API Gateway**: Handles REST requests, JWT authentication middleware, in-memory TTL caching, and background task execution via `ThreadPoolExecutor`.
-3. **Supabase Cloud**: Manages user authentication, profile data, DSA progress tracking, resume evaluations, and database Row-Level Security (RLS).
+3. **Supabase Cloud**: Manages user authentication, profile data, saved video playlists, DSA progress tracking, roadmap completion, resume evaluations, and Row-Level Security (RLS).
 4. **Groq AI Engine**: Evaluates resume transcripts, grades ATS keyword density, constructs personalized skill roadmaps, and conducts mock interviews using `llama-3.3-70b-versatile`.
 5. **Resend Email Service**: Sends automated welcome emails and personalized career report PDF/HTML summaries to candidates.
 
 ---
 
-## 🌟 Core Pillars
+## 🌟 Core Pillars & Feature Highlights
 
-### 1. Hybrid Skill & Certification Router
-- **Tier-1 Local Cache**: Instantly maps core topics (Python, Java, System Design, DSA) using pre-packaged, validated local datasets.
-- **Tier-2 YouTube Playlists Fallback**: Fetches real-time learning playlists via YouTube Data API v3 with custom quality metrics.
-- **Tier-3 AI Recommendation Engine**: Uses Llama-3.3 70B via Groq to craft personalized 5-tier roadmaps: *Primary, Fast Track, Interview, Project, and Advanced*.
+### 1. Saved Playlists & Interactive Video Player with Automatic 75% Completion Tick `✓`
+- **Embedded YouTube Player**: High-definition embedded player with instant video switching from the Course Content queue.
+- **100% Automatic 75% Watch Completion**: Runs a continuous background timer (`startWatchTimers` + YouTube `postMessage` listener). When a user completes at least **75% of a video**, the video is **automatically marked completed with a green checkmark tick `✓`**.
+- **Course Queue Sidebar & Saved Progress**: Highlights current video, tracks completed videos, and calculates live course progress percentages.
+- **Manual Completion Toggle**: Provides a 1-click **`✓ Mark Completed`** button for manual status updates.
 
-### 2. Multi-Stage Resume Evaluator
+### 2. Structured Skill & Career Roadmaps
+- **Skill Roadmaps Top Hierarchy**: **Skill Roadmaps** (Python Mastery, Java & Spring Boot, C++, JavaScript) are displayed at the top for instant language learning, followed by **Career Roadmaps** (Full Stack, Backend, AI/ML, DevOps) below.
+- **Multi-Tier AI Recommendation Engine**: Uses Llama-3.3 70B via Groq to craft personalized 5-tier roadmaps: *Primary, Fast Track, Interview, Project, and Advanced*.
+
+### 3. Multi-Stage Resume Evaluator
 - **Parsing Suite**: Extracts formatted text from PDF (`pypdf`) and DOCX (`docx2txt`) uploads.
 - **Recruiter Sandbox Simulation**:
   - **ATS Scanner**: Keyword density analysis and structural parsing verification.
@@ -65,18 +81,18 @@ graph TD
   - **Hiring Manager Audit**: Technical depth and project complexity grading.
 - **Actionable Output**: Delivers scores out of 10, tailored project ideas, suggested tools, line-by-line bullet points rewrites, and email export capability.
 
-### 3. DSA Command Center & Performance Analytics
+### 4. DSA Command Center & Performance Analytics
 - **Company-wise Question Mappings**: Frequency-sorted problem sets for 100+ tech companies (e.g. Google, Amazon, Meta, Microsoft, Apple).
 - **GitHub-Style Heatmap**: Visualizes practice streak consistency and topic completion over time.
 - **Personal Readiness Index (PRI)**: Weighted multi-variable readiness score:
   $$\text{PRI} = (\text{DSA\_Score} \times 0.40) + (\text{Resume\_Score} \times 0.30) + (\text{Playlist\_Progress} \times 0.15) + (\text{Projects\_Score} \times 0.15)$$
 - **Competency Radar**: Automatically benchmarks candidates against target role baselines (Intern, L3, L4, L5, Senior).
 
-### 4. Interactive AI Mock Interview & Evaluation
+### 5. Interactive AI Mock Interview & Evaluation
 - **Simulated Interview Rounds**: AI-generated technical questions based on candidate target role and company.
 - **Real-Time Scoring & Feedback**: Evaluates technical precision, communication style, and structural clarity.
 
-### 5. Automated Email Reporting & Onboarding
+### 6. Automated Email Reporting & Onboarding
 - **Welcome Emails**: Automatic asynchronous welcome email dispatch upon candidate onboarding.
 - **Career Reports**: One-click email dispatch of resume audit and interview feedback directly to candidate inbox via Resend.
 
@@ -90,6 +106,7 @@ graph TD
 | **AI Inference** | [Groq SDK](https://groq.com/) (`llama-3.3-70b-versatile`) | Ultra-fast token generation for resume analysis and mock interviews. |
 | **Database & Storage** | [Supabase](https://supabase.com/) (PostgreSQL 15) | Relational database, Supabase Auth, Object storage, and RLS policies. |
 | **Email Service** | [Resend API](https://resend.com/) | Transactional email dispatch for onboarding and career audit reports. |
+| **Deployment** | [Vercel](https://vercel.com/) | Live serverless cloud deployment and production hosting. |
 | **Authentication** | Supabase Auth + JWT Bearer Tokens | Stateless JWT-based authentication middleware. |
 | **Frontend UI** | HTML5 · Vanilla CSS3 · JS (ES6+) | Responsive glassmorphic dark-mode interface dashboard. |
 | **Performance & Caching**| Thread-Safe In-Memory TTL Cache | High-speed response caching for API endpoints and metadata. |
@@ -121,13 +138,13 @@ AI-CATALYST/
 │   ├── css/
 │   │   └── style.css           # Custom CSS Design System & Layout Tokens
 │   └── js/
-│       ├── app.js              # SPA Application Logic & API Communications
+│       ├── app.js              # SPA Application Logic & Video Watch Progress Tracker
 │       └── supabaseClient.js   # Supabase Authentication & Client Wrapper
 │
 ├── supabase/                   # Supabase Infrastructure & Database Provisioning
-│   ├── consolidated_schema.sql # Complete SQL Schema script (Tables, Triggers, RLS)
-│   ├── config.toml             # Local Supabase configuration
-│   └── migrations/             # Local database migration history
+│   ├── full_schema.sql         # Complete Production SQL Schema (13 Tables, Triggers, RLS)
+│   ├── roadmap_progress.sql    # Local database migration history
+│   └── config.toml             # Local Supabase configuration
 │
 └── data/                       # Curated Learning & Company Question Datasets
     ├── leetcode-companywise/   # CSV databases of company-specific DSA problems
@@ -185,19 +202,19 @@ RESEND_API_KEY=re_your_resend_api_key_here
 YOUTUBE_API_KEY=your_youtube_api_key_here
 ```
 
-### 4. Setup Database Schema
+### 4. Setup Master Database Schema in Supabase
 1. Log in to your [Supabase Dashboard](https://supabase.com).
 2. Go to **SQL Editor** -> **New Query**.
-3. Open `supabase/consolidated_schema.sql` from this repository, copy its contents, and paste them into the SQL Editor.
-4. Click **Run** to execute the script and provision all necessary tables, triggers, indexes, and storage buckets.
+3. Open `supabase/full_schema.sql` from this repository, copy its contents, and paste them into the SQL Editor.
+4. Click **Run** to execute the script and provision all 13 database tables, triggers, indexes, and Row Level Security policies.
 
-### 5. Run the Application
+### 5. Run the Application Locally
 ```bash
 python app.py
 ```
 By default, the server will start at:
 - **Local Base URL**: [http://localhost:3000](http://localhost:3000)
-- **Login Page**: [http://localhost:3000/login-page](http://localhost:3000/login-page)
+- **Login Page**: [http://localhost:3000/login](http://localhost:3000/login)
 - **Dashboard**: [http://localhost:3000/dashboard](http://localhost:3000/dashboard)
 
 ---
@@ -210,111 +227,17 @@ Main API endpoints provided by `app.py`:
 | :--- | :--- | :--- | :--- |
 | `POST` | `/signup` | ❌ No | Register a new user profile with Supabase Auth |
 | `POST` | `/login` | ❌ No | Authenticate user credentials and return JWT bearer token |
-| `GET` | `/login-page` | ❌ No | Serves the login and signup frontend HTML page |
+| `GET` | `/login` | ❌ No | Serves the login and signup frontend HTML page |
 | `GET` | `/dashboard` | ❌ No | Serves the main application dashboard HTML page |
 | `POST` | `/get-resource` | ✅ Yes | Retrieve skill path roadmaps and recommended learning resources |
+| `POST` | `/mark-video-complete` | ✅ Yes | Persist 75% video completion status to database |
 | `POST` | `/analyze-resume` | ✅ Yes | Parse PDF/DOCX resume file and return AI ATS evaluation |
 | `GET` | `/get-companies` | ✅ Yes | Get list of available tech companies for DSA prep |
 | `GET` | `/get-questions` | ✅ Yes | Fetch frequency-sorted LeetCode questions by company/topic |
 | `POST` | `/generate-competency-audit` | ✅ Yes | Generate AI-driven career readiness report and audit |
 | `POST` | `/send-email-report` | ✅ Yes | Send candidate resume/audit report via Resend email service |
 | `POST` | `/send-welcome-email` | ✅ Yes | Trigger welcome email notification for new candidate |
-| `POST` | `/sync-user-projects` | ✅ Yes | Persist candidate project portfolio updates to Supabase |
 | `POST` | `/sync-active-roadmap` | ✅ Yes | Save interactive roadmap checklist progress |
-
-*Note: Endpoints requiring authorization expect a JWT token in the header:*
-`Authorization: Bearer <your_supabase_jwt>`
-
----
-
-## 🗄️ Database Architecture
-
-Below is the entity-relationship model defining user profiles, resume feedback, and learning progress tracking.
-
-```mermaid
-erDiagram
-    PROFILES ||--o{ RESUME_ANALYSIS : "has"
-    PROFILES ||--o{ DSA_PROGRESS : "tracks"
-    PROFILES ||--o{ INTERVIEW_PROGRESS : "records"
-    PROFILES ||--o{ LEARNING_PROGRESS : "monitors"
-    PROFILES ||--o{ SUCCESS_METRICS : "logs"
-
-    PROFILES {
-        uuid id PK
-        string full_name
-        string email UK
-        string target_role
-        string skill_level
-        string preferred_learning_path
-        string_array target_companies
-        string leetcode_profile
-        string github_profile
-        timestamp created_at
-    }
-
-    RESUME_ANALYSIS {
-        uuid id PK
-        uuid user_id FK
-        string resume_file_url
-        int ats_score
-        jsonb ai_feedback
-        jsonb improvement_suggestions
-        timestamp created_at
-    }
-
-    DSA_PROGRESS {
-        uuid id PK
-        uuid user_id FK
-        int total_solved
-        int easy_solved
-        int medium_solved
-        int hard_solved
-        string_array weak_topics
-        int daily_streak
-        date last_active_date
-    }
-
-    INTERVIEW_PROGRESS {
-        uuid id PK
-        uuid user_id FK
-        string target_company
-        int mock_interview_score
-        string_array weak_areas
-        string interview_round_type
-        string preparation_status
-        timestamp updated_at
-    }
-
-    LEARNING_PROGRESS {
-        uuid id PK
-        string session_id
-        string skill_name
-        jsonb completed_steps
-        numeric completion_pct
-        timestamp started_at
-        timestamp updated_at
-    }
-
-    SUCCESS_METRICS {
-        uuid id PK
-        string session_id
-        string skill_name
-        string outcome_type
-        string outcome_detail
-        timestamp created_at
-    }
-```
-
----
-
-## 🤝 Contribution Guidelines
-
-We welcome contributions! To maintain code quality and stability:
-
-1. **Fork** the repository and create a feature branch: `git checkout -b feature/YourFeatureName`.
-2. Follow standard **PEP 8** coding guidelines for Python.
-3. Test your changes locally on port 3000 before opening a pull request.
-4. Open a **Pull Request** detailing your changes and features added.
 
 ---
 
