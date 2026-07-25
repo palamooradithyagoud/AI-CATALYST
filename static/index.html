@@ -741,48 +741,49 @@
                 </div>
 
                 <!-- Main Player Grid Layout: Primary Video Column + Playlist Sidebar -->
-                <div class="learning-player-grid">
+                <div class="learning-player-grid" style="display:grid; grid-template-columns: 1fr 340px; gap:20px; margin-top:20px;">
                     <!-- Left / Primary Column: Video Player & Controls -->
-                    <div class="player-main-column">
-                        <!-- Video Container with IFrame API Anchor & Resume Overlay -->
-                        <div class="player-video-wrapper">
-                            <!-- YouTube Player Anchor -->
-                <div id="player-placeholder" style="text-align:center; padding:50px 20px; border:2px dashed var(--border); border-radius:var(--radius-md); background:rgba(0,0,0,0.15);">
-                    <div style="display:flex; align-items:center; justify-content:center; margin-bottom:8px;"><svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="var(--primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-                    <h4 style="font-family:'Outfit',sans-serif; margin-bottom:6px;">Select a Video to Begin</h4>
-                    <p style="font-size:0.85rem; color:var(--text-muted); max-width:320px; margin:0 auto;">Click on any video from the list on the right to open the interactive player and resume your lesson.</p>
-                </div>
+                    <div class="player-main-column" style="display:flex; flex-direction:column; gap:16px;">
+                        <!-- RESUME MODAL / BANNER (Coursera-style Prompt) -->
+                        <div id="player-resume-prompt" class="player-resume-banner" style="display:none; background:var(--bg-card); border:1px solid var(--border); padding:16px 20px; border-radius:12px; justify-content:space-between; align-items:center;">
+                            <div class="resume-banner-text">
+                                <strong>Resume Learning?</strong>
+                                <span id="player-resume-time-text">You were at 02:45 in this video.</span>
+                            </div>
+                            <div class="resume-banner-actions" style="display:flex; gap:10px;">
+                                <button id="player-btn-resume" class="btn-resume-action btn-primary-gradient" style="padding:6px 14px; background:var(--primary); color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:600;">Continue Watching</button>
+                                <button id="player-btn-restart" class="btn-resume-action btn-secondary-outline" style="padding:6px 14px; background:transparent; border:1px solid var(--border); color:var(--text-main); border-radius:8px; cursor:pointer;">Start Over</button>
+                            </div>
+                        </div>
 
-                <!-- RESUME MODAL / BANNER (Coursera-style Prompt) -->
-                <div id="player-resume-prompt" class="player-resume-banner" style="display:none;">
-                    <div class="resume-banner-text">
-                        <strong>Resume Learning?</strong>
-                        <span id="player-resume-time-text">You were at 02:45 in this video.</span>
-                    </div>
-                    <div class="resume-banner-actions">
-                        <button id="player-btn-resume" class="btn-resume-action btn-primary-gradient">Continue Watching</button>
-                        <button id="player-btn-restart" class="btn-resume-action btn-secondary-outline">Start Over</button>
-                    </div>
-                    <!-- IFRAME PLAYER WRAPPER -->
-                    <div id="player-iframe-wrapper" class="player-iframe-wrapper" style="width:100%; height:480px; min-height:480px; background:#000; border-radius:16px; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.5); position:relative;">
-                        <div id="yt-player-anchor" style="width:100%; height:100%; min-height:480px; position:relative; display:block;"></div>
-                    </div>
-                </div>
+                        <!-- IFRAME PLAYER WRAPPER -->
+                        <div id="player-iframe-wrapper" class="player-iframe-wrapper" style="width:100%; height:480px; min-height:480px; background:#000; border-radius:16px; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.5); position:relative;">
+                            <div id="yt-player-anchor" style="width:100%; height:100%; min-height:480px; position:relative; display:block;"></div>
+                        </div>
 
-                <div id="player-controls-bar" class="player-controls-bar" style="display:none;">
-                    <button id="player-btn-prev" class="player-nav-btn">Previous Video</button>
-                    <button id="player-btn-next" class="player-nav-btn">Next Video</button>
-                </div>
+                        <!-- Player Controls Bar -->
+                        <div id="player-controls-bar" class="player-controls-bar" style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-card); border:1px solid var(--border); padding:12px 20px; border-radius:12px;">
+                            <button id="player-btn-prev" class="player-nav-btn" style="padding:8px 16px; background:var(--bg-main); border:1px solid var(--border); border-radius:8px; color:var(--text-main); font-weight:600; cursor:pointer;">← Previous Video</button>
+                            <span id="player-live-time-display" style="font-family:'Outfit',sans-serif; font-size:0.9rem; font-weight:700; color:var(--text-sub);">00:00 / 00:00</span>
+                            <button id="player-btn-next" class="player-nav-btn" style="padding:8px 16px; background:var(--primary); border:none; border-radius:8px; color:#fff; font-weight:600; cursor:pointer;">Next Video →</button>
+                        </div>
 
-                <div id="player-video-meta" class="player-video-meta" style="display:none;">
-                    <h3 id="player-video-title" class="player-video-title">Video Title</h3>
-                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-top:8px;">
-                        <span class="player-channel-name" id="player-channel-name">Channel Name</span>
-                        <div class="player-progress-badge">
-                            <span>Watch Progress <span id="player-auto-complete-status" style="font-size:0.75rem; color:#38bdf8; margin-left:6px;">(Anti-Cheat Active)</span></span>
+                        <!-- Video Metadata & Progress -->
+                        <div id="player-video-meta" class="player-video-meta" style="background:var(--bg-card); border:1px solid var(--border); padding:20px; border-radius:16px;">
+                            <h3 id="player-video-title" class="player-video-title" style="font-family:'Outfit',sans-serif; font-size:1.2rem; font-weight:700; margin:0 0 8px 0; color:var(--text-main);">Video Title</h3>
+                            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                                <span class="player-channel-name" id="player-channel-name" style="font-size:0.9rem; color:var(--text-sub); font-weight:500;">Channel Name</span>
+                                <div style="display:flex; align-items:center; gap:12px;">
+                                    <a id="player-youtube-external-link" href="#" target="_blank" rel="noopener noreferrer" style="background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3); color:#ef4444; font-size:0.8rem; font-weight:700; padding:6px 14px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg> Open on YouTube ↗
+                                    </a>
+                                    <div class="player-progress-badge" style="background:rgba(56,189,248,0.12); border:1px solid rgba(56,189,248,0.3); padding:6px 14px; border-radius:99px; font-size:0.8rem; color:#38bdf8; font-weight:600;">
+                                        <span>Watch Progress <span id="player-auto-complete-status" style="font-size:0.75rem; color:#38bdf8; margin-left:6px;">(Anti-Cheat Active)</span></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
             </section>
 
             <!-- VIEW: Practice (LeetCode Command Center) -->
