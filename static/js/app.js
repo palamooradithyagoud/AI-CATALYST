@@ -3980,8 +3980,9 @@ document.addEventListener('DOMContentLoaded', () => {
             updateCommandCenter();
         } else if (targetViewId === 'view-practice') {
             enterDsaPrep();
-        } else if (targetViewId === 'view-resume') {
+        } else if (targetViewId === 'view-career' || targetViewId === 'view-resume') {
             enterResumeAnalyzer();
+            initCareerWidgets();
         } else if (targetViewId === 'view-learning') {
             resetViews();
             const learningView = document.getElementById('view-learning');
@@ -3998,7 +3999,45 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (targetViewId === 'view-mentor') {
             loadCodingProfiles();
         } else if (targetViewId === 'view-interviews') {
-            showToast('Mock Interviews are currently locked for platform updates.');
+            showToast('🔒 AI Mock Interview is locked! Complete 5 DSA practice problems to unlock.');
+        }
+    };
+
+    const initCareerWidgets = () => {
+        const cardsGrid = document.getElementById('career-cards-grid');
+        const resumeWorkspace = document.getElementById('career-resume-workspace');
+        const cardOpenResume = document.getElementById('card-open-resume-review');
+        const cardOpenInterviews = document.getElementById('card-open-ai-interviews');
+        const btnBackToCareer = document.getElementById('btn-back-to-career');
+        const btnLockedInterview = document.getElementById('btn-start-locked-interview');
+
+        if (cardOpenResume) {
+            cardOpenResume.onclick = () => {
+                if (cardsGrid) cardsGrid.style.display = 'none';
+                if (resumeWorkspace) resumeWorkspace.style.display = 'block';
+                enterResumeAnalyzer();
+            };
+        }
+
+        if (btnBackToCareer) {
+            btnBackToCareer.onclick = (e) => {
+                if (e) e.stopPropagation();
+                if (resumeWorkspace) resumeWorkspace.style.display = 'none';
+                if (cardsGrid) cardsGrid.style.display = 'grid';
+            };
+        }
+
+        const handleLockedToast = (e) => {
+            if (e) e.stopPropagation();
+            showToast('🔒 AI Mock Interview is locked! Complete 5 DSA practice problems or upgrade to Pro tier to unlock.');
+        };
+
+        if (cardOpenInterviews) {
+            cardOpenInterviews.onclick = handleLockedToast;
+        }
+
+        if (btnLockedInterview) {
+            btnLockedInterview.onclick = handleLockedToast;
         }
     };
 
@@ -4016,16 +4055,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnDashboardResume = document.getElementById('dashboard-improve-resume-btn');
     if (btnDashboardResume) {
         btnDashboardResume.addEventListener('click', () => {
-            const resumeTabBtn = document.getElementById('btn-sidebar-resume');
-            if (resumeTabBtn) resumeTabBtn.click();
+            const careerTabBtn = document.getElementById('btn-sidebar-career') || document.getElementById('btn-sidebar-resume');
+            if (careerTabBtn) careerTabBtn.click();
         });
     }
 
     const btnDashboardCalendar = document.getElementById('dashboard-view-calendar-btn');
     if (btnDashboardCalendar) {
         btnDashboardCalendar.addEventListener('click', () => {
-            const interviewTabBtn = document.getElementById('btn-sidebar-interviews');
-            if (interviewTabBtn) interviewTabBtn.click();
+            const careerTabBtn = document.getElementById('btn-sidebar-career') || document.getElementById('btn-sidebar-interviews');
+            if (careerTabBtn) careerTabBtn.click();
         });
     }
 
