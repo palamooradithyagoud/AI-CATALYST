@@ -519,6 +519,133 @@ document.addEventListener('DOMContentLoaded', () => {
         return 'rfscVS0vtbw'; // Default Python / Coding fallback
     };
 
+    // ── PRODUCTION ANTI-CHEAT ENGINE (Segment Merger, Seek Detection & 95% Completion Validation) ──
+
+    // Module 1: SegmentMerger (Merges overlapping/contiguous [{start, end}] time intervals)
+    const SegmentMerger = {
+        merge: function(segments) {
+            if (!Array.isArray(segments) || segments.length === 0) return [];
+            const clean = segments
+                .filter(s => s && typeof s.start === 'number' && typeof s.end === 'number' && s.end > s.start)
+                .map(s => ({ start: Math.max(0, s.start), end: Math.max(0, s.end) }))
+                .sort((a, b) => a.start - b.start);
+            
+            if (clean.length === 0) return [];
+            const merged = [];
+            let curr = clean[0];
+            
+            for (let i = 1; i < clean.length; i++) {
+                const next = clean[i];
+                if (next.start <= curr.end) {
+                    curr.end = Math.max(curr.end, next.end);
+                } else {
+                    merged.push({ start: Math.round(curr.start * 100) / 100, end: Math.round(curr.end * 100) / 100 });
+                    curr = next;
+                }
+            }
+            merged.push({ start: Math.round(curr.start * 100) / 100, end: Math.round(curr.end * 100) / 100 });
+            return merged;
+        },
+
+        add: function(segments, start, end) {
+            if (end <= start || start < 0) return this.merge(segments);
+            const copy = Array.isArray(segments) ? [...segments] : [];
+            copy.push({ start: Math.max(0, start), end: Math.max(0, end) });
+            return this.merge(copy);
+        },
+
+        calculateUniqueTime: function(segments) {
+            const merged = this.merge(segments);
+            return merged.reduce((acc, seg) => acc + (seg.end - seg.start), 0);
+        }
+    };
+
+    // Module 2: TabLockManager (Double Tab Session Lock)
+    const TabLockManager = {
+        channel: null,
+        activeKey: null,
+        isTabLocked: false,
+        tabId: 'tab_' + Math.random().toString(36).substr(2, 9),
+
+        init: function() {
+            if ('BroadcastChannel' in window) {
+                try {
+                    this.channel = new BroadcastChannel('sp_video_tracker');
+                    this.channel.onmessage = (e) => {
+                        const data = e.data;
+                        if (data && data.key === this.activeKey && data.sender !== this.tabId) {
+                            if (data.type === 'CLAIM_ACTIVE') {
+                                this.isTabLocked = true;
+                                if (typeof showToast === 'function') {
+                                    showToast("⚠ Video completion tracking paused: Lesson open in another tab");
+                                }
+                            }
+                        }
+                    };
+                } catch(e){}
+            }
+        },
+
+        claimSession: function(key) {
+            this.activeKey = key;
+            this.isTabLocked = false;
+            if (this.channel) {
+                try {
+                    this.channel.postMessage({ type: 'CLAIM_ACTIVE', key: key, sender: this.tabId });
+                } catch(e){}
+            }
+        }
+    };
+    TabLockManager.init();
+
+    // Module 3: ProgressCalculator
+    const ProgressCalculator = {
+        calculate: function(segments, duration) {
+            const uniqueSec = SegmentMerger.calculateUniqueTime(segments);
+            const dur = (typeof duration === 'number' && duration > 0) ? duration : 300;
+            const pct = Math.min(100, Math.round((uniqueSec / dur) * 10000) / 100);
+            return { uniqueSeconds: uniqueSec, percentage: pct, duration: dur };
+        }
+    };
+
+    let currentWatchedSegments = [];
+    let lastPositionAnchor = -1;
+    let speedWarningToastShown = false;
+    let ytPlayerState = -1;
+
+    const getStoredPlaybackPositions = () => {
+        try {
+            return JSON.parse(localStorage.getItem('skillpath_video_positions') || '{}');
+        } catch (e) { return {}; }
+    };
+
+    const savePlaybackPositionLocally = (playlistUrl, videoId, lastPosition, watchedSeconds, watchedSegments, watchedPercentage) => {
+        try {
+            if (!playlistUrl || !videoId) return;
+            const positions = getStoredPlaybackPositions();
+            const key = `${playlistUrl}_${videoId}`;
+            positions[key] = { 
+                lastPosition, 
+                watchedSeconds, 
+                watchedSegments: watchedSegments || [],
+                watchedPercentage: watchedPercentage || 0,
+                timestamp: Date.now() 
+            };
+            localStorage.setItem('skillpath_video_positions', JSON.stringify(positions));
+
+            localStorage.setItem('skillpath_last_active_playback', JSON.stringify({
+                playlistUrl: playlistUrl,
+                videoId: videoId,
+                videoIndex: currentVideoIndex,
+                lastPosition: lastPosition,
+                watchedSeconds: watchedSeconds,
+                watchedSegments: watchedSegments || [],
+                watchedPercentage: watchedPercentage || 0,
+                timestamp: Date.now()
+            }));
+        } catch (e) {}
+    };
+
     const openLearningPlayer = (playlistUrl, videoIndex = 0) => {
         const saved = getSavedPlaylists();
         let targetPlaylist = saved.find(p => p.url === playlistUrl);
@@ -546,6 +673,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!v.videoId) v.videoId = extractYouTubeVideoId(v.url || targetPlaylist.url);
                 if (v.watchedSeconds === undefined) v.watchedSeconds = 0;
                 if (v.lastPosition === undefined) v.lastPosition = 0;
+                if (v.watchedSegments === undefined) v.watchedSegments = [];
+
+                // Sync position & segments from local storage if fresher
+                const key = `${playlistUrl}_${v.videoId || v.id}`;
+                const stored = getStoredPlaybackPositions()[key];
+                if (stored) {
+                    if (typeof stored.lastPosition === 'number' && stored.lastPosition > (v.lastPosition || 0)) {
+                        v.lastPosition = stored.lastPosition;
+                    }
+                    if (Array.isArray(stored.watchedSegments) && stored.watchedSegments.length > 0) {
+                        v.watchedSegments = SegmentMerger.merge([...(v.watchedSegments || []), ...stored.watchedSegments]);
+                        v.watchedSeconds = SegmentMerger.calculateUniqueTime(v.watchedSegments);
+                    }
+                }
+
                 if (v.completed === undefined) v.completed = false;
             });
         }
@@ -623,8 +765,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const video = currentPlaylist.videos[currentVideoIndex];
         activeVideoCompleted = video.completed || false;
-        watchedSecondsCounter = video.watchedSeconds || 0;
-        lastPlayerTime = 0;
+        currentWatchedSegments = Array.isArray(video.watchedSegments) ? [...video.watchedSegments] : [];
+        lastPositionAnchor = -1;
+        speedWarningToastShown = false;
+        ytPlayerState = -1;
+
+        // Check local storage for freshest segments and position
+        const localKey = `${currentPlaylist.url}_${video.videoId || video.id}`;
+        const localPosObj = getStoredPlaybackPositions()[localKey];
+        if (localPosObj) {
+            if (typeof localPosObj.lastPosition === 'number' && localPosObj.lastPosition > (video.lastPosition || 0)) {
+                video.lastPosition = localPosObj.lastPosition;
+            }
+            if (Array.isArray(localPosObj.watchedSegments) && localPosObj.watchedSegments.length > 0) {
+                currentWatchedSegments = SegmentMerger.merge([...currentWatchedSegments, ...localPosObj.watchedSegments]);
+                video.watchedSegments = currentWatchedSegments;
+            }
+        }
+
+        TabLockManager.claimSession(`${currentPlaylist.url}_${video.videoId || video.id}`);
+
+        const savedPos = video.lastPosition || 0;
+        const startParam = (savedPos > 2) ? `&start=${Math.floor(savedPos)}` : '';
 
         const resumeOverlay = document.getElementById('player-resume-overlay');
         if (resumeOverlay) resumeOverlay.style.display = 'none';
@@ -653,7 +815,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const playerAnchor = document.getElementById('yt-player-anchor');
 
         if (playerAnchor) {
-            const embedSrc = `https://www.youtube.com/embed/${finalYtId}?enablejsapi=1&rel=0&modestbranding=1`;
+            const embedSrc = `https://www.youtube.com/embed/${finalYtId}?enablejsapi=1&rel=0&modestbranding=1${startParam}`;
 
             playerAnchor.innerHTML = `
                 <iframe 
@@ -670,7 +832,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 ></iframe>
             `;
 
-            // Try attaching YT.Player API instance if available
             if (window.YT && window.YT.Player) {
                 try {
                     ytPlayer = new window.YT.Player('active-yt-player-iframe', {
@@ -702,15 +863,10 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         }
 
-        // Start automatic watch progress and auto-completion timers immediately
         startWatchTimers();
     };
 
     const onYTPlayerReady = (event) => {
-        checkResumePrompt();
-    };
-
-    const checkResumePrompt = () => {
         if (!currentPlaylist || !currentPlaylist.videos[currentVideoIndex]) return;
         const video = currentPlaylist.videos[currentVideoIndex];
         const savedPos = video.lastPosition || 0;
@@ -719,24 +875,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const mins = Math.floor(savedPos / 60);
             const secs = Math.floor(savedPos % 60);
             const formatted = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-
-            const resumeOverlay = document.getElementById('player-resume-overlay');
-            const resumeText = document.getElementById('player-resume-time-text');
-            const btnResume = document.getElementById('player-btn-resume');
-
-            if (resumeText) resumeText.textContent = `You previously watched up to ${formatted}.`;
-            if (btnResume) btnResume.textContent = `Continue watching from ${formatted}`;
-            if (resumeOverlay) resumeOverlay.style.display = 'flex';
-
-            if (ytPlayer && typeof ytPlayer.pauseVideo === 'function') {
-                try { ytPlayer.pauseVideo(); } catch(e){}
+            if (typeof showToast === 'function') {
+                showToast(`▶ Resumed video from ${formatted}`);
             }
         }
     };
 
     const onYTPlayerStateChange = (event) => {
-        const pState = window.YT ? window.YT.PlayerState : { PLAYING: 1, ENDED: 0 };
+        const pState = window.YT ? window.YT.PlayerState : { PLAYING: 1, ENDED: 0, PAUSED: 2 };
+        if (event) ytPlayerState = event.data;
+
         if (event && event.data === pState.PLAYING) {
+            if (ytPlayer && typeof ytPlayer.getCurrentTime === 'function') {
+                try { lastPositionAnchor = ytPlayer.getCurrentTime() || 0; } catch(e){}
+            }
             startWatchTimers();
         } else {
             stopWatchTimers();
@@ -757,17 +909,17 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!data) return;
             
             if (data.event === 'onStateChange') {
+                ytPlayerState = data.info;
                 if (data.info === 0) { // ENDED
-                    markCurrentVideoComplete();
+                    const dur = (ytPlayer && typeof ytPlayer.getDuration === 'function') ? (ytPlayer.getDuration() || 0) : 0;
+                    checkAutoCompletion(dur, dur);
                 } else if (data.info === 1) { // PLAYING
                     startWatchTimers();
                 }
             } else if (data.info && typeof data.info.currentTime === 'number' && typeof data.info.duration === 'number') {
                 const curr = data.info.currentTime;
                 const dur = data.info.duration;
-                if (dur > 0 && curr / dur >= 0.75) {
-                    markCurrentVideoComplete();
-                }
+                checkAutoCompletion(curr, dur);
             }
         } catch(e){}
     });
@@ -779,18 +931,61 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!currentPlaylist || !currentPlaylist.videos[currentVideoIndex]) return;
 
             let curr = 0;
-            let dur = 300; // default 5 minutes estimate
+            let dur = 300;
+            let currentRate = 1.0;
 
             if (ytPlayer && typeof ytPlayer.getCurrentTime === 'function') {
                 try {
                     curr = ytPlayer.getCurrentTime() || 0;
                     dur = ytPlayer.getDuration() || 300;
+                    currentRate = (typeof ytPlayer.getPlaybackRate === 'function') ? (ytPlayer.getPlaybackRate() || 1.0) : 1.0;
                 } catch(e){}
             }
 
-            watchedSecondsCounter += 1;
-            if (curr === 0) {
-                curr = watchedSecondsCounter;
+            // FAST FORWARD PROTECTION (> 2x speed)
+            if (currentRate > 2.0) {
+                if (!speedWarningToastShown) {
+                    showToast("⚠ Video completion tracking is paused while playback speed exceeds 2×.");
+                    speedWarningToastShown = true;
+                }
+                lastPositionAnchor = curr;
+                updateLiveProgressUI(curr, dur);
+                return;
+            } else {
+                speedWarningToastShown = false;
+            }
+
+            // PLAYBACK VALIDATION: Accumulate segments ONLY when video is PLAYING, tab visible, window focused, and no tab lock
+            const isPlaying = (ytPlayerState === 1 || (curr > 0 && ytPlayerState !== 2 && ytPlayerState !== 0));
+            const isVisible = (!document.hidden && document.hasFocus());
+            const isNotLocked = (!TabLockManager.isTabLocked);
+
+            if (isPlaying && isVisible && isNotLocked) {
+                if (lastPositionAnchor >= 0) {
+                    const gap = Math.abs(curr - lastPositionAnchor);
+                    // SEEK DETECTION: If user jumps (> 2.5s gap), reset anchor without counting unplayed gap
+                    if (gap <= 2.5) {
+                        const startT = Math.min(lastPositionAnchor, curr);
+                        const endT = Math.max(lastPositionAnchor, curr);
+                        if (endT > startT) {
+                            currentWatchedSegments = SegmentMerger.add(currentWatchedSegments, startT, endT);
+                        }
+                    }
+                }
+                lastPositionAnchor = curr;
+            } else {
+                lastPositionAnchor = curr;
+            }
+
+            const stats = ProgressCalculator.calculate(currentWatchedSegments, dur);
+
+            if (curr > 0 || stats.uniqueSeconds > 0) {
+                const v = currentPlaylist.videos[currentVideoIndex];
+                v.lastPosition = curr;
+                v.watchedSeconds = stats.uniqueSeconds;
+                v.watchedSegments = currentWatchedSegments;
+                v.watchedPercentage = stats.percentage;
+                savePlaybackPositionLocally(currentPlaylist.url, v.videoId || v.id, curr, stats.uniqueSeconds, currentWatchedSegments, stats.percentage);
             }
 
             updateLiveProgressUI(curr, dur);
@@ -813,15 +1008,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const fill = document.getElementById('player-live-progress-fill');
         const text = document.getElementById('player-live-time-display');
 
+        const stats = ProgressCalculator.calculate(currentWatchedSegments, dur);
+
         if (dur > 0) {
-            const pct = Math.min(100, Math.round((curr / dur) * 100));
-            if (fill) fill.style.width = `${pct}%`;
+            if (fill) fill.style.width = `${stats.percentage}%`;
 
             const currMin = Math.floor(curr / 60);
             const currSec = Math.floor(curr % 60);
             const durMin = Math.floor(dur / 60);
             const durSec = Math.floor(dur % 60);
-            const formatted = `${String(currMin).padStart(2, '0')}:${String(currSec).padStart(2, '0')} / ${String(durMin).padStart(2, '0')}:${String(durSec).padStart(2, '0')}`;
+            const formatted = `${String(currMin).padStart(2, '0')}:${String(currSec).padStart(2, '0')} / ${String(durMin).padStart(2, '0')}:${String(durSec).padStart(2, '0')} (${stats.percentage.toFixed(1)}% Unique Watched)`;
             if (text) text.textContent = formatted;
         }
     };
@@ -829,10 +1025,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkAutoCompletion = (curr, dur) => {
         if (activeVideoCompleted || dur <= 0) return;
 
-        const ratio = curr / dur;
-        const genuineRatio = watchedSecondsCounter / dur;
+        const stats = ProgressCalculator.calculate(currentWatchedSegments, dur);
 
-        if (ratio >= 0.75 || genuineRatio >= 0.75 || curr >= dur * 0.75 || watchedSecondsCounter >= dur * 0.75) {
+        // PRODUCTION ANTI-CHEAT RULE: Mark completed ONLY when genuine unique watched time >= 95%
+        if (stats.percentage >= 95.0) {
             markCurrentVideoComplete();
         }
     };
@@ -847,7 +1043,7 @@ document.addEventListener('DOMContentLoaded', () => {
         video.completedAt = new Date().toISOString();
         activeVideoCompleted = true;
 
-        showToast(`✓ Video #${video.displayNum || (currentVideoIndex + 1)} Completed! (75%+ Watched)`);
+        showToast(`🎉 Lesson Completed! (95%+ Unique Content Watched) +50 XP`);
 
         renderPlayerHeader();
         renderPlayerSidebar();
@@ -858,7 +1054,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     playlistUrl: currentPlaylist.url,
-                    videoId: String(video.videoId || video.id)
+                    videoId: String(video.videoId || video.id),
+                    watchedSegments: currentWatchedSegments
                 })
             });
         } catch (e) {}
@@ -878,15 +1075,23 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const syncCurrentWatchProgress = async () => {
-        if (!currentPlaylist || !currentPlaylist.videos[currentVideoIndex] || !ytPlayer || typeof ytPlayer.getCurrentTime !== 'function') return;
+        if (!currentPlaylist || !currentPlaylist.videos[currentVideoIndex]) return;
 
         const video = currentPlaylist.videos[currentVideoIndex];
-        const curr = ytPlayer.getCurrentTime() || 0;
-        const dur = (typeof ytPlayer.getDuration === 'function') ? (ytPlayer.getDuration() || 0) : 0;
+        const curr = (ytPlayer && typeof ytPlayer.getCurrentTime === 'function') ? (ytPlayer.getCurrentTime() || 0) : (video.lastPosition || 0);
+        const dur = (ytPlayer && typeof ytPlayer.getDuration === 'function') ? (ytPlayer.getDuration() || 0) : (video.duration || 0);
 
-        video.lastPosition = curr;
-        video.watchedSeconds = watchedSecondsCounter;
-        if (dur > 0) video.duration = dur;
+        const stats = ProgressCalculator.calculate(currentWatchedSegments, dur);
+
+        if (curr > 0 || stats.uniqueSeconds > 0) {
+            video.lastPosition = curr;
+            video.watchedSeconds = stats.uniqueSeconds;
+            video.watchedSegments = currentWatchedSegments;
+            video.watchedPercentage = stats.percentage;
+            if (dur > 0) video.duration = dur;
+
+            savePlaybackPositionLocally(currentPlaylist.url, video.videoId || video.id, curr, stats.uniqueSeconds, currentWatchedSegments, stats.percentage);
+        }
 
         try {
             const res = await fetch('/watch-progress', {
@@ -896,7 +1101,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     playlistUrl: currentPlaylist.url,
                     videoId: String(video.videoId || video.id),
                     lastPosition: curr,
-                    watchedSeconds: watchedSecondsCounter,
+                    watchedSeconds: stats.uniqueSeconds,
+                    watchedSegments: currentWatchedSegments,
+                    watchedPercentage: stats.percentage,
                     duration: dur
                 })
             });
@@ -906,6 +1113,41 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } catch (e) {}
     };
+
+    // Global unload listener to save exact playback position and segments when user refreshes or leaves page
+    const handlePageUnloadSync = () => {
+        if (!currentPlaylist || !currentPlaylist.videos || !currentPlaylist.videos[currentVideoIndex]) return;
+        const video = currentPlaylist.videos[currentVideoIndex];
+        let curr = video.lastPosition || 0;
+        if (ytPlayer && typeof ytPlayer.getCurrentTime === 'function') {
+            try {
+                const t = ytPlayer.getCurrentTime();
+                if (t && t > 0) curr = t;
+            } catch(e){}
+        }
+        const stats = ProgressCalculator.calculate(currentWatchedSegments, video.duration || 300);
+        if (curr > 0 || stats.uniqueSeconds > 0) {
+            video.lastPosition = curr;
+            video.watchedSegments = currentWatchedSegments;
+            savePlaybackPositionLocally(currentPlaylist.url, video.videoId || video.id, curr, stats.uniqueSeconds, currentWatchedSegments, stats.percentage);
+            try {
+                const payload = JSON.stringify({
+                    playlistUrl: currentPlaylist.url,
+                    videoId: String(video.videoId || video.id),
+                    lastPosition: curr,
+                    watchedSeconds: stats.uniqueSeconds,
+                    watchedSegments: currentWatchedSegments,
+                    watchedPercentage: stats.percentage,
+                    duration: video.duration || 0
+                });
+                if (navigator.sendBeacon) {
+                    navigator.sendBeacon('/watch-progress', new Blob([payload], { type: 'application/json' }));
+                }
+            } catch(e){}
+        }
+    };
+    window.addEventListener('beforeunload', handlePageUnloadSync);
+    window.addEventListener('pagehide', handlePageUnloadSync);
 
     // Event Wire-up for Player Controls
     const btnPlayerBack = document.getElementById('player-btn-back');

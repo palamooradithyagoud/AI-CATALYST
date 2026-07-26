@@ -2201,6 +2201,44 @@ def get_user_projects():
         print(f"[PROJECTS] Get failed: {e}")
         return jsonify([])
 
+def _merge_segments(segments):
+    """
+    Server-side helper to merge an array of [{start, end}] time intervals
+    and compute total unique watched seconds.
+    """
+    if not isinstance(segments, list) or not segments:
+        return [], 0.0
+    
+    clean_intervals = []
+    for s in segments:
+        if isinstance(s, dict):
+            try:
+                start = float(s.get("start", 0))
+                end = float(s.get("end", 0))
+                if end > start and start >= 0:
+                    clean_intervals.append((start, end))
+            except (ValueError, TypeError):
+                continue
+    
+    if not clean_intervals:
+        return [], 0.0
+    
+    clean_intervals.sort(key=lambda x: x[0])
+    merged = []
+    curr_start, curr_end = clean_intervals[0]
+    
+    for next_start, next_end in clean_intervals[1:]:
+        if next_start <= curr_end:
+            curr_end = max(curr_end, next_end)
+        else:
+            merged.append({"start": round(curr_start, 2), "end": round(curr_end, 2)})
+            curr_start, curr_end = next_start, next_end
+            
+    merged.append({"start": round(curr_start, 2), "end": round(curr_end, 2)})
+    
+    total_unique_seconds = sum(seg["end"] - seg["start"] for seg in merged)
+    return merged, round(total_unique_seconds, 2)
+
 def _migrate_video_item(v):
     if not isinstance(v, dict):
         return {
@@ -2210,17 +2248,24 @@ def _migrate_video_item(v):
             "duration": 0.0,
             "watchTime": 0.0,
             "watchedSeconds": 0.0,
+            "watchedSegments": [],
+            "watchedPercentage": 0.0,
             "completed": False,
             "completedAt": None,
             "lastPosition": 0.0
         }
+    segments, total_sec = _merge_segments(v.get("watchedSegments", []))
+    dur = float(v.get("duration", 0) or 0)
+    pct = round((total_sec / dur) * 100.0, 2) if dur > 0 else float(v.get("watchedPercentage", 0) or 0)
     return {
         "id": v.get("id", 1),
         "videoId": str(v.get("videoId") or v.get("video_id") or "").strip(),
         "title": v.get("title", "Untitled Video"),
-        "duration": float(v.get("duration", 0) or 0),
+        "duration": dur,
         "watchTime": float(v.get("watchTime", 0) or 0),
-        "watchedSeconds": float(v.get("watchedSeconds", 0) or 0),
+        "watchedSeconds": max(float(v.get("watchedSeconds", 0) or 0), total_sec),
+        "watchedSegments": segments,
+        "watchedPercentage": pct,
         "completed": bool(v.get("completed", False)),
         "completedAt": v.get("completedAt"),
         "lastPosition": float(v.get("lastPosition", 0) or 0)
@@ -2295,6 +2340,7 @@ def watch_progress():
     last_position = float(body.get("lastPosition") or body.get("last_position") or 0)
     watched_seconds = float(body.get("watchedSeconds") or body.get("watched_seconds") or 0)
     duration = float(body.get("duration") or 0)
+    raw_segments = body.get("watchedSegments") or body.get("watched_segments") or []
     
     if not playlist_url or not video_id:
         return jsonify({"error": "playlistUrl and videoId required"}), 400
@@ -2318,6 +2364,9 @@ def watch_progress():
         
         from datetime import datetime, timezone
         now_iso = datetime.now(timezone.utc).isoformat()
+        
+        # Merge incoming watched segments server-side
+        incoming_merged_segments, unique_watched_seconds = _merge_segments(raw_segments)
 
         for p in playlists_list:
             if p.get("url") == playlist_url:
@@ -2327,18 +2376,27 @@ def watch_progress():
                     v_item = videos[i]
                     target_vid = str(v_item.get("videoId") or v_item.get("id") or "").strip()
                     if target_vid == video_id or str(v_item.get("id")) == video_id:
-                        v_item["lastPosition"] = max(v_item.get("lastPosition", 0), last_position)
-                        v_item["watchedSeconds"] = max(v_item.get("watchedSeconds", 0), watched_seconds)
+                        if last_position > 0:
+                            v_item["lastPosition"] = last_position
+                        
+                        # Merge stored segments with incoming segments
+                        combined_segments = (v_item.get("watchedSegments") or []) + incoming_merged_segments
+                        merged_combined, total_unique_sec = _merge_segments(combined_segments)
+                        
+                        v_item["watchedSegments"] = merged_combined
+                        v_item["watchedSeconds"] = max(v_item.get("watchedSeconds", 0), total_unique_sec, watched_seconds)
                         if duration > 0:
                             v_item["duration"] = duration
                         v_item["watchTime"] = max(v_item.get("watchTime", 0), last_position)
                         
-                        # Anti-cheat completion check: 95% position OR end-of-video + 80% genuine watched seconds
                         dur = v_item.get("duration", 0)
                         if dur > 0:
-                            ratio = last_position / dur
-                            genuine_ratio = v_item.get("watchedSeconds", 0) / dur
-                            if (ratio >= 0.95 or last_position >= dur - 5) and (genuine_ratio >= 0.80 or v_item.get("watchedSeconds", 0) >= dur * 0.80):
+                            unique_ratio = total_unique_sec / dur
+                            watched_pct = round(unique_ratio * 100.0, 2)
+                            v_item["watchedPercentage"] = watched_pct
+                            
+                            # STRICT PRODUCTION ANTI-CHEAT: Require >= 95% unique watched content
+                            if unique_ratio >= 0.95:
                                 if not v_item.get("completed"):
                                     v_item["completed"] = True
                                     v_item["completedAt"] = now_iso
