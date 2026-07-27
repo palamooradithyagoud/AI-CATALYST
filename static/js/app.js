@@ -1640,21 +1640,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // Tier label badge
-            if (tierLabelBadge) tierLabelBadge.textContent = data.tier_label || '';
+            if (tierLabelBadge) tierLabelBadge.textContent = '';
 
-            if (data.tier === 0) {
-                tierIndicator.textContent = 'Instant Result: Retrieved from AI Memory';
-            } else if (data.tier === 1) {
-                tierIndicator.textContent = 'Curated Result: Trusted CSV Dataset';
-            } else if (data.tier >= 3) {
-                tierIndicator.textContent = 'AI-Ranked Result: Groq Intelligence Engine';
-            } else {
+            if (tierIndicator) {
                 tierIndicator.textContent = 'The best free curated playlists to build your foundation.';
             }
 
-            if (data.roadmap) {
-                tabRoadmap.style.display = 'inline-block';
-            } else {
+            if (tabRoadmap) {
                 tabRoadmap.style.display = 'none';
             }
 
@@ -1742,14 +1734,14 @@ document.addEventListener('DOMContentLoaded', () => {
     /**
      * Render a specific view step
      */
-    const renderStep = (step) => {
+    const renderStep = (step, scroll = false) => {
         // Reset all
         playlistStep.classList.remove('active');
         certificateStep.classList.remove('active');
-        roadmapStep.classList.remove('active');
+        if (roadmapStep) roadmapStep.classList.remove('active');
         tabPlaylists.classList.remove('active');
         tabCertificates.classList.remove('active');
-        tabRoadmap.classList.remove('active');
+        if (tabRoadmap) tabRoadmap.classList.remove('active');
 
         if (step === 'playlists') {
             playlistGrid.innerHTML = '';
@@ -1915,14 +1907,18 @@ document.addEventListener('DOMContentLoaded', () => {
                                 `;
                             }
                             listWrap.appendChild(stepEl);
-                        });
+                    });
 
-                        checklistContainer.appendChild(phaseSection);
-                    }
-                });
-            }
+                    checklistContainer.appendChild(phaseSection);
+                }
+            });
         }
-    };
+    }
+
+    if (scroll && resultsNav) {
+        resultsNav.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+};
 
     /**
      * Card Factory
@@ -2016,12 +2012,12 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsNav.style.display = 'none';
         playlistStep.classList.remove('active');
         certificateStep.classList.remove('active');
-        roadmapStep.classList.remove('active');
+        if (roadmapStep) roadmapStep.classList.remove('active');
         emptyState.style.display = 'none';
         playlistGrid.innerHTML = '';
         certificateGrid.innerHTML = '';
         aiRecommendationsGrid.innerHTML = '';
-        roadmapContent.innerHTML = '';
+        if (roadmapContent) roadmapContent.innerHTML = '';
     };
 
     const setLoading = (isLoading) => {
@@ -3870,9 +3866,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (tabPlaylists) tabPlaylists.addEventListener('click', () => renderStep('playlists'));
-    if (tabCertificates) tabCertificates.addEventListener('click', () => renderStep('certificates'));
-    if (tabRoadmap) tabRoadmap.addEventListener('click', () => renderStep('roadmap'));
+    if (tabPlaylists) tabPlaylists.addEventListener('click', () => renderStep('playlists', true));
+    if (tabCertificates) tabCertificates.addEventListener('click', () => renderStep('certificates', true));
+    if (tabRoadmap) tabRoadmap.addEventListener('click', () => renderStep('roadmap', true));
 
     // ── Student Projects Management ──
     const projectsListContainer = document.getElementById('projects-list-container');

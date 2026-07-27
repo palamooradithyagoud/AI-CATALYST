@@ -874,6 +874,14 @@ body {
   cursor: not-allowed;
 }
 
+.results-step {
+  display: none !important;
+}
+
+.results-step.active {
+  display: block !important;
+}
+
 /* Results grid & Tabs */
 .results-tabs {
   display: flex;
