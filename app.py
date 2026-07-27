@@ -3084,33 +3084,9 @@ def get_interview_history():
 # Resend Transactional Email Service
 # ──────────────────────────────────────────────
 def send_email_via_resend(to_email: str, subject: str, html_body: str) -> dict:
-    """Sends transactional email via Resend API."""
-    resend_key = os.getenv("RESEND_API_KEY", "")
-    if not resend_key:
-        print("[RESEND] RESEND_API_KEY not configured.")
-        return {"error": "RESEND_API_KEY is not configured"}
-        
-    try:
-        url = "https://api.resend.com/emails"
-        headers = {
-            "Authorization": f"Bearer {resend_key}",
-            "Content-Type": "application/json"
-        }
-        payload = {
-            "from": "SkillPath AI <onboarding@resend.dev>",
-            "to": [to_email],
-            "subject": subject,
-            "html": html_body
-        }
-        resp = requests.post(url, headers=headers, json=payload, timeout=10)
-        print(f"[RESEND] Email status: {resp.status_code}, response: {resp.text}")
-        if resp.status_code in (200, 201):
-            return resp.json()
-        else:
-            return {"error": resp.text, "status": resp.status_code}
-    except Exception as e:
-        print(f"[RESEND] Send email exception: {e}")
-        return {"error": str(e)}
+    """Sends transactional email via Resend API (Disabled for now)."""
+    print("[RESEND] Resend email service is currently disabled.")
+    return {"message": "Resend email service is currently disabled", "id": "resend_disabled"}
 
 @app.route("/send-email-report", methods=["POST"])
 @token_required

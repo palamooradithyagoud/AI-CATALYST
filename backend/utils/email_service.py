@@ -7,7 +7,10 @@ import os
 import logging
 from typing import Dict, Any, Optional
 from dotenv import load_dotenv
-import resend
+try:
+    import resend
+except ImportError:
+    resend = None
 
 # Load environment variables
 load_dotenv()
@@ -18,27 +21,9 @@ logging.basicConfig(level=logging.INFO)
 
 
 def send_welcome_email(email: str, name: str) -> Dict[str, Any]:
-    """
-    Sends a production-ready, beautifully designed Welcome Email using the Resend Python SDK.
-
-    Args:
-        email (str): The candidate's recipient email address.
-        name (str): The candidate's display name.
-
-    Returns:
-        Dict[str, Any]: Dictionary containing success status, message, or email ID.
-    """
-    load_dotenv()
-    if not email or "@" not in email:
-        logger.error(f"[EMAIL_SERVICE] Invalid email address provided: {email}")
-        return {"success": False, "error": "Invalid recipient email address"}
-
-    api_key = os.getenv("RESEND_API_KEY", "")
-    if not api_key:
-        logger.error("[EMAIL_SERVICE] Cannot send email: RESEND_API_KEY is missing")
-        return {"success": False, "error": "RESEND_API_KEY is missing"}
-
-    resend.api_key = api_key
+    """Email delivery disabled for now."""
+    logger.info(f"[EMAIL_SERVICE] Resend email service disabled. Skipping for {email}.")
+    return {"success": True, "message": "Email sending is currently disabled."}
     display_name = name.strip() if name else "Candidate"
     sender_email = "SkillPath AI <onboarding@resend.dev>"
     subject = "Welcome to SkillPath 🚀"
